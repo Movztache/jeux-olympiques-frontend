@@ -26,7 +26,7 @@ export class AuthService {
     const loginData = { email, password };
 
     // Envoi de la requête POST à l'endpoint de login
-    return this.http.post<any>(`${this.apiUrl}/login`, loginData)
+    return this.http.post<any>(`${this.apiUrl}/auth/login`, loginData)
       .pipe(
         // Stockage du token si présent dans la réponse
         tap(response => {
