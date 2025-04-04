@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/pages/login/login.component';
-import { HomeComponent } from './home/home.component';
 
 // La constante routes définit toutes les routes disponibles dans l'application
 const routes: Routes = [
@@ -9,9 +8,6 @@ const routes: Routes = [
   // Quand l'URL sera '/login', Angular affichera le composant LoginComponent
   { path: 'login', component: LoginComponent },
 
-  // Cette nouvelle route associe le chemin 'home' au composant HomeComponent
-  // Quand l'URL sera '/home', Angular affichera le composant HomeComponent que nous venons de créer
-  { path: 'home', component: HomeComponent },
 
   // Cette route gère l'URL racine '' (ex: http://localhost:4200/)
   // 'redirectTo' redirige vers le chemin spécifié ('/login')
