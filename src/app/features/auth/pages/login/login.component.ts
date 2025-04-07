@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../../services/auth.service';
+import { AuthService } from '../../../../core/authentication/auth.service';
+import {LoginRequest} from '../../../../core/models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -48,10 +49,10 @@ export class LoginComponent implements OnInit {
       this.loading = true;
       this.errorMessage = '';
 
-      const { email, password } = this.loginForm.value;
+      const loginRequest: LoginRequest = this.loginForm.value;
 
       // Appel au service d'authentification
-      this.authService.login(email, password).subscribe({
+      this.authService.login(loginRequest).subscribe({
         next: (response: any) => {
           // Connexion réussie
           console.log('Connexion réussie:', response);

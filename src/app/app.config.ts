@@ -1,15 +1,22 @@
+// src/app/app.config.ts
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
+
 import { routes } from './app.routes';
+import { tokenInterceptor } from './core/authentication/token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // Configuration du routeur avec les routes définies dans app.routes.ts
     provideRouter(routes),
-
-    // Configuration du HttpClient pour les requêtes API
-    provideHttpClient(/* withInterceptors([authInterceptor]) */ // Vous pourrez ajouter un intercepteur plus tard
-    )
+    provideHttpClient(
+      withInterceptors([tokenInterceptor])
+    ),
+    provideStore(),
+    provideEffects(),
+    provideAnimations()
   ]
 };
