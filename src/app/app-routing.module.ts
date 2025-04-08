@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/pages/login/login.component';
+import {authGuard} from './core/guards/auth.guard';
 
 // La constante routes définit toutes les routes disponibles dans l'application
 const routes: Routes = [
@@ -16,7 +17,14 @@ const routes: Routes = [
 
   // Cette route avec '**' est un joker qui correspond à toutes les routes non définies ci-dessus
   // Elle redirige vers '/login' pour toutes les URLs qui ne correspondent à aucune route définie
-  { path: '**', redirectTo: '/login' }
+  { path: '**', redirectTo: '/login' },
+
+  {
+    path: 'profil',
+    loadChildren: () => import('./features/profil/profil.module').then(m => m.ProfilModule),
+    canActivate: [authGuard] // Protection par authentification
+  }
+
 ];
 
 @NgModule({
