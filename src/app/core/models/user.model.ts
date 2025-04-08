@@ -5,6 +5,8 @@
 
 export interface Rule {
   id?: number;
+  name?: string;
+  description?: string;
   // Ajoutez d'autres propriétés selon votre entité Rule
 }
 
@@ -32,6 +34,7 @@ export interface User {
   email: string;
   userKey?: string;
   rule?: Rule;
+  roles: string[]; // Ajout de la propriété roles qui manquait
 
   // Ces relations peuvent être optionnelles car elles sont souvent
   // chargées séparément ou sur demande

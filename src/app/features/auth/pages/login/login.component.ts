@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router'; // Ajout de ActivatedRoute
 import { AuthService } from '../../../../core/authentication/auth.service';
 import {LoginRequest} from '../../../../core/models/user.model';
 
@@ -26,7 +26,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute // Ajout de l'injection de ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -44,31 +45,40 @@ export class LoginComponent implements OnInit {
    * Gère la soumission du formulaire de connexion
    */
   onSubmit(): void {
-    // Vérifie si le formulaire est valide
     if (this.loginForm.valid) {
       this.loading = true;
       this.errorMessage = '';
 
       const loginRequest: LoginRequest = this.loginForm.value;
 
-      // Appel au service d'authentification
       this.authService.login(loginRequest).subscribe({
         next: (response: any) => {
-          // Connexion réussie
           console.log('Connexion réussie:', response);
           this.loading = false;
-          // Redirection vers la page d'accueil ou une autre page
-          // this.router.navigate(['/home']);
+
+          // Récupérer l'URL de retour depuis les paramètres de l'URL ou utiliser le dashboard par défaut
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+
+          // Navigation avec gestion de promesse simplifiée mais efficace
+          this.router.navigateByUrl(returnUrl)
+            .then(() => console.log(`Navigation vers ${returnUrl} réussie`))
+            .catch(error => {
+              console.error('Erreur de navigation', error);
+              // En cas d'échec, rediriger vers le dashboard comme solution de repli
+              if (returnUrl !== '/dashboard') {
+                this.router.navigateByUrl('/dashboard').catch(err =>
+                  console.error('Navigation de repli échouée', err)
+                );
+              }
+            });
         },
         error: (error: any) => {
-          // Gestion des erreurs
           this.loading = false;
           this.errorMessage = error.message || 'Erreur de connexion. Veuillez réessayer.';
           console.error('Erreur de connexion', error);
         }
       });
     } else {
-      // Marque tous les champs comme touchés pour afficher les erreurs
       this.markFormGroupTouched(this.loginForm);
     }
   }
