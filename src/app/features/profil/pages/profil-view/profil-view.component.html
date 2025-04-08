@@ -1,0 +1,81 @@
+<!-- src/app/features/profil/pages/profil-view/profil-view.component.html -->
+<div class="profil-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Mon Profil</mat-card-title>
+      <button mat-icon-button color="primary" (click)="toggleEditMode()"
+              [disabled]="loading">
+        <mat-icon>{{ editMode ? 'close' : 'edit' }}</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="loading" class="loading-indicator">
+        Chargement...
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <form [formGroup]="profilForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="nom">
+            <mat-error *ngIf="profilForm.get('nom')?.errors?.['required']">
+              Le nom est requis
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Prénom</mat-label>
+            <input matInput formControlName="prenom">
+            <mat-error *ngIf="profilForm.get('prenom')?.errors?.['required']">
+              Le prénom est requis
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email">
+            <mat-error *ngIf="profilForm.get('email')?.errors?.['required']">
+              L'email est requis
+            </mat-error>
+            <mat-error *ngIf="profilForm.get('email')?.errors?.['email']">
+              Format d'email invalide
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Adresse</mat-label>
+            <input matInput formControlName="adresse">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Téléphone</mat-label>
+            <input matInput formControlName="telephone">
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions" *ngIf="editMode">
+          <button mat-raised-button color="primary" type="submit"
+                  [disabled]="profilForm.invalid || loading">
+            Enregistrer
+          </button>
+          <button mat-button type="button" (click)="toggleEditMode()">
+            Annuler
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
