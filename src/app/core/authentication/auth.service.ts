@@ -8,6 +8,14 @@ import { User, AuthResponse, LoginRequest, RegisterRequest } from '../models/use
 import { environment } from '../../../environments/environment';
 import { jwtDecode } from 'jwt-decode';
 
+// Définition de l'interface pour le payload du token JWT
+interface TokenPayload {
+  sub: string;      // ID utilisateur
+  exp?: number;     // Date d'expiration
+  roles?: string[]; // Rôles utilisateur
+  iat?: number;     // Date d'émission du token
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -29,6 +37,7 @@ export class AuthService {
     this.currentUserSubject = new BehaviorSubject<User | null>(userInfo);
     this.currentUser = this.currentUserSubject.asObservable();
   }
+
 
   public get currentUserValue(): User | null {
     return this.currentUserSubject.value;
@@ -131,4 +140,67 @@ export class AuthService {
     console.error(errorMessage);
     return throwError(() => new Error(errorMessage));
   }
+
+  // Pour la demande de réinitialisation de mot de passe
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/forgot-password`, { email })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  // Pour la réinitialisation de mot de passe
+  resetPassword(token: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/reset-password`, { token, password })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  // Pour vérifier la validité d'un token de réinitialisation
+  verifyResetToken(token: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/auth/verify-reset-token/${token}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  // Méthode pour vérifier si l'utilisateur est authentifié
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+
+    if (!token) {
+      return false;
+    }
+
+    // Vérification de l'expiration du token
+    try {
+      const decodedToken = jwtDecode<TokenPayload>(token);
+      const currentTime = Date.now() / 1000;
+
+      if (decodedToken.exp && decodedToken.exp < currentTime) {
+        // Token expiré
+        this.logout();
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Erreur lors de la validation du token:', error);
+      return false;
+    }
+  }
+
+  hasRole(requiredRoles: string[]): boolean {
+    const user = this.currentUserValue;
+
+    // Si l'utilisateur n'est pas connecté, retourner false
+    if (!user) {
+      return false;
+    }
+
+    // Vérifier si l'utilisateur a au moins un des rôles requis
+    return requiredRoles.some(role => user.roles.includes(role));
+  }
+
 }
