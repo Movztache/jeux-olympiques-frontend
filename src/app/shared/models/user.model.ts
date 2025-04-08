@@ -1,11 +1,19 @@
+// Définir l'interface Rule
+export interface Rule {
+  id?: number;
+  name: string;
+  description?: string;
+  // Ajoutez d'autres propriétés selon vos besoins
+}
+
+// Puis l'ajouter à l'interface User quand nécessaire
 export interface User {
   userId?: number;
   firstName: string;
   lastName: string;
   email: string;
-  password?: string; // Optionnel car sensible
+  password?: string;
   userKey?: string;
-  // Nous n'incluons pas les relations (carts, logs, reservations, rule) pour l'instant
-  // On pourra les ajouter selon les besoins
-
+  roles: string[];
+  rule?: Rule; // Relation avec Rule (optionnelle)
 }
