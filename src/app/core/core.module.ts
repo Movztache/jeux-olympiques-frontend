@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 // provideHttpClient : Fonction moderne pour configurer le client HTTP
 import { provideHttpClient } from '@angular/common/http';
 
+
 /**
  * Module Core qui contient les services singleton et fonctionnalités essentielles de l'application.
  * Ce module ne doit être importé qu'une seule fois, dans le AppModule.
