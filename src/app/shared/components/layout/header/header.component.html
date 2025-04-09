@@ -1,0 +1,43 @@
+<header class="header">
+  <div class="header-container">
+    <div class="logo">
+      <a routerLink="/">Jeux Olympiques 2025</a>
+    </div>
+
+    <button class="mobile-menu-toggle" (click)="toggleMenu()">
+      <span class="material-icons">{{ isMenuOpen ? 'close' : 'menu' }}</span>
+    </button>
+
+    <nav class="nav-menu" [class.open]="isMenuOpen">
+      <ul class="nav-list">
+        <li class="nav-item"><a routerLink="/home" routerLinkActive="active">Accueil</a></li>
+        <li class="nav-item"><a routerLink="/events" routerLinkActive="active">Épreuves</a></li>
+        <li class="nav-item"><a routerLink="/offers" routerLinkActive="active">Billetterie</a></li>
+      </ul>
+
+      <div class="auth-buttons">
+        <ng-container *ngIf="!isLoggedIn">
+          <a routerLink="/auth/login" class="login-btn">Connexion</a>
+          <a routerLink="/auth/register" class="register-btn">Inscription</a>
+        </ng-container>
+
+        <ng-container *ngIf="isLoggedIn">
+          <a routerLink="/cart" class="cart-btn">
+            <span class="material-icons">shopping_cart</span>
+            <span class="cart-count" *ngIf="cartItemsCount > 0">{{ cartItemsCount }}</span>
+          </a>
+
+          <a routerLink="/profile" class="profile-btn">
+            <span class="material-icons">person</span>
+            <span class="profile-text">Mon Profil</span>
+          </a>
+
+          <button class="logout-btn" (click)="logout()">
+            <span class="material-icons">logout</span>
+            <span class="logout-text">Déconnexion</span>
+          </button>
+        </ng-container>
+      </div>
+    </nav>
+  </div>
+</header>
