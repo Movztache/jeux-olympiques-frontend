@@ -1,25 +1,29 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-// Import du composant LoginComponent
-import { LoginComponent } from './pages/login/login.component';
-import { RegisterComponent} from './pages/register/register.component';
-import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { HomePageComponent } from '../home/pages/home-page/home-page.component';
 
 const routes: Routes = [
-  // Configuration de la route pour le composant LoginComponent
-  { path: 'login', component: LoginComponent },
-  // Redirection vers login si aucun chemin n'est spécifié dans /auth
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'register', component: RegisterComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'reset-password', component: ResetPasswordComponent }
+  // Redirection de la route racine vers /home
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
 
+  // Route de la page d'accueil
+  { path: 'home', component: HomePageComponent },
+
+  // Autres routes principales
+  // { path: 'events', loadChildren: () => import('./features/events/events.module').then(m => m.EventsModule) },
+  // { path: 'offers', loadChildren: () => import('./features/offers/offers.module').then(m => m.OffersModule) },
+
+  // Module d'authentification en lazy loading
+  { path: 'auth', loadChildren: () => import('./auth.module').then(m => m.AuthModule) },
+
+  // Vous pouvez ajouter d'autres modules ou routes ici
+
+  // Gestion des routes inexistantes (toujours en dernière position)
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AuthRoutingModule { }
+export class AppRoutingModule { }

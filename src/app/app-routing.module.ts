@@ -1,40 +1,34 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/pages/login/login.component';
-import {authGuard} from './core/guards/auth.guard';
+import { authGuard } from './core/guards/auth.guard';
+import { HomePageComponent } from './features/home/pages/home-page/home-page.component';
 
-// La constante routes définit toutes les routes disponibles dans l'application
 const routes: Routes = [
-  // Cette route associe le chemin 'login' au composant LoginComponent
-  // Quand l'URL sera '/login', Angular affichera le composant LoginComponent
+  // IMPORTANT: Cette redirection doit être en PREMIER
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+
+  // Page d'accueil - SANS authGuard
+  { path: 'home', component: HomePageComponent },
+
+  // Page de login
   { path: 'login', component: LoginComponent },
 
-
-  // Cette route gère l'URL racine '' (ex: http://localhost:4200/)
-  // 'redirectTo' redirige vers le chemin spécifié ('/login')
-  // 'pathMatch: full' signifie que toute l'URL doit correspondre exactement au chemin vide ''
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-
-  // Cette route avec '**' est un joker qui correspond à toutes les routes non définies ci-dessus
-  // Elle redirige vers '/login' pour toutes les URLs qui ne correspondent à aucune route définie
-  { path: '**', redirectTo: '/login' },
-
+  // Pages protégées - avec authGuard
   {
     path: 'profil',
     loadChildren: () => import('./features/profil/profil.module').then(m => m.ProfilModule),
-    canActivate: [authGuard] // Protection par authentification
-  }
+    canActivate: [authGuard]
+  },
+  // Autres routes protégées...
 
+  // Redirection de toute route inconnue vers home
+  { path: '**', redirectTo: 'home' }
 ];
 
-@NgModule({
-  // RouterModule.forRoot(routes) enregistre les routes au niveau racine de l'application
-  // C'est nécessaire pour que le système de routing fonctionne
-  imports: [RouterModule.forRoot(routes)],
 
-  // Exporte RouterModule pour qu'il soit disponible dans tout le module AppModule
-  // Cela nous permet d'utiliser des directives comme routerLink et router-outlet
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-

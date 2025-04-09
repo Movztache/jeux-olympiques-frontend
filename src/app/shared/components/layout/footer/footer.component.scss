@@ -1,0 +1,106 @@
+.footer {
+  background-color: #1a1a2e;
+  color: #fff;
+  padding: 3rem 0 1rem;
+  width: 100%;
+  margin-top: auto; // Pousse le footer en bas de la page
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  gap: 2rem;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+  margin-bottom: 1.5rem;
+}
+
+.footer-title {
+  color: #f1f1f1;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.5rem;
+    width: 40px;
+    height: 2px;
+    background-color: #e63946; // Couleur d'accent olympique
+  }
+}
+
+.footer-description {
+  line-height: 1.6;
+  color: #c9c9c9;
+  font-size: 0.9rem;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin-bottom: 0.75rem;
+  }
+
+  a {
+    color: #c9c9c9;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease-in-out;
+
+    &:hover {
+      color: #e63946; // Couleur d'accent olympique
+    }
+  }
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+
+  a {
+    color: #fff;
+    font-size: 1.5rem;
+    transition: color 0.2s ease-in-out;
+
+    &:hover {
+      color: #e63946; // Couleur d'accent olympique
+    }
+  }
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  text-align: center;
+}
+
+.copyright {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+// Media queries pour la responsivité
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+  }
+
+  .footer-section {
+    min-width: 100%;
+  }
+}
