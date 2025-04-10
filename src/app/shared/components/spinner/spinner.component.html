@@ -1,0 +1,15 @@
+<div class="spinner-container" [class.overlay]="overlay">
+  <div class="spinner-content">
+    <mat-spinner
+      [diameter]="diameter"
+      [color]="color"
+      [mode]="mode"
+      [value]="value"
+      [strokeWidth]="strokeWidth">
+    </mat-spinner>
+
+    <div *ngIf="message" class="spinner-message">
+      {{ message }}
+    </div>
+  </div>
+</div>
