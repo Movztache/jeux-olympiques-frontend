@@ -1,1 +1,11 @@
-<p>card works!</p>
+<div [ngClass]="cardType === 'sport' ? 'sport-card' : 'news-card'">
+  <img *ngIf="imgSrc" [src]="imgSrc" [alt]="imgAlt">
+
+  <h3 *ngIf="cardType === 'news' && title">{{title}}</h3>
+
+  <p>{{description}}</p>
+
+  <a *ngIf="cardType === 'news' && linkUrl" [href]="linkUrl">{{linkText}}</a>
+</div>
+
+<!--il faut pushh-->

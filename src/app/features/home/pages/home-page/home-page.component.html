@@ -12,44 +12,62 @@
   <section class="sports">
     <h2>Quelques sports</h2>
     <div class="sports-grid">
-      <div class="sport-card">
-        <img src="assets/pictures/vtt.webp" alt="Cyclisme Mountain Bike">
-        <p>Cyclisme Mountain Bike</p>
-      </div>
-      <div class="sport-card">
-        <img src="assets/pictures/escrime.webp" alt="Escrime">
-        <p>Escrime</p>
-      </div>
-      <div class="sport-card">
-        <img src="assets/pictures/natation.webp" alt="Natation">
-        <p>Natation</p>
-      </div>
-      <div class="sport-card">
-        <img src="assets/pictures/gym.webp" alt="Gymnastique Artistique">
-        <p>Gymnastique Artistique</p>
-      </div>
-      <div class="sport-card">
-        <img src="assets/pictures/judo.webp" alt="Judo">
-        <p>Judo</p>
-      </div>
+      <app-card
+        cardType="sport"
+        imgSrc="assets/pictures/vtt.webp"
+        imgAlt="Cyclisme Mountain Bike"
+        description="Cyclisme Mountain Bike">
+      </app-card>
+
+      <app-card
+        cardType="sport"
+        imgSrc="assets/pictures/escrime.webp"
+        imgAlt="Escrime"
+        description="Escrime">
+      </app-card>
+
+      <app-card
+        cardType="sport"
+        imgSrc="assets/pictures/natation.webp"
+        imgAlt="Natation"
+        description="Natation">
+      </app-card>
+
+      <app-card
+        cardType="sport"
+        imgSrc="assets/pictures/gym.webp"
+        imgAlt="Gymnastique Artistique"
+        description="Gymnastique Artistique">
+      </app-card>
+
+      <app-card
+        cardType="sport"
+        imgSrc="assets/pictures/judo.webp"
+        imgAlt="Judo"
+        description="Judo">
+      </app-card>
     </div>
   </section>
 
   <section class="news-highlights">
     <h2>Actualités</h2>
     <div class="news-grid">
-      <article class="news-card">
-<!--        <img src="assets/images/news/news-1.jpg" alt="Actualité olympique">-->
-        <h3>Nouveau record du monde pour le 400m nage libre</h3>
-        <p>Le nageur australien bat le record du monde lors des séries éliminatoires.</p>
-        <a href="#">Lire la suite</a>
-      </article>
-      <article class="news-card">
-<!--        <img src="assets/images/news/news-2.jpg" alt="Actualité olympique">-->
-        <h3>La gymnaste française remporte l'or</h3>
-        <p>Une performance exceptionnelle qui fait la fierté de toute la nation.</p>
-        <a href="#">Lire la suite</a>
-      </article>
+      <app-card
+        cardType="news"
+        title="Nouveau record du monde pour le 400m nage libre"
+        description="Le nageur australien bat le record du monde lors des séries éliminatoires."
+        linkUrl="#"
+        linkText="Lire la suite">
+      </app-card>
+
+      <app-card
+        cardType="news"
+        title="La gymnaste française remporte l'or"
+        description="Une performance exceptionnelle qui fait la fierté de toute la nation."
+        linkUrl="#"
+        linkText="Lire la suite">
+      </app-card>
     </div>
   </section>
+
 </div>
