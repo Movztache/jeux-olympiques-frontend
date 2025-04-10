@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService} from '../../../../core/authentication/auth.service';
-import { NgOptimizedImage} from '@angular/common';
+import { AuthService } from '../../../../core/authentication/auth.service';
+import { NgOptimizedImage } from '@angular/common';
+import { CardComponent } from '../../../../shared/components/card/card.component'; // Ajustez le chemin selon votre structure
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   standalone: true,
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, CardComponent],
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent implements OnInit {
