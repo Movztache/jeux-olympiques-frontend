@@ -18,3 +18,4 @@ export class CardComponent {
   @Input() linkText: string = 'Lire la suite';
 }
 
+// il faut push pour voir
