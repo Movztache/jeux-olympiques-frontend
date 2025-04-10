@@ -17,3 +17,4 @@ export class CardComponent {
   @Input() linkUrl: string = '';
   @Input() linkText: string = 'Lire la suite';
 }
+
