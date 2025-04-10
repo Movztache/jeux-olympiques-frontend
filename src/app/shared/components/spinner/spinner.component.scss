@@ -1,0 +1,46 @@
+:host {
+  display: contents;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+  }
+}
+
+.spinner-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner-message {
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  text-align: center;
+  max-width: 200px;
+}
+
+// Animation pour faire apparaître le spinner progressivement
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+:host {
+  animation: fadeIn 0.3s ease-in;
+}
