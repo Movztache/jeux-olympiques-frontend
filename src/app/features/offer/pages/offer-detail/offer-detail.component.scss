@@ -1,0 +1,122 @@
+/* offer-detail.component.scss */
+.offer-detail-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 0 16px;
+}
+
+.offer-card {
+  margin-bottom: 20px;
+}
+
+.offer-image {
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.price-section {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+
+  .price {
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+  .discount {
+    background-color: #f44336;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+}
+
+.description-section,
+.details-section {
+  margin: 20px 0;
+
+  h3 {
+    margin-bottom: 10px;
+    color: #3f51b5;
+  }
+}
+
+.detail-item {
+  display: flex;
+  margin-bottom: 8px;
+
+  .label {
+    width: 150px;
+    font-weight: 500;
+    color: #555;
+  }
+
+  .value {
+    flex: 1;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+
+  p {
+    margin-top: 16px;
+    color: #666;
+  }
+}
+
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff3f3;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: #d32f2f;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+}
+
+.error-card {
+  text-align: center;
+  padding: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .price-section {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .price {
+      margin-bottom: 8px;
+    }
+  }
+
+  .detail-item {
+    flex-direction: column;
+
+    .label {
+      width: 100%;
+      margin-bottom: 4px;
+    }
+  }
+}
