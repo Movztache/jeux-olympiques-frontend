@@ -20,7 +20,7 @@ const routes: Routes = [
   // Billetterie accessible à tous
   {
     path: 'billetterie',
-    loadChildren: () => import('./features/billetterie/billetterie.module').then(m => m.BilletterieModule)
+    loadChildren: () => import('./features/offer/offer.module').then(m => m.OfferModule)
   },
 
   // Panier accessible à tous
