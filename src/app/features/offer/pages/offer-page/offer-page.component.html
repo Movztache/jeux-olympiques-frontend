@@ -1,0 +1,77 @@
+<div class="offers-container">
+  <header class="offers-header">
+    <h1>Découvrez nos offres</h1>
+    <p class="subtitle">Sélectionnez l'offre qui vous convient pour profiter pleinement des Jeux Olympiques</p>
+
+    <!-- Filtres par type -->
+    <div class="filter-container">
+      <mat-chip-set aria-label="Type de billets">
+        <mat-chip
+          [selected]="selectedType === null"
+          (click)="filterByType(null)">
+          Tous
+        </mat-chip>
+        <mat-chip
+          *ngFor="let type of offerTypes"
+          [selected]="selectedType === type"
+          (click)="filterByType(type)">
+          {{ type }}
+        </mat-chip>
+      </mat-chip-set>
+    </div>
+  </header>
+
+  <!-- Liste des offres -->
+  <div class="offers-grid">
+    <ng-container *ngIf="(offers$ | async) as offers; else loading">
+      <div *ngIf="offers.length > 0; else noOffers">
+        <mat-card *ngFor="let offer of offers" class="offer-card" [class.unavailable]="!offer.available">
+          <mat-card-header>
+            <mat-card-title>{{ offer.name }}</mat-card-title>
+            <mat-card-subtitle>
+              <span class="offer-type">{{ offer.offerType }}</span>
+              <span class="offer-price">{{ offer.price | currency:'EUR' }}</span>
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p>{{ offer.description }}</p>
+            <div class="offer-details">
+              <div class="offer-detail">
+                <mat-icon>people</mat-icon>
+                <span>{{ offer.personCount }} personne(s)</span>
+              </div>
+              <div class="offer-detail">
+                <mat-icon>{{ offer.available ? 'check_circle' : 'cancel' }}</mat-icon>
+                <span>{{ offer.available ? 'Disponible' : 'Indisponible' }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-raised-button color="primary" [disabled]="!offer.available">
+              Réserver
+            </button>
+            <button mat-button color="accent">
+              Plus d'infos
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+
+      <ng-template #noOffers>
+        <div class="no-offers">
+          <mat-icon>sentiment_dissatisfied</mat-icon>
+          <p>Aucune offre disponible pour le moment</p>
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <ng-template #loading>
+      <div class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Chargement des offres...</p>
+      </div>
+    </ng-template>
+  </div>
+</div>
