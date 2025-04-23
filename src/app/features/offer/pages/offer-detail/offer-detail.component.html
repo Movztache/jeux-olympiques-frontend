@@ -1,0 +1,55 @@
+<div class="offer-detail-container" *ngIf="offer$ | async as offer; else loadingOrError">
+  <mat-card class="offer-card">
+    <mat-card-header>
+      <mat-card-title>{{ offer.name }}</mat-card-title>
+      <mat-card-subtitle>{{ offer.price | currency:'EUR' }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="offer-meta">
+        <div class="chips">
+          <mat-chip>{{ offer.offerType }}</mat-chip>
+          <mat-chip>{{ offer.personCount }} personne(s)</mat-chip>
+          <mat-chip [color]="offer.available ? 'primary' : 'warn'">
+            {{ offer.available ? 'Disponible' : 'Non disponible' }}
+          </mat-chip>
+        </div>
+      </div>
+
+      <mat-divider class="divider"></mat-divider>
+
+      <div class="offer-description" *ngIf="offer.description">
+        <h2>Description</h2>
+        <div [innerHTML]="offer.description"></div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" [disabled]="!offer.available" (click)="reserve(offer)">
+        <mat-icon>calendar_today</mat-icon> Réserver
+      </button>
+      <button mat-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon> Retour
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<ng-template #loadingOrError>
+  <div *ngIf="!error" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Chargement des détails de l'offre...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <mat-card>
+      <mat-card-content>
+        <mat-icon color="warn">error</mat-icon>
+        <p class="error-message">{{ error }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="goBack()">Retour</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</ng-template>
