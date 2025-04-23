@@ -2,13 +2,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Pour les directives communes comme *ngIf, *ngFor
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; // Pour la gestion des formulaires réactifs
-import { Router } from '@angular/router'; // Pour la navigation après inscription
+import {Router, RouterLink} from '@angular/router'; // Pour la navigation après inscription
 import { AuthService } from '../../../../core/authentication/auth.service'; // Service d'authentification
 
 @Component({
   selector: 'app-register', // Sélecteur CSS pour utiliser ce composant
   standalone: true, // Composant autonome (pas besoin d'être déclaré dans un module)
-  imports: [CommonModule, ReactiveFormsModule], // Modules importés par ce composant
+  imports: [CommonModule, ReactiveFormsModule, RouterLink], // Modules importés par ce composant
   templateUrl: './register.component.html', // Template HTML associé
   styleUrls: ['./register.component.scss'] // Styles SCSS associés
 })

@@ -1,77 +1,79 @@
 <div class="offers-container">
-  <header class="offers-header">
-    <h1>Découvrez nos offres</h1>
-    <p class="subtitle">Sélectionnez l'offre qui vous convient pour profiter pleinement des Jeux Olympiques</p>
-
-    <!-- Filtres par type -->
-    <div class="filter-container">
-      <mat-chip-set aria-label="Type de billets">
-        <mat-chip
-          [selected]="selectedType === null"
-          (click)="filterByType(null)">
-          Tous
-        </mat-chip>
-        <mat-chip
-          *ngFor="let type of offerTypes"
-          [selected]="selectedType === type"
-          (click)="filterByType(type)">
-          {{ type }}
-        </mat-chip>
-      </mat-chip-set>
+  <!-- Filtres par type d'offre -->
+  <div class="filters">
+    <h2>Filtrer par type</h2>
+    <div class="filter-chips">
+      <button mat-button
+              [class.active]="selectedType === null"
+              (click)="filterByType(null)">
+        Tous
+      </button>
+      <button mat-button
+              *ngFor="let type of offerTypes"
+              [class.active]="selectedType === type"
+              (click)="filterByType(type)">
+        {{type}}
+      </button>
     </div>
-  </header>
+  </div>
 
   <!-- Liste des offres -->
-  <div class="offers-grid">
-    <ng-container *ngIf="(offers$ | async) as offers; else loading">
-      <div *ngIf="offers.length > 0; else noOffers">
-        <mat-card *ngFor="let offer of offers" class="offer-card" [class.unavailable]="!offer.available">
-          <mat-card-header>
-            <mat-card-title>{{ offer.name }}</mat-card-title>
-            <mat-card-subtitle>
-              <span class="offer-type">{{ offer.offerType }}</span>
-              <span class="offer-price">{{ offer.price | currency:'EUR' }}</span>
-            </mat-card-subtitle>
-          </mat-card-header>
+  <div class="offers-list" *ngIf="(offers$ | async) as offers; else loading">
+    <div *ngIf="offers.length > 0; else noOffers">
+      <mat-card class="offer-card" *ngFor="let offer of offers">
+        <mat-card-header>
+          <mat-card-title>{{offer.name}}</mat-card-title>
+          <mat-card-subtitle>{{offer.price | currency:'EUR'}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="offer-chips">
+            <mat-chip>{{offer.offerType}}</mat-chip>
+            <mat-chip>{{offer.personCount}} personne(s)</mat-chip>
+            <mat-chip [color]="offer.available ? 'primary' : 'warn'">
+              {{offer.available ? 'Disponible' : 'Non disponible'}}
+            </mat-chip>
+          </div>
+          <p class="offer-description" *ngIf="offer.description">
+            {{offer.description | slice:0:150}}{{offer.description.length > 150 ? '...' : ''}}
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary" (click)="viewOfferDetails(offer)">
+            <mat-icon>visibility</mat-icon> Voir détails
+          </button>
+          <button mat-raised-button color="accent" [disabled]="!offer.available" (click)="reserve(offer)">
+            <mat-icon>calendar_today</mat-icon> Réserver
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
 
-          <mat-card-content>
-            <p>{{ offer.description }}</p>
-            <div class="offer-details">
-              <div class="offer-detail">
-                <mat-icon>people</mat-icon>
-                <span>{{ offer.personCount }} personne(s)</span>
-              </div>
-              <div class="offer-detail">
-                <mat-icon>{{ offer.available ? 'check_circle' : 'cancel' }}</mat-icon>
-                <span>{{ offer.available ? 'Disponible' : 'Indisponible' }}</span>
-              </div>
-            </div>
-          </mat-card-content>
+  <!-- Templates pour les états alternatifs -->
+  <ng-template #loading>
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Chargement des offres...</p>
+    </div>
+  </ng-template>
 
-          <mat-card-actions>
-            <button mat-raised-button color="primary" [disabled]="!offer.available">
-              Réserver
-            </button>
-            <button mat-button color="accent">
-              Plus d'infos
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
+  <ng-template #noOffers>
+    <div class="no-offers">
+      <mat-icon>search_off</mat-icon>
+      <p>Aucune offre trouvée pour ces critères.</p>
+    </div>
+  </ng-template>
 
-      <ng-template #noOffers>
-        <div class="no-offers">
-          <mat-icon>sentiment_dissatisfied</mat-icon>
-          <p>Aucune offre disponible pour le moment</p>
-        </div>
-      </ng-template>
-    </ng-container>
-
-    <ng-template #loading>
-      <div class="loading-container">
-        <mat-spinner diameter="50"></mat-spinner>
-        <p>Chargement des offres...</p>
-      </div>
-    </ng-template>
+  <!-- Affichage des erreurs -->
+  <div *ngIf="error" class="error-container">
+    <mat-card>
+      <mat-card-content>
+        <mat-icon color="warn">error</mat-icon>
+        <p>{{error}}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="goBack()">Retour</button>
+      </mat-card-actions>
+    </mat-card>
   </div>
 </div>
