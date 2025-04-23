@@ -1,0 +1,59 @@
+<div class="reservation-detail-container" *ngIf="reservation$ | async as reservation">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Détail de la réservation</mat-card-title>
+      <mat-card-subtitle>
+        <span class="status-badge" [ngClass]="reservation.isUsed ? 'used' : 'active'">
+          {{ reservation.isUsed ? 'Utilisée' : 'Active' }}
+        </span>
+        <span class="reservation-id">ID: {{ reservation.reservationId }}</span>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="qr-code-section">
+        <img [src]="'data:image/png;base64,' + reservation.qrCode" alt="QR Code de la réservation" class="qr-code">
+        <p class="reservation-key">Clé: {{ reservation.reservationKey }}</p>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="info-section">
+        <h3>Informations</h3>
+        <p><strong>Date de réservation:</strong> {{ reservation.reservationDate | date:'dd/MM/yyyy HH:mm' }}</p>
+        <p><strong>Quantité:</strong> {{ reservation.quantity }}</p>
+        <p *ngIf="reservation.isUsed"><strong>Date d'utilisation:</strong> {{ reservation.usageDate | date:'dd/MM/yyyy HH:mm' }}</p>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="offer-section">
+        <h3>Offre</h3>
+        <p><strong>Nom:</strong> {{ reservation.offer.name }}</p>
+        <p><strong>Description:</strong> {{ reservation.offer.description }}</p>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="user-section">
+        <h3>Utilisateur</h3>
+        <p><strong>Nom:</strong> {{ reservation.userApp.firstName }} {{ reservation.userApp.lastName }}</p>
+        <p><strong>Email:</strong> {{ reservation.userApp.email }}</p>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-button color="warn" (click)="deleteReservation(reservation.reservationId!)">
+        <mat-icon>delete</mat-icon> Supprimer
+      </button>
+      <button mat-button color="primary" [routerLink]="['/reservations', reservation.reservationId, 'edit']">
+        <mat-icon>edit</mat-icon> Modifier
+      </button>
+      <button mat-raised-button color="accent"
+              *ngIf="!reservation.isUsed"
+              (click)="useReservation(reservation.reservationId!)">
+        <mat-icon>check_circle</mat-icon> Marquer comme utilisée
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

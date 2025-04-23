@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationStart, NavigationEnd, Event as RouterEvent } from '@angular/router';
+import {
+  Router,
+  NavigationStart,
+  NavigationEnd,
+  Event as RouterEvent,
+  NavigationCancel,
+  NavigationError
+} from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -23,7 +30,22 @@ import { filter } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   title = 'jeux-olympiques-frontend';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        console.log('Navigation démarrage:', event.url);
+      }
+      if (event instanceof NavigationEnd) {
+        console.log('Navigation terminée:', event.url);
+      }
+      if (event instanceof NavigationCancel) {
+        console.log('Navigation annulée:', event.url, 'Raison:', event.reason);
+      }
+      if (event instanceof NavigationError) {
+        console.log('Erreur de navigation:', event.url, 'Erreur:', event.error);
+      }
+    });
+  }
 
   ngOnInit() {
     // Surveillance des événements de navigation

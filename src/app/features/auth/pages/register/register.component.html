@@ -1,73 +1,84 @@
-<!-- reset-password.component.html -->
-<div class="reset-password-container">
-  <h2>Réinitialisation du mot de passe</h2>
+<!-- register.component.html -->
+<div class="register-container">
+  <h2>Inscription</h2>
 
-  <!-- Affichage pendant la vérification du token -->
-  <div *ngIf="isVerifying" class="loading-message">
-    <p>Vérification de votre lien de réinitialisation...</p>
-  </div>
-
-  <!-- Affichage d'erreur si pas de token valide -->
-  <div *ngIf="errorMessage && !resetSuccess && !isVerifying" class="alert-error">
+  <!-- Affichage d'erreur -->
+  <div *ngIf="errorMessage" class="alert-error">
     <p>{{ errorMessage }}</p>
-    <div class="form-links">
-      <a routerLink="/auth/forgot-password">Demander un nouveau lien</a>
-    </div>
   </div>
 
-  <!-- Formulaire de réinitialisation -->
-  <div *ngIf="!errorMessage && !resetSuccess && !isVerifying">
+  <!-- Formulaire d'inscription -->
+  <div>
     <p class="instructions">
-      Veuillez créer un nouveau mot de passe pour votre compte.
+      Veuillez remplir ce formulaire pour créer votre compte.
     </p>
 
-    <form [formGroup]="resetPasswordForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- Champ prénom -->
+      <div class="form-group">
+        <label for="firstName">Prénom</label>
+        <input
+          type="text"
+          id="firstName"
+          formControlName="firstName"
+          placeholder="Entrez votre prénom">
+        <div *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched" class="error-message">
+          <span *ngIf="registerForm.get('firstName')?.errors?.['required']">Prénom requis</span>
+        </div>
+      </div>
+
+      <!-- Champ nom de famille -->
+      <div class="form-group">
+        <label for="lastName">Nom</label>
+        <input
+          type="text"
+          id="lastName"
+          formControlName="lastName"
+          placeholder="Entrez votre nom">
+        <div *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched" class="error-message">
+          <span *ngIf="registerForm.get('lastName')?.errors?.['required']">Nom requis</span>
+        </div>
+      </div>
+
+      <!-- Champ email -->
+      <div class="form-group">
+        <label for="email">Adresse email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="Entrez votre adresse email">
+        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error-message">
+          <span *ngIf="registerForm.get('email')?.errors?.['required']">Email requis</span>
+          <span *ngIf="registerForm.get('email')?.errors?.['email']">Format d'email invalide</span>
+        </div>
+      </div>
+
       <!-- Champ mot de passe -->
       <div class="form-group">
-        <label for="password">Nouveau mot de passe</label>
+        <label for="password">Mot de passe</label>
         <input
           type="password"
           id="password"
           formControlName="password"
-          placeholder="Entrez votre nouveau mot de passe">
-        <div *ngIf="resetPasswordForm.get('password')?.invalid && resetPasswordForm.get('password')?.touched" class="error-message">
-          <span *ngIf="resetPasswordForm.get('password')?.errors?.['required']">Mot de passe requis</span>
-          <span *ngIf="resetPasswordForm.get('password')?.errors?.['minlength']">Le mot de passe doit contenir au moins 8 caractères</span>
+          placeholder="Entrez votre mot de passe">
+        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error-message">
+          <span *ngIf="registerForm.get('password')?.errors?.['required']">Mot de passe requis</span>
+          <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Le mot de passe doit contenir au moins 8 caractères</span>
         </div>
-      </div>
-
-      <!-- Champ confirmation de mot de passe -->
-      <div class="form-group">
-        <label for="confirmPassword">Confirmer le mot de passe</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          formControlName="confirmPassword"
-          placeholder="Confirmez votre nouveau mot de passe">
-        <div *ngIf="resetPasswordForm.get('confirmPassword')?.invalid && resetPasswordForm.get('confirmPassword')?.touched" class="error-message">
-          <span *ngIf="resetPasswordForm.get('confirmPassword')?.errors?.['required']">Confirmation requise</span>
-          <span *ngIf="resetPasswordForm.get('confirmPassword')?.errors?.['passwordMismatch']">Les mots de passe ne correspondent pas</span>
-        </div>
-      </div>
-
-      <!-- Message d'erreur si les mots de passe ne correspondent pas -->
-      <div *ngIf="resetPasswordForm.valid && !passwordsMatch" class="error-message">
-        <span>Les mots de passe ne correspondent pas</span>
       </div>
 
       <div class="form-actions">
         <button
           type="submit"
-          [disabled]="resetPasswordForm.invalid || !passwordsMatch || isSubmitting">
-          {{ isSubmitting ? 'Réinitialisation en cours...' : 'Réinitialiser le mot de passe' }}
+          [disabled]="registerForm.invalid || isSubmitting">
+          {{ isSubmitting ? 'Inscription en cours...' : 'S\'inscrire' }}
         </button>
       </div>
     </form>
   </div>
 
-  <!-- Message de succès après réinitialisation -->
-  <div *ngIf="resetSuccess" class="success-message">
-    <p>Votre mot de passe a été réinitialisé avec succès!</p>
-    <p>Vous allez être redirigé vers la page de connexion dans quelques secondes...</p>
+  <div class="form-links">
+    <p>Déjà inscrit ? <a routerLink="/auth/login">Se connecter</a></p>
   </div>
 </div>

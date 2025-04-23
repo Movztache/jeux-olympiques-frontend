@@ -1,0 +1,51 @@
+<div class="create-reservation-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Créer une nouvelle réservation</mat-card-title>
+      <mat-card-subtitle>Complétez le formulaire pour créer votre réservation</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="reservationForm" (ngSubmit)="submitReservation()">
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Offre</mat-label>
+            <mat-select formControlName="offerId" required>
+              <mat-option [value]="1">Offre 1</mat-option>
+              <mat-option [value]="2">Offre 2</mat-option>
+              <mat-option [value]="3">Offre 3</mat-option>
+              <!-- Ces options devraient être chargées dynamiquement depuis un service -->
+            </mat-select>
+            <mat-error *ngIf="reservationForm.get('offerId')?.hasError('required')">
+              Veuillez sélectionner une offre
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Quantité</mat-label>
+            <input matInput type="number" formControlName="quantity" min="1" required>
+            <mat-error *ngIf="reservationForm.get('quantity')?.hasError('required')">
+              La quantité est requise
+            </mat-error>
+            <mat-error *ngIf="reservationForm.get('quantity')?.hasError('min')">
+              La quantité doit être au moins de 1
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-button type="button" routerLink="/reservations">Annuler</button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="reservationForm.invalid || isSubmitting">
+            {{ isSubmitting ? 'Création en cours...' : 'Créer la réservation' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
