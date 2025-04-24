@@ -1,7 +1,7 @@
 import { User } from './user.model';
 import { Offer } from './offer.model';
 
-export interface Reservation {
+export interface ReservationModel {
   reservationId?: number;
   reservationDate: Date;
   reservationKey: string;

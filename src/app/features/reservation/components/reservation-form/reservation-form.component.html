@@ -1,0 +1,88 @@
+<div class="reservation-form-container">
+  <h2>Réservation de billets</h2>
+
+  <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+    <div class="form-section personal-info">
+      <h3>Informations personnelles</h3>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Prénom</mat-label>
+          <input matInput formControlName="firstName" placeholder="Votre prénom">
+          <mat-error *ngIf="reservationForm.get('firstName')?.hasError('required')">
+            Le prénom est requis
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="lastName" placeholder="Votre nom">
+          <mat-error *ngIf="reservationForm.get('lastName')?.hasError('required')">
+            Le nom est requis
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" placeholder="votre@email.com">
+          <mat-error *ngIf="reservationForm.get('email')?.hasError('required')">
+            L'email est requis
+          </mat-error>
+          <mat-error *ngIf="reservationForm.get('email')?.hasError('email')">
+            Format d'email invalide
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Téléphone</mat-label>
+          <input matInput formControlName="phoneNumber" placeholder="+33 6 XX XX XX XX">
+          <mat-error *ngIf="reservationForm.get('phoneNumber')?.hasError('required')">
+            Le numéro de téléphone est requis
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-section ticket-details">
+      <h3>Détails des billets</h3>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre de billets</mat-label>
+        <input matInput formControlName="ticketCount" type="number" min="1" [max]="maxTickets">
+        <mat-hint>Maximum: {{maxTickets}} billets pour l'offre {{offerType}}</mat-hint>
+        <mat-error *ngIf="reservationForm.get('ticketCount')?.hasError('required')">
+          Le nombre de billets est requis
+        </mat-error>
+        <mat-error *ngIf="reservationForm.get('ticketCount')?.hasError('min')">
+          Minimum 1 billet
+        </mat-error>
+        <mat-error *ngIf="reservationForm.get('ticketCount')?.hasError('max')">
+          Maximum {{maxTickets}} billets pour cette offre
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Demandes spéciales</mat-label>
+        <textarea matInput formControlName="specialRequests" placeholder="Besoins d'accessibilité ou autres demandes"></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="form-section terms">
+      <mat-checkbox formControlName="acceptTerms">
+        J'accepte les conditions générales de vente et de réservation
+      </mat-checkbox>
+      <mat-error *ngIf="reservationForm.get('acceptTerms')?.invalid && reservationForm.get('acceptTerms')?.touched">
+        Vous devez accepter les conditions pour continuer
+      </mat-error>
+    </div>
+
+    <div class="form-actions">
+      <button mat-button type="button" routerLink="/offers">Annuler</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="reservationForm.invalid">
+        Continuer vers la sélection de places
+      </button>
+    </div>
+  </form>
+</div>
