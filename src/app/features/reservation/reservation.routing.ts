@@ -21,11 +21,6 @@ export const RESERVATIONS_ROUTES: Routes = [
         data: { step: 'form' }
       },
       {
-        path: 'seats/:offerId',
-        component: CreateReservationComponent,
-        data: { step: 'seats' }
-      },
-      {
         path: 'payment/:offerId',
         component: CreateReservationComponent,
         data: { step: 'payment' }
