@@ -1,59 +1,99 @@
-<div class="reservation-detail-container" *ngIf="reservation$ | async as reservation">
+<!-- src/app/features/reservations/reservation-detail/reservation-detail.component.html -->
+<div class="reservation-detail-container">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Détail de la réservation</mat-card-title>
-      <mat-card-subtitle>
-        <span class="status-badge" [ngClass]="reservation.isUsed ? 'used' : 'active'">
-          {{ reservation.isUsed ? 'Utilisée' : 'Active' }}
-        </span>
-        <span class="reservation-id">ID: {{ reservation.reservationId }}</span>
-      </mat-card-subtitle>
+      <mat-card-title>
+        Détail de ma réservation
+      </mat-card-title>
+      <div class="header-actions">
+        <button mat-icon-button matTooltip="Retour à mes réservations" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
     </mat-card-header>
 
-    <mat-card-content>
-      <div class="qr-code-section">
-        <img [src]="'data:image/png;base64,' + reservation.qrCode" alt="QR Code de la réservation" class="qr-code">
-        <p class="reservation-key">Clé: {{ reservation.reservationKey }}</p>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <mat-card-content *ngIf="!isLoading && reservation">
+      <div class="reservation-header">
+        <div class="reservation-id">
+          <h2>Réservation #{{ reservation.reservationKey }}</h2>
+          <mat-chip [color]="reservation.isUsed ? 'accent' : 'primary'" selected>
+            {{ reservation.isUsed ? 'Utilisée' : 'Active' }}
+          </mat-chip>
+        </div>
+        <div class="reservation-date">
+          <p>Créée le: {{ reservation.reservationDate | date:'dd/MM/yyyy à HH:mm' }}</p>
+        </div>
       </div>
 
       <mat-divider></mat-divider>
 
-      <div class="info-section">
-        <h3>Informations</h3>
-        <p><strong>Date de réservation:</strong> {{ reservation.reservationDate | date:'dd/MM/yyyy HH:mm' }}</p>
-        <p><strong>Quantité:</strong> {{ reservation.quantity }}</p>
-        <p *ngIf="reservation.isUsed"><strong>Date d'utilisation:</strong> {{ reservation.usageDate | date:'dd/MM/yyyy HH:mm' }}</p>
+      <div class="detail-section">
+        <h3>Détails de l'offre</h3>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <strong>Offre:</strong> {{ reservation.offer?.name }}
+          </div>
+          <div class="detail-item">
+            <strong>Type:</strong> {{ reservation.offer?.offerType }}
+          </div>
+          <div class="detail-item">
+            <strong>Quantité:</strong> {{ reservation.quantity }}
+          </div>
+          <div class="detail-item">
+            <strong>Prix unitaire:</strong> {{ reservation.offer?.price | currency:'EUR' }}
+          </div>
+          <div class="detail-item">
+            <strong>Prix total:</strong> {{ reservation.quantity * (reservation.offer?.price || 0) | currency:'EUR' }}
+          </div>
+        </div>
       </div>
 
-      <mat-divider></mat-divider>
-
-      <div class="offer-section">
-        <h3>Offre</h3>
-        <p><strong>Nom:</strong> {{ reservation.offer.name }}</p>
-        <p><strong>Description:</strong> {{ reservation.offer.description }}</p>
+      <div class="detail-section" *ngIf="reservation.offer?.description">
+        <h3>Description</h3>
+        <p>{{ reservation.offer.description }}</p>
       </div>
 
-      <mat-divider></mat-divider>
+      <div class="detail-section qr-code" *ngIf="reservation.qrCode">
+        <h3>Code QR</h3>
+        <div class="qr-container">
+          <img [src]="reservation.qrCode" alt="QR Code de la réservation">
+        </div>
+      </div>
 
-      <div class="user-section">
-        <h3>Utilisateur</h3>
-        <p><strong>Nom:</strong> {{ reservation.userApp.firstName }} {{ reservation.userApp.lastName }}</p>
-        <p><strong>Email:</strong> {{ reservation.userApp.email }}</p>
+      <div class="detail-section usage-info" *ngIf="reservation.isUsed && reservation.usageDate">
+        <h3>Informations d'utilisation</h3>
+        <p>Utilisée le: {{ reservation.usageDate | date:'dd/MM/yyyy à HH:mm' }}</p>
       </div>
     </mat-card-content>
 
-    <mat-card-actions align="end">
-      <button mat-button color="warn" (click)="deleteReservation(reservation.reservationId!)">
-        <mat-icon>delete</mat-icon> Supprimer
-      </button>
-      <button mat-button color="primary" [routerLink]="['/reservations', reservation.reservationId, 'edit']">
-        <mat-icon>edit</mat-icon> Modifier
-      </button>
-      <button mat-raised-button color="accent"
-              *ngIf="!reservation.isUsed"
-              (click)="useReservation(reservation.reservationId!)">
-        <mat-icon>check_circle</mat-icon> Marquer comme utilisée
-      </button>
+    <mat-card-actions *ngIf="!isLoading && reservation">
+      <div class="action-buttons">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="downloadTicket()">
+          <mat-icon>download</mat-icon>
+          Télécharger mon billet
+        </button>
+        <button
+          mat-raised-button
+          color="accent"
+          [routerLink]="['/reservations', reservation.reservationId, 'ticket']">
+          <mat-icon>visibility</mat-icon>
+          Voir mon billet
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          [disabled]="reservation.isUsed"
+          (click)="cancelReservation()">
+          <mat-icon>cancel</mat-icon>
+          Annuler ma réservation
+        </button>
+      </div>
     </mat-card-actions>
+
   </mat-card>
 </div>
