@@ -33,24 +33,24 @@
         <h3>Détails de l'offre</h3>
         <div class="detail-grid">
           <div class="detail-item">
-            <strong>Offre:</strong> {{ reservation.offer?.name }}
+            <strong>Offre:</strong> {{ reservation.offer.name }}
           </div>
           <div class="detail-item">
-            <strong>Type:</strong> {{ reservation.offer?.offerType }}
+            <strong>Type:</strong> {{ reservation.offer.offerType }}
           </div>
           <div class="detail-item">
             <strong>Quantité:</strong> {{ reservation.quantity }}
           </div>
           <div class="detail-item">
-            <strong>Prix unitaire:</strong> {{ reservation.offer?.price | currency:'EUR' }}
+            <strong>Prix unitaire:</strong> {{ reservation.offer.price | currency:'EUR' }}
           </div>
           <div class="detail-item">
-            <strong>Prix total:</strong> {{ reservation.quantity * (reservation.offer?.price || 0) | currency:'EUR' }}
+            <strong>Prix total:</strong> {{ reservation.quantity * (reservation.offer.price || 0) | currency:'EUR' }}
           </div>
         </div>
       </div>
 
-      <div class="detail-section" *ngIf="reservation.offer?.description">
+      <div class="detail-section" *ngIf="reservation.offer.description">
         <h3>Description</h3>
         <p>{{ reservation.offer.description }}</p>
       </div>
