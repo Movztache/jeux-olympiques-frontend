@@ -1,6 +1,6 @@
 // src/app/core/models/user.model.ts
 
-// Définition des interfaces pour Rule, Cart, Log et Reservation
+// Définition des interfaces pour Rule, Cart, Log et ReservationModel
 // que nous pouvons simplifier pour l'instant
 
 export interface Rule {

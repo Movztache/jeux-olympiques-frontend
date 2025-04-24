@@ -1,0 +1,56 @@
+<div class="ticket-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Billet</mat-card-title>
+      <div class="header-actions">
+        <button mat-icon-button matTooltip="Retour au détail" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Imprimer billet" (click)="print()">
+          <mat-icon>print</mat-icon>
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <mat-card-content *ngIf="!isLoading && reservation">
+      <div class="ticket-header">
+        <div class="logo">
+          <img src="assets/jeux-olympiques-logo.png" alt="Logo Jeux Olympiques">
+        </div>
+        <h1 class="ticket-title">BILLET OFFICIEL</h1>
+        <div class="ticket-id">
+          <h2>Numéro: {{ reservation.reservationKey }}</h2>
+          <mat-chip [color]="reservation.isUsed ? 'accent' : 'primary'" selected>
+            {{ reservation.isUsed ? 'Utilisé' : 'Valide' }}
+          </mat-chip>
+        </div>
+      </div>
+
+      <div class="ticket-body">
+        <div class="offer-details">
+          <h3>{{ reservation.offer?.name }}</h3>
+          <p class="offer-type">{{ reservation.offer?.offerType }}</p>
+          <p class="quantity">Quantité: {{ reservation.quantity }}</p>
+          <p class="price">Prix: {{ reservation.quantity * (reservation.offer?.price || 0) | currency:'EUR' }}</p>
+        </div>
+
+        <div class="qr-section">
+          <div class="qr-container">
+            <img [src]="reservation.qrCode" alt="QR Code de la réservation">
+          </div>
+          <p class="scan-info">Scannez ce code pour accéder à l'événement</p>
+        </div>
+      </div>
+
+      <div class="ticket-footer">
+        <p>Réservation émise le: {{ reservation.reservationDate | date:'dd MMMM yyyy à HH:mm' }}</p>
+        <p *ngIf="reservation.isUsed && reservation.usageDate">
+          Billet utilisé le: {{ reservation.usageDate | date:'dd MMMM yyyy à HH:mm' }}
+        </p>
+        <p class="instructions">Veuillez présenter ce billet à l'entrée avec une pièce d'identité</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

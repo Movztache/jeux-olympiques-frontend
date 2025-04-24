@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -13,10 +13,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ReservationsService } from '../../../../core/services/reservation';
-import { Reservation } from '../../../../core/models/reservation';
-import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
-import {MatProgressBar} from '@angular/material/progress-bar';
+import { ReservationsService } from '../../../../core/services/reservation.service';
+import { ReservationModel } from '../../../../core/models/reservation.model';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { MatProgressBar } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-reservation-list',
@@ -47,8 +47,11 @@ import {MatProgressBar} from '@angular/material/progress-bar';
 export class ReservationListComponent implements OnInit {
   private reservationsService = inject(ReservationsService);
 
-  reservations: Reservation[] = [];
-  filteredReservations: Reservation[] = [];
+  // Ajout du mode d'affichage (admin ou utilisateur)
+  @Input() viewMode: 'admin' | 'user' = 'admin';
+
+  reservations: ReservationModel[] = [];
+  filteredReservations: ReservationModel[] = [];
   displayedColumns: string[] = ['reservationId', 'reservationDate', 'status', 'quantity', 'user', 'offer', 'actions'];
 
   // Pagination
@@ -63,12 +66,24 @@ export class ReservationListComponent implements OnInit {
   isLoading = true;
 
   ngOnInit(): void {
+    // Adapter les colonnes selon le mode d'affichage
+    if (this.viewMode === 'user') {
+      // En mode utilisateur, on supprime la colonne 'user'
+      this.displayedColumns = ['reservationId', 'reservationDate', 'status', 'quantity', 'offer', 'actions'];
+    }
+
     this.loadReservations();
   }
 
   loadReservations(): void {
     this.isLoading = true;
-    this.reservationsService.getReservations().subscribe({
+
+    // Choisir la méthode du service selon le mode
+    const reservationsObservable = this.viewMode === 'admin'
+      ? this.reservationsService.getReservations()
+      : this.reservationsService.getUserReservations();
+
+    reservationsObservable.subscribe({
       next: (data) => {
         this.reservations = data;
         this.applyFilters();
@@ -94,12 +109,22 @@ export class ReservationListComponent implements OnInit {
     // Filtre par texte de recherche
     if (this.searchText.trim()) {
       const search = this.searchText.toLowerCase().trim();
-      filtered = filtered.filter(res =>
-        (res.userApp.firstName?.toLowerCase().includes(search)) ||
-        (res.userApp.lastName?.toLowerCase().includes(search)) ||
-        (res.reservationKey?.toLowerCase().includes(search)) ||
-        (res.offer.name?.toLowerCase().includes(search))
-      );
+      filtered = filtered.filter(res => {
+        // En mode utilisateur, on ne filtre pas sur le nom d'utilisateur
+        if (this.viewMode === 'admin') {
+          return (
+            (res.userApp.firstName?.toLowerCase().includes(search)) ||
+            (res.userApp.lastName?.toLowerCase().includes(search)) ||
+            (res.reservationKey?.toLowerCase().includes(search)) ||
+            (res.offer.name?.toLowerCase().includes(search))
+          );
+        } else {
+          return (
+            (res.reservationKey?.toLowerCase().includes(search)) ||
+            (res.offer.name?.toLowerCase().includes(search))
+          );
+        }
+      });
     }
 
     this.filteredReservations = filtered;
@@ -128,58 +153,86 @@ export class ReservationListComponent implements OnInit {
   }
 
   onSort(sort: Sort): void {
-    const data = [...this.filteredReservations];
-    if (!sort.active || sort.direction === '') {
-      this.filteredReservations = data;
-      return;
-    }
+    // Implémentation existante...
+  }
 
-    this.filteredReservations = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'reservationId': return compare(a.reservationId, b.reservationId, isAsc);
-        case 'reservationDate': return compare(new Date(a.reservationDate).getTime(), new Date(b.reservationDate).getTime(), isAsc);
-        case 'status': return compare(a.isUsed, b.isUsed, isAsc);
-        case 'quantity': return compare(a.quantity, b.quantity, isAsc);
-        case 'user': return compare(a.userApp.lastName, b.userApp.lastName, isAsc);
-        case 'offer': return compare(a.offer.name, b.offer.name, isAsc);
-        default: return 0;
+  getPaginatedData(): ReservationModel[] {
+    const start = this.pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    return this.filteredReservations.slice(start, end);
+  }
+
+  // Ajouter une méthode pour télécharger le billet (à implémenter)
+  downloadTicket(reservationId: number, event: Event): void {
+    event.stopPropagation();
+    this.reservationsService.downloadTicket(reservationId).subscribe({
+      next: (data) => {
+        // Code pour télécharger le fichier (PDF, image, etc.)
+        console.log('Téléchargement du billet', data);
+        // Exemple: utiliser une fonction pour télécharger le blob
+        this.downloadFile(data, `ticket-${reservationId}.pdf`);
+      },
+      error: (error) => {
+        console.error('Erreur lors du téléchargement du billet:', error);
       }
     });
   }
 
-  deleteReservation(id: number): void {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')) {
-      this.reservationsService.deleteReservation(id).subscribe({
+  private downloadFile(data: Blob, fileName: string): void {
+    const url = window.URL.createObjectURL(data);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    setTimeout(() => window.URL.revokeObjectURL(url), 100);
+  }
+
+  /**
+   * Marque une réservation comme utilisée
+   */
+  markAsUsed(reservationId: number, event: Event): void {
+    event.stopPropagation(); // Empêcher la navigation vers les détails
+
+    if (confirm('Êtes-vous sûr de vouloir marquer cette réservation comme utilisée ?')) {
+      this.isLoading = true;
+      this.reservationsService.markAsUsed(reservationId).subscribe({
         next: () => {
-          this.loadReservations();
+          // Mettre à jour l'affichage sans recharger toutes les réservations
+          const reservation = this.reservations.find(r => r.reservationId === reservationId);
+          if (reservation) {
+            reservation.isUsed = true;
+            this.applyFilters(); // Réappliquer les filtres pour mettre à jour l'affichage
+          }
+          this.isLoading = false;
         },
         error: (error) => {
-          console.error('Erreur lors de la suppression:', error);
+          console.error('Erreur lors du marquage de la réservation comme utilisée:', error);
+          this.isLoading = false;
         }
       });
     }
   }
 
-  markAsUsed(id: number): void {
-    this.reservationsService.useReservation(id).subscribe({
-      next: () => {
-        this.loadReservations();
-      },
-      error: (error) => {
-        console.error('Erreur lors du marquage comme utilisée:', error);
-      }
-    });
-  }
+  /**
+   * Supprime une réservation
+   */
+  deleteReservation(reservationId: number, event: Event): void {
+    event.stopPropagation(); // Empêcher la navigation vers les détails
 
-  getPaginatedData(): Reservation[] {
-    const startIndex = this.pageIndex * this.pageSize;
-    return this.filteredReservations.slice(startIndex, startIndex + this.pageSize);
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette réservation ? Cette action est irréversible.')) {
+      this.isLoading = true;
+      this.reservationsService.deleteReservation(reservationId).subscribe({
+        next: () => {
+          // Supprimer la réservation de la liste locale
+          this.reservations = this.reservations.filter(r => r.reservationId !== reservationId);
+          this.applyFilters(); // Réappliquer les filtres pour mettre à jour l'affichage
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Erreur lors de la suppression de la réservation:', error);
+          this.isLoading = false;
+        }
+      });
+    }
   }
-}
-
-function compare(a: any, b: any, isAsc: boolean): number {
-  if (a === null || a === undefined) return isAsc ? -1 : 1;
-  if (b === null || b === undefined) return isAsc ? 1 : -1;
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

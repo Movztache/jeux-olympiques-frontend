@@ -13,7 +13,29 @@ export const RESERVATIONS_ROUTES: Routes = [
   {
     path: 'create',
     component: CreateReservationComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'form/:offerId',
+        component: CreateReservationComponent,
+        data: { step: 'form' }
+      },
+      {
+        path: 'seats/:offerId',
+        component: CreateReservationComponent,
+        data: { step: 'seats' }
+      },
+      {
+        path: 'payment/:offerId',
+        component: CreateReservationComponent,
+        data: { step: 'payment' }
+      },
+      {
+        path: '',
+        redirectTo: 'form',
+        pathMatch: 'full'
+      }
+    ]
   },
   {
     path: ':id',
