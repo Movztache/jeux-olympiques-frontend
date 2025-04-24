@@ -2,50 +2,68 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>Créer une nouvelle réservation</mat-card-title>
-      <mat-card-subtitle>Complétez le formulaire pour créer votre réservation</mat-card-subtitle>
+      <mat-card-subtitle>Suivez les étapes pour finaliser votre réservation</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
-      <form [formGroup]="reservationForm" (ngSubmit)="submitReservation()">
-        <div class="form-field">
-          <mat-form-field appearance="outline">
-            <mat-label>Offre</mat-label>
-            <mat-select formControlName="offerId" required>
-              <mat-option [value]="1">Offre 1</mat-option>
-              <mat-option [value]="2">Offre 2</mat-option>
-              <mat-option [value]="3">Offre 3</mat-option>
-              <!-- Ces options devraient être chargées dynamiquement depuis un service -->
-            </mat-select>
-            <mat-error *ngIf="reservationForm.get('offerId')?.hasError('required')">
-              Veuillez sélectionner une offre
-            </mat-error>
-          </mat-form-field>
-        </div>
+      <mat-stepper linear #stepper [selectedIndex]="currentStep">
+        <!-- Étape 1: Formulaire de réservation -->
+        <mat-step label="Informations de réservation" [completed]="currentStep > 0">
+          <app-reservation-form
+            [offerId]="reservationData.offerId"
+            [offerType]="reservationData.offerType"
+            (formSubmit)="handleFormSubmit($event)">
+          </app-reservation-form>
+        </mat-step>
 
-        <div class="form-field">
-          <mat-form-field appearance="outline">
-            <mat-label>Quantité</mat-label>
-            <input matInput type="number" formControlName="quantity" min="1" required>
-            <mat-error *ngIf="reservationForm.get('quantity')?.hasError('required')">
-              La quantité est requise
-            </mat-error>
-            <mat-error *ngIf="reservationForm.get('quantity')?.hasError('min')">
-              La quantité doit être au moins de 1
-            </mat-error>
-          </mat-form-field>
-        </div>
+        <!-- Étape 2: Sélection des sièges -->
+        <mat-step label="Sélection des places" [completed]="currentStep > 1">
+          <app-seat-selection
+            [eventId]="reservationData.offerId"
+            [requiredSeats]="reservationData.quantity"
+            (seatsSelected)="handleSeatsSelected($event)">
+          </app-seat-selection>
 
-        <div class="form-actions">
-          <button mat-button type="button" routerLink="/reservations">Annuler</button>
-          <button
-            mat-raised-button
-            color="primary"
-            type="submit"
-            [disabled]="reservationForm.invalid || isSubmitting">
-            {{ isSubmitting ? 'Création en cours...' : 'Créer la réservation' }}
-          </button>
-        </div>
-      </form>
+          <div class="step-actions">
+            <button mat-button (click)="goBack()">Retour</button>
+          </div>
+        </mat-step>
+
+        <!-- Étape 3: Confirmation et paiement -->
+        <mat-step label="Confirmation et paiement">
+          <div class="confirmation-step">
+            <h3>Récapitulatif de votre réservation</h3>
+
+            <div class="confirmation-details">
+              <p><strong>Offre sélectionnée:</strong> {{reservationData.offerId ? 'Offre #' + reservationData.offerId : 'Aucune'}}</p>
+              <p><strong>Nombre de places:</strong> {{reservationData.quantity}}</p>
+              <p><strong>Places sélectionnées:</strong>
+                <span *ngIf="reservationData.seats && reservationData.seats.length">
+                  {{getSeatLabels()}}
+                </span>
+                <span *ngIf="!reservationData.seats || !reservationData.seats.length">Aucune</span>
+              </p>
+              <p><strong>Prix total:</strong> {{getTotalPrice()}} €</p>
+            </div>
+
+            <div class="payment-placeholder">
+              <!-- Ici vous pourrez intégrer le composant de paiement -->
+              <p>Le système de paiement sera intégré ultérieurement.</p>
+            </div>
+
+            <div class="step-actions">
+              <button mat-button (click)="goBack()">Retour</button>
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="confirmReservation()"
+                [disabled]="isSubmitting || !reservationData.offerId || !reservationData.seats || reservationData.seats.length === 0">
+                {{ isSubmitting ? 'Traitement en cours...' : 'Confirmer la réservation' }}
+              </button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-stepper>
     </mat-card-content>
   </mat-card>
 </div>
