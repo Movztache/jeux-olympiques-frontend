@@ -11,18 +11,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ReservationsService } from '../../../../core/services/reservation.service';
 import { CreateReservationDto, ReservationModel } from '../../../../core/models/reservation.model';
 import { ReservationFormComponent } from '../../components/reservation-form/reservation-form.component';
-import { SeatSelectionComponent } from '../../components/seat-selection/seat-selection.component';
+import { Offer } from '../../../../core/models/offer.model';
 
-// Interface pour correspondre à l'interface Seat du SeatSelectionComponent
-interface Seat {
-  id: string;
-  row: number;
-  column: number;
-  isAvailable: boolean;
-  isSelected: boolean;
-  price: number;
-  category: 'standard' | 'premium' | 'vip';
-}
 
 @Component({
   selector: 'app-create-reservation',
@@ -36,8 +26,7 @@ interface Seat {
     MatCardModule,
     MatStepperModule,
     MatSnackBarModule,
-    ReservationFormComponent,
-    SeatSelectionComponent
+    ReservationFormComponent
   ],
   templateUrl: './create-reservation.component.html',
   styleUrls: ['./create-reservation.component.scss']
@@ -45,6 +34,7 @@ interface Seat {
 export class CreateReservationComponent {
   @ViewChild('stepper') stepper!: MatStepper;
 
+  selectedOffer: Offer | null = null;
   private fb = inject(FormBuilder);
   private reservationsService = inject(ReservationsService);
   private router = inject(Router);
@@ -60,12 +50,12 @@ export class CreateReservationComponent {
     quantity: number;
     offerType: 'solo' | 'duo' | 'family';
     customerInfo?: any;
-    seats: Seat[];
+    offerPrice: number;
   } = {
     offerId: null,
     quantity: 1,
     offerType: 'solo',
-    seats: []
+    offerPrice: 0
   };
 
   isSubmitting = false;
@@ -122,12 +112,6 @@ export class CreateReservationComponent {
     }
   }
 
-  // Gestion de la sélection des sièges
-  handleSeatsSelected(seats: Seat[]): void {
-    this.reservationData.seats = seats;
-    this.submitReservation();
-  }
-
   // Soumission de la réservation
   submitReservation(): void {
     if (this.isSubmitting) return;
@@ -156,4 +140,26 @@ export class CreateReservationComponent {
 
     });
   }
+
+  confirmReservation(): void {
+    // Appeler la méthode existante pour soumettre la réservation
+    this.submitReservation();
+  }
+
+  // Pour calculer le prix total
+  getTotalPrice(): number {
+    return this.reservationData.quantity * this.reservationData.offerPrice;
+  }
+
+// Pour retourner à l'étape précédente
+  goBack(): void {
+    this.currentStep--;
+    if (this.stepper) {
+      this.stepper.previous();
+    }
+  }
+
+
+
+
 }

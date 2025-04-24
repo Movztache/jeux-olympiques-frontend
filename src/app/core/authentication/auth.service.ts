@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { User, AuthResponse, LoginRequest, RegisterRequest } from '../models/user.model';
 import { environment } from '../../../environments/environment';
 import { jwtDecode } from 'jwt-decode';
@@ -44,17 +44,28 @@ export class AuthService {
   }
 
   login(loginRequest: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, loginRequest)
+    return this.http.post<any>(`${this.apiUrl}/auth/login`, loginRequest)
       .pipe(
-        tap(response => {
-          if (response && response.accessToken) {
-            this.storeToken(response.accessToken);
-
-            if (response.user) {
-              this.storeUserInfo(response.user);
-              this.currentUserSubject.next(response.user);
+        map((response: any) => {
+          // Transformer la réponse API en structure AuthResponse attendue
+          const authResponse: AuthResponse = {
+            accessToken: response.token, // Utiliser le token reçu comme accessToken
+            user: {
+              // Propriétés obligatoires selon l'interface User
+              email: response.email,
+              lastName: response.lastName || '', // Valeur par défaut si absente dans la réponse
+              firstName: response.firstName || '', // Valeur par défaut si absente dans la réponse
+              roles: [response.role], // Conversion du rôle en tableau pour correspondre à l'interface
+              // Autres propriétés optionnelles disponibles dans la réponse
+              userId: response.id
             }
-          }
+          };
+          return authResponse;
+        }),
+        tap((authResponse: AuthResponse) => {
+          this.storeToken(authResponse.accessToken);
+          this.storeUserInfo(authResponse.user);
+          this.currentUserSubject.next(authResponse.user);
         }),
         catchError(this.handleError)
       );

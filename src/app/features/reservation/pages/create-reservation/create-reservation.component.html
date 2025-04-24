@@ -10,23 +10,10 @@
         <!-- Étape 1: Formulaire de réservation -->
         <mat-step label="Informations de réservation" [completed]="currentStep > 0">
           <app-reservation-form
-            [offerId]="reservationData.offerId"
+            [offerId]="reservationData.offerId !== null ? reservationData.offerId.toString() : null"
             [offerType]="reservationData.offerType"
             (formSubmit)="handleFormSubmit($event)">
           </app-reservation-form>
-        </mat-step>
-
-        <!-- Étape 2: Sélection des sièges -->
-        <mat-step label="Sélection des places" [completed]="currentStep > 1">
-          <app-seat-selection
-            [eventId]="reservationData.offerId"
-            [requiredSeats]="reservationData.quantity"
-            (seatsSelected)="handleSeatsSelected($event)">
-          </app-seat-selection>
-
-          <div class="step-actions">
-            <button mat-button (click)="goBack()">Retour</button>
-          </div>
         </mat-step>
 
         <!-- Étape 3: Confirmation et paiement -->
@@ -37,12 +24,6 @@
             <div class="confirmation-details">
               <p><strong>Offre sélectionnée:</strong> {{reservationData.offerId ? 'Offre #' + reservationData.offerId : 'Aucune'}}</p>
               <p><strong>Nombre de places:</strong> {{reservationData.quantity}}</p>
-              <p><strong>Places sélectionnées:</strong>
-                <span *ngIf="reservationData.seats && reservationData.seats.length">
-                  {{getSeatLabels()}}
-                </span>
-                <span *ngIf="!reservationData.seats || !reservationData.seats.length">Aucune</span>
-              </p>
               <p><strong>Prix total:</strong> {{getTotalPrice()}} €</p>
             </div>
 
@@ -57,7 +38,7 @@
                 mat-raised-button
                 color="primary"
                 (click)="confirmReservation()"
-                [disabled]="isSubmitting || !reservationData.offerId || !reservationData.seats || reservationData.seats.length === 0">
+                [disabled]="isSubmitting || !reservationData.offerId">
                 {{ isSubmitting ? 'Traitement en cours...' : 'Confirmer la réservation' }}
               </button>
             </div>
