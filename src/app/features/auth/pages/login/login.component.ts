@@ -45,42 +45,26 @@ export class LoginComponent implements OnInit {
    * Gère la soumission du formulaire de connexion
    */
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      this.loading = true;
-      this.errorMessage = '';
+    if (this.loginForm.invalid) {
+      return;
+    }
 
-      const loginRequest: LoginRequest = this.loginForm.value;
+    const loginRequest: LoginRequest = {
+      email: this.loginForm.get('email')?.value,
+      password: this.loginForm.get('password')?.value
+    };
 
-      this.authService.login(loginRequest).subscribe({
-        next: (response: any) => {
-          console.log('Connexion réussie:', response);
-          this.loading = false;
-
-          // Récupérer l'URL de retour depuis les paramètres de l'URL ou utiliser le dashboard par défaut
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
-
-          // Navigation avec gestion de promesse simplifiée mais efficace
-          this.router.navigateByUrl(returnUrl)
-            .then(() => console.log(`Navigation vers ${returnUrl} réussie`))
-            .catch(error => {
-              console.error('Erreur de navigation', error);
-              // En cas d'échec, rediriger vers le dashboard comme solution de repli
-              if (returnUrl !== '/dashboard') {
-                this.router.navigateByUrl('/dashboard').catch(err =>
-                  console.error('Navigation de repli échouée', err)
-                );
-              }
-            });
+    this.authService.login(loginRequest)
+      .subscribe({
+        next: () => {
+          // Navigation vers le tableau de bord après connexion réussie
+          this.router.navigate(['/dashboard']);
         },
-        error: (error: any) => {
-          this.loading = false;
-          this.errorMessage = error.message || 'Erreur de connexion. Veuillez réessayer.';
-          console.error('Erreur de connexion', error);
+        error: (error) => {
+          // Gestion des erreurs de manière plus propre
+          this.errorMessage = error?.error?.message || 'Erreur de connexion';
         }
       });
-    } else {
-      this.markFormGroupTouched(this.loginForm);
-    }
   }
 
   /**
