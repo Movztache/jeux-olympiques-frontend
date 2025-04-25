@@ -25,7 +25,9 @@ export const routes: Routes = [
       // },
       //
       // // Panier accessible à tous
-      {  path: 'panier', loadChildren: () => import('./features/panier/panier.routing').then(m => m.PANIER_ROUTES) },
+      {
+        path: 'panier',
+        loadChildren: () => import('./features/panier/cart.routing').then(m => m.PANIER_ROUTES) },
       {
         path: 'reservations',
         loadChildren: () => import('./features/reservation/reservation.routing').then(m => m.RESERVATIONS_ROUTES),
@@ -33,7 +35,7 @@ export const routes: Routes = [
       },
 
       //
-      { path: 'profil', loadChildren: () => import('./features/profil/profil.routing').then(m => m.PROFIL_ROUTES), canActivate : [authGuard] },
+      { path: 'profile', loadChildren: () => import('./features/profil/profil.routing').then(m => m.PROFIL_ROUTES), canActivate : [authGuard] },
       // // Pages protégées
       // {
       //   path: 'profil',
