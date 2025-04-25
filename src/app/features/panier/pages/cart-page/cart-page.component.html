@@ -1,0 +1,71 @@
+<!-- src/app/features/cart/pages/cart-page/cart-page.component.html -->
+
+<div class="cart-container">
+  <h1>Mon Panier</h1>
+
+  <!-- Affichage du chargement -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Chargement de votre panier...</p>
+  </div>
+
+  <!-- Affichage du panier vide -->
+  <div *ngIf="!isLoading && cartItems.length === 0" class="empty-cart">
+    <mat-icon class="empty-cart-icon">shopping_cart</mat-icon>
+    <h2>Votre panier est vide</h2>
+    <p>Découvrez notre catalogue d'offres pour les Jeux Olympiques</p>
+    <button mat-raised-button color="primary" (click)="continueShopping()">Voir les offres</button>
+  </div>
+
+  <!-- Affichage du contenu du panier -->
+  <div *ngIf="!isLoading && cartItems.length > 0" class="cart-content">
+
+    <!-- En-tête du tableau -->
+    <div class="cart-header">
+      <div class="product-info">Produit</div>
+      <div class="price">Prix</div>
+      <div class="quantity">Quantité</div>
+      <div class="total">Total</div>
+      <div class="actions">Actions</div>
+    </div>
+
+    <!-- Liste des articles du panier -->
+    <div class="cart-items">
+      <app-cart-item
+        *ngFor="let item of cartItems"
+        [item]="item"
+        (quantityChange)="updateQuantity($event.cartId, $event.quantity)"
+        (remove)="removeItem($event)">
+      </app-cart-item>
+    </div>
+
+    <!-- Résumé du panier et boutons d'action -->
+    <div class="cart-summary">
+      <div class="summary-details">
+        <div class="summary-row">
+          <span>Nombre d'articles:</span>
+          <span>{{ cartSummary.itemCount }}</span>
+        </div>
+        <div class="summary-row total-row">
+          <span>Total:</span>
+          <span class="total-price">{{ cartSummary.total | currency:'EUR' }}</span>
+        </div>
+      </div>
+
+      <div class="cart-actions">
+        <button mat-stroked-button (click)="clearCart()" color="warn">
+          <mat-icon>remove_shopping_cart</mat-icon>
+          Vider le panier
+        </button>
+        <button mat-stroked-button (click)="continueShopping()">
+          <mat-icon>arrow_back</mat-icon>
+          Continuer les achats
+        </button>
+        <button mat-raised-button color="primary" (click)="proceedToCheckout()" [disabled]="cartItems.length === 0">
+          <mat-icon>payment</mat-icon>
+          Passer au paiement
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
