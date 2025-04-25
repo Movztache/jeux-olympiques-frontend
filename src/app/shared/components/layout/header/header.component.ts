@@ -5,7 +5,7 @@ import { CartService } from '../../../../core/services/cart.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon'; // Ajouté pour les icônes Material
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon'; // Ajouté pour les icô
   imports: [
     CommonModule,
     RouterModule,
-    MatIconModule // Nécessaire pour les balises <span class="material-icons">
+    MatIconModule
   ]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
@@ -39,11 +39,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
     this.subscriptions.push(authSub);
 
-    // S'abonner au nombre d'articles dans le panier
-    const cartSub = this.cartService.cart$.subscribe(cart => {
-      this.cartItemsCount = cart?.items?.length || 0;
+    // S'abonner au nombre d'articles dans le panier en utilisant le cartItems$ existant
+    const cartSub = this.cartService.cartItems$.subscribe(items => {
+      this.cartItemsCount = items?.length || 0;
     });
     this.subscriptions.push(cartSub);
+
+    // Alternative: vous pourriez également utiliser le cartSummary$ si vous préférez
+    // const summarySub = this.cartService.cartSummary$.subscribe(summary => {
+    //   this.cartItemsCount = summary.itemCount;
+    // });
+    // this.subscriptions.push(summarySub);
   }
 
   ngOnDestroy(): void {

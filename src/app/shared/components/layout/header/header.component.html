@@ -12,7 +12,7 @@
       <ul class="nav-list">
         <li class="nav-item"><a routerLink="/home" routerLinkActive="active">Accueil</a></li>
         <li class="nav-item"><a routerLink="/events" routerLinkActive="active">Épreuves</a></li>
-        <li class="nav-item"><a routerLink="/offers" routerLinkActive="active">Billetterie</a></li>
+        <li class="nav-item"><a routerLink="/offres" routerLinkActive="active">Billetterie</a></li>
       </ul>
 
       <div class="auth-buttons">
@@ -22,7 +22,7 @@
         </ng-container>
 
         <ng-container *ngIf="isLoggedIn">
-          <a routerLink="/cart" class="cart-btn">
+          <a routerLink="/panier" class="cart-btn">
             <span class="material-icons">shopping_cart</span>
             <span class="cart-count" *ngIf="cartItemsCount > 0">{{ cartItemsCount }}</span>
           </a>
