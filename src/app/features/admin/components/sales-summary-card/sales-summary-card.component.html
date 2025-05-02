@@ -1,0 +1,28 @@
+<!-- src/app/features/dashboard/components/sales-summary-card/sales-summary-card.component.html -->
+<div class="card-container" [class]="color">
+  <mat-card class="summary-card">
+    <mat-card-content class="card-content">
+      <div class="card-icon">
+        <mat-icon>{{ icon }}</mat-icon>
+      </div>
+      <div class="card-data">
+        <h2 class="card-title">{{ title }}</h2>
+        <p class="card-value">
+          {{ formatNumber(value) }}{{ valueSuffix }}
+        </p>
+        @if (subtitle) {
+          <p class="card-subtitle">{{ subtitle }}</p>
+        }
+        @if (compareValue !== undefined) {
+          <div class="card-comparison" [class]="getCompareColor()">
+            <mat-icon class="compare-icon">{{ getCompareIcon() }}</mat-icon>
+            <span class="compare-value">{{ compareValue }}%</span>
+            @if (compareLabel) {
+              <span class="compare-label">{{ compareLabel }}</span>
+            }
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

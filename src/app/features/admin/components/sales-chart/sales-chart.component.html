@@ -1,0 +1,60 @@
+<!-- src/app/features/dashboard/components/sales-chart/sales-chart.component.html -->
+<mat-card class="chart-card">
+  <mat-card-header>
+    <mat-card-title>{{ chartTitle }}</mat-card-title>
+    <mat-card-subtitle>Comparaison des ventes sur la période</mat-card-subtitle>
+    <div class="chart-actions">
+      <!-- Sélecteur de période -->
+      <button mat-button [matMenuTriggerFor]="periodMenu">
+        <span>{{ getPeriodLabel() }}</span>
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+      <mat-menu #periodMenu="matMenu">
+        @for (period of timePeriods; track period.value) {
+          <button mat-menu-item (click)="changePeriod(period.value)">
+            {{ period.label }}
+          </button>
+        }
+      </mat-menu>
+
+      <!-- Type de graphique -->
+      <button mat-icon-button [matMenuTriggerFor]="chartTypeMenu"
+              matTooltip="Changer le type de graphique">
+        <mat-icon>bar_chart</mat-icon>
+      </button>
+      <mat-menu #chartTypeMenu="matMenu">
+        <button mat-menu-item (click)="switchChartType('bar')">
+          <mat-icon>bar_chart</mat-icon>
+          <span>Histogramme</span>
+        </button>
+        <button mat-menu-item (click)="switchChartType('line')">
+          <mat-icon>show_chart</mat-icon>
+          <span>Ligne</span>
+        </button>
+      </mat-menu>
+
+      <!-- Téléchargement -->
+      <button mat-icon-button [matMenuTriggerFor]="downloadMenu"
+              matTooltip="Télécharger">
+        <mat-icon>download</mat-icon>
+      </button>
+      <mat-menu #downloadMenu="matMenu">
+        <button mat-menu-item (click)="downloadChart('png')">
+          <mat-icon>image</mat-icon>
+          <span>PNG</span>
+        </button>
+        <button mat-menu-item (click)="downloadChart('jpg')">
+          <mat-icon>image</mat-icon>
+          <span>JPG</span>
+        </button>
+        <button mat-menu-item (click)="downloadChart('pdf')">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <span>PDF</span>
+        </button>
+      </mat-menu>
+    </div>
+  </mat-card-header>
+  <mat-card-content class="chart-container">
+    <canvas #salesCanvas></canvas>
+  </mat-card-content>
+</mat-card>

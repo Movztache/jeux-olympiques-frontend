@@ -120,9 +120,9 @@ export class AuthService {
     localStorage.setItem('user_info', JSON.stringify(userInfo));
   }
 
-  getUserInfo(): User | null {
-    const userInfo = localStorage.getItem('user_info');
-    return userInfo ? JSON.parse(userInfo) : null;
+  private getUserInfo(): User | null {
+    const userJson = localStorage.getItem('user_info');
+    return userJson ? JSON.parse(userJson) : null;
   }
 
   refreshUserInfo(): Observable<User> {
@@ -137,18 +137,21 @@ export class AuthService {
       );
   }
 
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'Une erreur est survenue';
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'Une erreur inconnue est survenue';
 
     if (error.error instanceof ErrorEvent) {
+      // Erreur côté client
       errorMessage = `Erreur: ${error.error.message}`;
     } else {
-      errorMessage = error.error?.message ||
-        `Code: ${error.status}, ` +
-        `Message: ${error.message}`;
+      // Erreur côté serveur
+      errorMessage = `Code d'erreur: ${error.status}, Message: ${error.message}`;
     }
 
+    // Vous pouvez ajouter ici de la journalisation ou d'autres traitements
     console.error(errorMessage);
+
+    // Retourner un observable avec un message d'erreur
     return throwError(() => new Error(errorMessage));
   }
 
@@ -202,16 +205,28 @@ export class AuthService {
     }
   }
 
-  hasRole(requiredRoles: string[]): boolean {
-    const user = this.currentUserValue;
-
-    // Si l'utilisateur n'est pas connecté, retourner false
-    if (!user) {
+  hasRole(roles: string | string[]): boolean {
+    const currentUser = this.currentUserValue;
+    if (!currentUser || !currentUser.roles) {
       return false;
     }
 
-    // Vérifier si l'utilisateur a au moins un des rôles requis
-    return requiredRoles.some(role => user.roles.includes(role));
+    if (Array.isArray(roles)) {
+      // Vérifier si l'utilisateur possède au moins un des rôles fournis
+      return roles.some(role => currentUser.roles.includes(role));
+    } else {
+      // Vérifier un seul rôle
+      return currentUser.roles.includes(roles);
+    }
   }
+
+
+// Méthode helper pour obtenir l'utilisateur actuel
+  private getCurrentUser() {
+    // Récupérer l'utilisateur depuis le localStorage ou autre source
+    const userJson = localStorage.getItem('currentUser');
+    return userJson ? JSON.parse(userJson) : null;
+  }
+
 
 }
