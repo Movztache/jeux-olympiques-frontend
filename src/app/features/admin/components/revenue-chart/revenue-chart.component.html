@@ -1,0 +1,64 @@
+<!-- src/app/features/dashboard/components/revenue-chart/revenue-chart.component.html -->
+<mat-card class="chart-card">
+  <mat-card-header>
+    <mat-card-title>{{ chartTitle }}</mat-card-title>
+    <mat-card-subtitle>Analyse de la contribution au chiffre d'affaires</mat-card-subtitle>
+    <div class="chart-actions">
+      <!-- Affichage des valeurs -->
+      <button mat-button [matMenuTriggerFor]="displayMenu">
+        <span>{{ getDisplayLabel() }}</span>
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+      <mat-menu #displayMenu="matMenu">
+        @for (display of displayValues; track display.value) {
+          <button mat-menu-item (click)="changeDisplayValue(display.value)">
+            {{ display.label }}
+          </button>
+        }
+      </mat-menu>
+
+      <!-- Type de graphique -->
+      <button mat-icon-button [matMenuTriggerFor]="chartTypeMenu"
+              matTooltip="Changer le type de graphique">
+        <mat-icon>pie_chart</mat-icon>
+      </button>
+      <mat-menu #chartTypeMenu="matMenu">
+        <button mat-menu-item (click)="switchChartType('pie')">
+          <mat-icon>pie_chart</mat-icon>
+          <span>Camembert</span>
+        </button>
+        <button mat-menu-item (click)="switchChartType('doughnut')">
+          <mat-icon>donut_large</mat-icon>
+          <span>Anneau</span>
+        </button>
+        <button mat-menu-item (click)="switchChartType('bar')">
+          <mat-icon>bar_chart</mat-icon>
+          <span>Histogramme</span>
+        </button>
+      </mat-menu>
+
+      <!-- Téléchargement -->
+      <button mat-icon-button [matMenuTriggerFor]="downloadMenu"
+              matTooltip="Télécharger">
+        <mat-icon>download</mat-icon>
+      </button>
+      <mat-menu #downloadMenu="matMenu">
+        <button mat-menu-item (click)="downloadChart('png')">
+          <mat-icon>image</mat-icon>
+          <span>PNG</span>
+        </button>
+        <button mat-menu-item (click)="downloadChart('jpg')">
+          <mat-icon>image</mat-icon>
+          <span>JPG</span>
+        </button>
+        <button mat-menu-item (click)="downloadChart('pdf')">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <span>PDF</span>
+        </button>
+      </mat-menu>
+    </div>
+  </mat-card-header>
+  <mat-card-content class="chart-container">
+    <canvas #revenueCanvas></canvas>
+  </mat-card-content>
+</mat-card>

@@ -1,11 +1,11 @@
-// header.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { AuthService } from '../../../../core/authentication/auth.service';
 import { CartService } from '../../../../core/services/cart.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-header',
@@ -15,13 +15,17 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule,
     RouterModule,
-    MatIconModule
+    MatIconModule,
+    MatMenuModule
   ]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   isMenuOpen = false;
   isLoggedIn = false;
+  isAdmin = false;
   cartItemsCount = 0;
+  adminMenuOpen = false;
+  userMenuOpen = false;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -33,9 +37,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // Utiliser directement isLoggedIn() pour l'état initial
     this.isLoggedIn = this.authService.isLoggedIn();
 
+    // Vérifier si l'utilisateur est administrateur
+    this.isAdmin = this.authService.hasRole("Admin");
+
     // S'abonner aux changements d'utilisateur pour mettre à jour l'état de connexion
     const authSub = this.authService.currentUser.subscribe(user => {
       this.isLoggedIn = !!user;
+      this.isAdmin = user ? this.authService.hasRole('Admin') : false;
     });
     this.subscriptions.push(authSub);
 
@@ -44,12 +52,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.cartItemsCount = items?.length || 0;
     });
     this.subscriptions.push(cartSub);
-
-    // Alternative: vous pourriez également utiliser le cartSummary$ si vous préférez
-    // const summarySub = this.cartService.cartSummary$.subscribe(summary => {
-    //   this.cartItemsCount = summary.itemCount;
-    // });
-    // this.subscriptions.push(summarySub);
   }
 
   ngOnDestroy(): void {
@@ -61,8 +63,62 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
+  // Méthodes pour gérer l'ouverture au survol
+  openAdminMenu(): void {
+    this.adminMenuOpen = true;
+    this.userMenuOpen = false;
+  }
+
+  closeAdminMenu(): void {
+    // Utiliser un délai pour éviter la fermeture immédiate
+    // ce qui permettra le survol du contenu du menu
+    setTimeout(() => {
+      if (!this.isHoveringAdminDropdown) {
+        this.adminMenuOpen = false;
+      }
+    }, 100);
+  }
+
+  openUserMenu(): void {
+    this.userMenuOpen = true;
+    this.adminMenuOpen = false;
+  }
+
+  closeUserMenu(): void {
+    // Utiliser un délai pour éviter la fermeture immédiate
+    setTimeout(() => {
+      if (!this.isHoveringUserDropdown) {
+        this.userMenuOpen = false;
+      }
+    }, 100);
+  }
+
+  // Variables pour suivre l'état du survol
+  isHoveringAdminDropdown = false;
+  isHoveringUserDropdown = false;
+
+  // Méthodes pour suivre si on survole le contenu du menu déroulant
+  onAdminDropdownEnter(): void {
+    this.isHoveringAdminDropdown = true;
+  }
+
+  onAdminDropdownLeave(): void {
+    this.isHoveringAdminDropdown = false;
+    this.closeAdminMenu();
+  }
+
+  onUserDropdownEnter(): void {
+    this.isHoveringUserDropdown = true;
+  }
+
+  onUserDropdownLeave(): void {
+    this.isHoveringUserDropdown = false;
+    this.closeUserMenu();
+  }
+
   logout(): void {
     this.authService.logout();
     this.isMenuOpen = false;
+    this.userMenuOpen = false;
   }
 }

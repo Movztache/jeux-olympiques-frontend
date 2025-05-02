@@ -1,5 +1,3 @@
-// src/app/features/cart/pages/cart-page/cart-page.component.ts
-
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';

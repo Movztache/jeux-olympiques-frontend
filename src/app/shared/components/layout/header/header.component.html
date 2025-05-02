@@ -1,43 +1,71 @@
-<header class="header">
-  <div class="header-container">
-    <div class="logo">
-      <a routerLink="/">Jeux Olympiques 2025</a>
-    </div>
+<!-- header.component.html -->
+<header class="navbar">
+  <div class="logo">
+    <a routerLink="/">
+      JO<span>2025</span>
+    </a>
+  </div>
 
-    <button class="mobile-menu-toggle" (click)="toggleMenu()">
-      <span class="material-icons">{{ isMenuOpen ? 'close' : 'menu' }}</span>
-    </button>
+  <button class="mobile-menu-toggle" (click)="toggleMenu()" aria-label="Menu">
+    <span class="material-icons">{{ isMenuOpen ? 'close' : 'menu' }}</span>
+  </button>
 
-    <nav class="nav-menu" [class.open]="isMenuOpen">
-      <ul class="nav-list">
-        <li class="nav-item"><a routerLink="/home" routerLinkActive="active">Accueil</a></li>
-        <li class="nav-item"><a routerLink="/events" routerLinkActive="active">Épreuves</a></li>
-        <li class="nav-item"><a routerLink="/offres" routerLinkActive="active">Billetterie</a></li>
-      </ul>
+  <nav class="nav-links" [class.open]="isMenuOpen">
+    <a routerLink="/home" routerLinkActive="active">ACCUEIL</a>
+    <a routerLink="/events" routerLinkActive="active">ÉPREUVES</a>
+    <a routerLink="/offres" routerLinkActive="active">BILLETTERIE</a>
 
-      <div class="auth-buttons">
-        <ng-container *ngIf="!isLoggedIn">
-          <a routerLink="/auth/login" class="login-btn">Connexion</a>
-          <a routerLink="/auth/register" class="register-btn">Inscription</a>
-        </ng-container>
-
-        <ng-container *ngIf="isLoggedIn">
-          <a routerLink="/panier" class="cart-btn">
-            <span class="material-icons">shopping_cart</span>
-            <span class="cart-count" *ngIf="cartItemsCount > 0">{{ cartItemsCount }}</span>
-          </a>
-
-          <a routerLink="/profile" class="profile-btn">
-            <span class="material-icons">person</span>
-            <span class="profile-text">Mon Profil</span>
-          </a>
-
-          <button class="logout-btn" (click)="logout()">
-            <span class="material-icons">logout</span>
-            <span class="logout-text">Déconnexion</span>
-          </button>
-        </ng-container>
+    <ng-container *ngIf="isAdmin">
+      <div class="dropdown" [class.open]="adminMenuOpen"
+           (mouseenter)="openAdminMenu()"
+           (mouseleave)="closeAdminMenu()">
+        <a class="dropdown-toggle" routerLinkActive="active">
+          ADMIN <span class="arrow">▼</span>
+        </a>
+        <div class="dropdown-content"
+             (mouseenter)="onAdminDropdownEnter()"
+             (mouseleave)="onAdminDropdownLeave()">
+          <a routerLink="/admin" routerLinkActive="active">Dashboard</a>
+          <a routerLink="/admin/create-offer" routerLinkActive="active">Créer une offre</a>
+          <a routerLink="/admin/create-event" routerLinkActive="active">Créer un événement</a>
+        </div>
       </div>
-    </nav>
+    </ng-container>
+
+  </nav>
+
+  <div class="nav-icons">
+    <ng-container *ngIf="!isLoggedIn">
+      <button class="icon-button" routerLink="/auth/login">
+        <img src="https://img.icons8.com/ios-filled/20/ffffff/login-rounded.png" alt="Connexion" />
+      </button>
+      <div class="divider"></div>
+      <button class="icon-button" routerLink="/auth/register">
+        <img src="https://img.icons8.com/ios-filled/20/ffffff/add-user-male.png" alt="Inscription" />
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="isLoggedIn">
+      <button class="icon-button" routerLink="/panier">
+        <img src="https://img.icons8.com/ios-filled/20/ffffff/shopping-bag.png" alt="Panier" />
+        <span class="cart-count" *ngIf="cartItemsCount > 0">{{ cartItemsCount }}</span>
+      </button>
+
+      <div class="divider"></div>
+
+      <div class="dropdown user-dropdown" [class.open]="userMenuOpen"
+           (mouseenter)="openUserMenu()"
+           (mouseleave)="closeUserMenu()">
+        <button class="icon-button dropdown-toggle">
+          <img src="https://img.icons8.com/ios-filled/20/ffffff/user.png" alt="User" />
+        </button>
+        <div class="dropdown-content user-menu"
+             (mouseenter)="onUserDropdownEnter()"
+             (mouseleave)="onUserDropdownLeave()">
+          <a routerLink="/profile">Mon Profil</a>
+          <a (click)="logout()">Déconnexion</a>
+        </div>
+      </div>
+    </ng-container>
   </div>
 </header>

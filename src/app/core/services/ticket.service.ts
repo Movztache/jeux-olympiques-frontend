@@ -1,4 +1,3 @@
-// src/app/services/ticket.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
@@ -70,15 +69,4 @@ export class TicketService {
     );
   }
 
-  /**
-   * Génère des données pour le QR code à partir des informations du billet
-   */
-  generateQrCodeData(ticket: Ticket): string {
-    return JSON.stringify({
-      finalKey: ticket.finalKey,
-      eventId: ticket.eventId,
-      eventName: ticket.eventName,
-      reservationId: ticket.reservationId
-    });
-  }
 }

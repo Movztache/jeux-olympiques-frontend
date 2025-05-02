@@ -1,6 +1,5 @@
-// src/app/features/payment/order-confirmation/order-confirmation.component.ts
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'; // CommonModule inclut déjà les pipes
 import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,7 +15,7 @@ interface TicketDetails {
   };
   amount: number;
   date: string;
-  payment?: { // Rendez payment optionnel avec '?'
+  payment: {  // Plus d'optionnel ici
     transactionId: string;
     cardLastDigits: string;
     paymentMethod: string;
@@ -41,7 +40,24 @@ interface TicketDetails {
 export class OrderConfirmationComponent implements OnInit {
   private router = inject(Router);
 
-  ticketDetails: TicketDetails | null = null;
+  // Initialisation complète avec des valeurs par défaut
+  ticketDetails: TicketDetails = {
+    ticketId: '',
+    eventDetails: {
+      name: '',
+      date: '',
+      time: ''
+    },
+    amount: 0,
+    date: '',
+    payment: {
+      transactionId: 'N/A',
+      cardLastDigits: 'N/A',
+      paymentMethod: 'N/A',
+      status: 'N/A'
+    }
+  };
+
   qrCodeData = '';
 
   // Pour l'accès à window.print()
@@ -50,17 +66,18 @@ export class OrderConfirmationComponent implements OnInit {
   ngOnInit(): void {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
-      this.ticketDetails = navigation.extras.state as TicketDetails;
+      const stateData = navigation.extras.state as any;
 
-      // Si payment n'existe pas, créez un objet par défaut
-      if (!this.ticketDetails.payment) {
-        this.ticketDetails.payment = {
-          transactionId: 'N/A',
-          cardLastDigits: 'N/A',
-          paymentMethod: 'N/A',
-          status: 'N/A'
-        };
-      }
+      // Fusion des données reçues avec l'objet par défaut
+      this.ticketDetails = {
+        ...this.ticketDetails,
+        ...stateData,
+        // S'assurer que payment existe toujours
+        payment: {
+          ...this.ticketDetails.payment,
+          ...(stateData.payment || {})
+        }
+      };
 
       // Générer les données pour le QR code
       this.qrCodeData = JSON.stringify({
@@ -76,4 +93,16 @@ export class OrderConfirmationComponent implements OnInit {
       this.router.navigate(['/offers']);
     }
   }
+
+  formatMontant(montant: number): string {
+    if (!montant) return '0,00 €';
+    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(montant);
+  }
+
+  formatDate(date: string): string {
+    if (!date) return '';
+    return new Date(date).toLocaleString('fr-FR');
+  }
+
+
 }
