@@ -1,1 +1,100 @@
-<p>dashboard-page works!</p>
+<!-- src/app/features/dashboard/dashboard.component.html -->
+<div class="dashboard-container">
+  <!-- Filtres du dashboard -->
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <form [formGroup]="filterForm" class="filter-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Période</mat-label>
+          <mat-select formControlName="period" (selectionChange)="onPeriodChange()">
+            <mat-option value="day">Aujourd'hui</mat-option>
+            <mat-option value="week">Cette semaine</mat-option>
+            <mat-option value="month">Ce mois</mat-option>
+            <mat-option value="year">Cette année</mat-option>
+            <mat-option value="custom">Personnalisé</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Date de début</mat-label>
+          <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Date de fin</mat-label>
+          <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="applyFilters()">
+          Appliquer
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Affichage conditionnel selon l'état de chargement -->
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Chargement des données...</p>
+    </div>
+  } @else if (error) {
+    <div class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>Une erreur est survenue lors du chargement des données.</p>
+      <button mat-raised-button color="primary" (click)="loadSalesData()">Réessayer</button>
+    </div>
+  } @else if (salesSummary) {
+    <!-- Cartes de résumé -->
+    <div class="summary-cards">
+      <app-sales-summary-card
+        title="Offres Créées"
+        [value]="salesSummary.totalSales"
+        icon="note_add"
+        color="primary">
+      </app-sales-summary-card>
+
+      <app-sales-summary-card
+        title="Offres Vendues"
+        [value]="salesSummary.totalSales"
+        icon="shopping_cart"
+        color="accent">
+      </app-sales-summary-card>
+
+      <app-sales-summary-card
+        title="Chiffre d'Affaires"
+        [value]="salesSummary.totalRevenue"
+        valueSuffix=" €"
+        icon="euro"
+        color="primary">
+      </app-sales-summary-card>
+
+      <app-sales-summary-card
+        title="Taux de Conversion"
+        [value]="(salesSummary.totalSales / salesSummary.totalSales) * 100"
+        valueSuffix=" %"
+        icon="trending_up"
+        color="warn">
+      </app-sales-summary-card>
+    </div>
+
+    <!-- Graphiques -->
+    <div class="charts-container">
+      <div class="chart">
+        <app-sales-chart [salesData]="salesData"></app-sales-chart>
+      </div>
+      <div class="chart">
+        <app-revenue-chart [salesData]="salesData"></app-revenue-chart>
+      </div>
+    </div>
+  } @else {
+    <div class="no-data-container">
+      <mat-icon>info</mat-icon>
+      <p>Aucune donnée disponible pour cette période.</p>
+    </div>
+  }
+</div>

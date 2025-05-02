@@ -16,21 +16,20 @@
         <p><strong>Événement :</strong> {{ ticketDetails.eventDetails.name }}</p>
         <p><strong>Date :</strong> {{ ticketDetails.eventDetails.date }}</p>
         <p><strong>Heure :</strong> {{ ticketDetails.eventDetails.time }}</p>
-        <p><strong>Montant payé :</strong> {{ ticketDetails.amount | currency:'EUR' }}</p>
+        <p><strong>Montant payé :</strong> {{ formatMontant(ticketDetails.amount) }}</p>
+      </div>
 
-        <!-- Information de paiement -->
-        <!-- Information de paiement -->
-        <div class="payment-info">
-          <h3>Information de paiement</h3>
-          <p><strong>Transaction :</strong> {{ ticketDetails?.payment?.transactionId }}</p>
-          <p><strong>Méthode :</strong> {{ ticketDetails?.payment?.paymentMethod }} (**** {{ ticketDetails?.payment?.cardLastDigits }})</p>
-          <p><strong>Statut :</strong> {{ ticketDetails?.payment?.status }}</p>
-          <p><strong>Date :</strong> {{ ticketDetails?.date | date:'medium' }}</p>
-        </div>
+      <!-- Information de paiement -->
+      <div class="payment-info">
+        <h3>Information de paiement</h3>
+        <p><strong>Transaction :</strong> {{ ticketDetails.payment.transactionId }}</p>
+        <p><strong>Méthode :</strong> {{ ticketDetails.payment.paymentMethod }} (**** {{ ticketDetails.payment.cardLastDigits }})</p>
+        <p><strong>Statut :</strong> {{ ticketDetails.payment.status }}</p>
+        <p><strong>Date :</strong> {{ formatDate(ticketDetails.date) }}</p>
+      </div>
 
       <div class="qr-code-container">
         <h3>Votre QR Code</h3>
-        <!-- Utilisation du composant de la bibliothèque spécifiée -->
         <qrcode [qrdata]="qrCodeData" [width]="180" [errorCorrectionLevel]="'M'"></qrcode>
         <p class="qr-instructions">Présentez ce QR code à l'entrée de l'événement</p>
       </div>

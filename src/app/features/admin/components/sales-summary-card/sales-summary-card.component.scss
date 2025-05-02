@@ -1,0 +1,102 @@
+.card-container {
+  margin: 0.5rem;
+
+  &.primary {
+    --card-color: var(--primary-color, #3f51b5);
+  }
+
+  &.accent {
+    --card-color: var(--accent-color, #ff4081);
+  }
+
+  &.warn {
+    --card-color: var(--warn-color, #f44336);
+  }
+}
+
+.summary-card {
+  border-top: 4px solid var(--card-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.card-content {
+  display: flex;
+  padding: 1rem;
+}
+
+.card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--card-color);
+  margin-right: 1rem;
+
+  mat-icon {
+    color: white;
+  }
+}
+
+.card-data {
+  flex: 1;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.card-value {
+  margin: 0.5rem 0 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--card-color);
+}
+
+.card-subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.card-comparison {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+
+  &.positive {
+    color: #4caf50;
+  }
+
+  &.negative {
+    color: #f44336;
+  }
+
+  .compare-icon {
+    font-size: 1.125rem;
+    height: 1.125rem;
+    width: 1.125rem;
+    margin-right: 0.25rem;
+  }
+
+  .compare-value {
+    font-weight: 600;
+    margin-right: 0.25rem;
+  }
+
+  .compare-label {
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
