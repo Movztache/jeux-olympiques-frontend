@@ -25,30 +25,18 @@ export const routes: Routes = [
       // },
       //
       // // Panier accessible à tous
-      {
-        path: 'panier',
-        loadChildren: () => import('./features/panier/cart.routing').then(m => m.PANIER_ROUTES) },
-      {
-        path: 'reservations',
-        loadChildren: () => import('./features/reservation/reservation.routing').then(m => m.RESERVATIONS_ROUTES),
-        canActivate: [authGuard]
-      },
+      {path: 'panier',loadChildren: () => import('./features/panier/cart.routing').then(m => m.PANIER_ROUTES) },
+
+      {path: 'reservations',loadChildren: () => import('./features/reservation/reservation.routing').then(m => m.RESERVATIONS_ROUTES),},
+
+      {path: 'payment', loadChildren: () => import('./features/payment/payment.routing').then(m => m.PAYMENT_ROUTES),canActivate: [authGuard]},
 
       //
       { path: 'profile', loadChildren: () => import('./features/profil/profil.routing').then(m => m.PROFIL_ROUTES), canActivate : [authGuard] },
-      // // Pages protégées
-      // {
-      //   path: 'profil',
-      //   loadChildren: () => import('./features/profil/profil.routes').then(m => m.PROFIL_ROUTES),
-      //   canActivate: [authGuard]
-      // },
+
       { path: 'auth', loadChildren: () => import('./features/auth/auth.routing').then(m => m.AUTH_ROUTES) },
 
-      // Dans app.routes.ts, ajoutez/modifiez cette entrée :
-      {
-        path: 'admin',
-        loadChildren: () => import('./features/admin/admin.routing').then(m => m.ADMIN_ROUTES)
-      },
+      { path: 'admin',loadChildren: () => import('./features/admin/admin.routing').then(m => m.ADMIN_ROUTES) },
 
       // Redirection de toute route inconnue vers home
       { path: '**', redirectTo: 'home' }

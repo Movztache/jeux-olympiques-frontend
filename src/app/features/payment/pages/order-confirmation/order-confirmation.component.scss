@@ -1,0 +1,50 @@
+// src/app/features/payment/order-confirmation/order-confirmation.component.scss
+.confirmation-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.confirmation-card {
+  max-width: 600px;
+  width: 100%;
+}
+
+.success-icon {
+  text-align: center;
+  margin: 1rem 0;
+
+  .mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+  }
+}
+
+.ticket-details, .payment-info {
+  margin-bottom: 1.5rem;
+}
+
+.qr-code-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1.5rem 0;
+
+  .qrcode {
+    margin: 1rem 0;
+  }
+
+  .qr-instructions {
+    font-style: italic;
+    color: #666;
+    text-align: center;
+  }
+}
+
+// Styles pour l'impression
+@media print {
+  .mat-card-actions {
+    display: none;
+  }
+}
