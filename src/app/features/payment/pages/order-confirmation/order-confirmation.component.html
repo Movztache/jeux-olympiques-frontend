@@ -1,0 +1,45 @@
+<!-- src/app/features/payment/order-confirmation/order-confirmation.component.html -->
+<div class="confirmation-container" *ngIf="ticketDetails">
+  <mat-card class="confirmation-card">
+    <mat-card-header>
+      <mat-card-title>Confirmation de commande</mat-card-title>
+      <mat-card-subtitle>Votre paiement a été accepté</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="success-icon">
+        <mat-icon color="primary">check_circle</mat-icon>
+      </div>
+
+      <div class="ticket-details">
+        <h3>Détails de l'événement</h3>
+        <p><strong>Événement :</strong> {{ ticketDetails.eventDetails.name }}</p>
+        <p><strong>Date :</strong> {{ ticketDetails.eventDetails.date }}</p>
+        <p><strong>Heure :</strong> {{ ticketDetails.eventDetails.time }}</p>
+        <p><strong>Montant payé :</strong> {{ ticketDetails.amount | currency:'EUR' }}</p>
+
+        <!-- Information de paiement -->
+        <!-- Information de paiement -->
+        <div class="payment-info">
+          <h3>Information de paiement</h3>
+          <p><strong>Transaction :</strong> {{ ticketDetails?.payment?.transactionId }}</p>
+          <p><strong>Méthode :</strong> {{ ticketDetails?.payment?.paymentMethod }} (**** {{ ticketDetails?.payment?.cardLastDigits }})</p>
+          <p><strong>Statut :</strong> {{ ticketDetails?.payment?.status }}</p>
+          <p><strong>Date :</strong> {{ ticketDetails?.date | date:'medium' }}</p>
+        </div>
+
+      <div class="qr-code-container">
+        <h3>Votre QR Code</h3>
+        <!-- Utilisation du composant de la bibliothèque spécifiée -->
+        <qrcode [qrdata]="qrCodeData" [width]="180" [errorCorrectionLevel]="'M'"></qrcode>
+        <p class="qr-instructions">Présentez ce QR code à l'entrée de l'événement</p>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button color="primary" routerLink="/user/tickets">Voir mes billets</button>
+      <button mat-button color="accent" (click)="window.print()">Imprimer</button>
+      <button mat-button routerLink="/events">Retour aux événements</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

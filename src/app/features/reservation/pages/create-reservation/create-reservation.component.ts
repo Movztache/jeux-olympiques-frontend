@@ -119,25 +119,35 @@ export class CreateReservationComponent {
     this.isSubmitting = true;
 
     const reservationDto: CreateReservationDto = {
-      quantity: this.reservationData.quantity,
-      offerId: this.reservationData.offerId as number
+      offerId: this.reservationData.offerId!,
+      quantity: this.reservationData.quantity
     };
 
     this.reservationsService.createReservation(reservationDto).subscribe({
-      next: (response: ReservationModel) => {
-        this.snackBar.open('Réservation créée avec succès!', 'Fermer', {
-          duration: 3000
+      next: (reservation: ReservationModel) => {
+        this.isSubmitting = false;
+
+        // Rediriger vers le formulaire de paiement avec les détails nécessaires
+        this.router.navigate(['/payment/form'], {
+          state: {
+            reservationId: reservation.reservationId,
+            orderTotal: this.reservationData.offerPrice * this.reservationData.quantity,
+            eventDetails: {
+              name: reservation.offer.name || 'Événement',
+              date: new Date(reservation.reservationDate).toLocaleDateString() || 'Date',
+              time: new Date(reservation.reservationDate).toLocaleTimeString() || 'Heure'
+            },
+            customerInfo: this.reservationData.customerInfo // Passer les infos client si nécessaire
+          }
         });
-        this.router.navigate(['/reservations/confirmation', response.reservationId]);
       },
       error: (error) => {
-        console.error('Erreur lors de la création de la réservation', error);
-        this.snackBar.open('Erreur lors de la création de la réservation. Veuillez réessayer.', 'Fermer', {
-          duration: 5000
-        });
         this.isSubmitting = false;
+        this.snackBar.open('Erreur lors de la création de la réservation', 'Fermer', {
+          duration: 3000
+        });
+        console.error('Erreur de création de réservation', error);
       }
-
     });
   }
 
