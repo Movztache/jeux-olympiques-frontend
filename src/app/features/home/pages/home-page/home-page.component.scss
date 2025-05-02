@@ -1,5 +1,5 @@
 .home-container {
-  max-width: 1200px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 0 1rem;
   font-family: 'Roboto', Arial, sans-serif;
@@ -50,6 +50,7 @@
 // Section Sports
 .sports {
   margin-bottom: 3rem;
+  text-align: center; // Centre le titre h2
 
   h2 {
     font-size: 1.75rem;
@@ -62,15 +63,19 @@
 
   .sports-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
-
+    justify-content: center; // Centre les éléments horizontalement
+    width: 100%;
+    max-width: 1200px; // Largeur maximale de la grille
+    margin: 0 auto; // Centre la grille elle-même
   }
 }
 
 // Section actualités
 .news-highlights {
   margin-bottom: 3rem;
+  text-align: center; // Centre le titre h2
 
   h2 {
     font-size: 1.75rem;
@@ -84,9 +89,14 @@
 
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
+  justify-content: center; // Centre les éléments horizontalement
+  width: 100%;
+  max-width: 1200px; // Largeur maximale de la grille
+  margin: 0 auto; // Centre la grille elle-même
 }
+
 
 // Responsive
 @media (max-width: 768px) {

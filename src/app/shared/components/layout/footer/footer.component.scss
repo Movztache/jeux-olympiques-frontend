@@ -1,50 +1,123 @@
+// footer.component.scss
 .footer {
-  background-color: #1a1a2e;
-  color: #fff;
-  padding: 3rem 0 1rem;
+  position: relative;
+  margin-top: auto;
   width: 100%;
-  margin-top: auto; // Pousse le footer en bas de la page
+  color: #333;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.footer-main {
+  background-color: #f0f4f8; // Même couleur de fond que le body du header
+  padding: 4rem 0 2rem;
 }
 
 .footer-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  max-width: 1200px;
+  max-width: 1800px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 2rem;
   gap: 2rem;
 }
 
 .footer-section {
   flex: 1;
   min-width: 200px;
+}
+
+.about-section {
+  flex: 2;
+  min-width: 300px;
+}
+
+.footer-links-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  flex: 3;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
   margin-bottom: 1.5rem;
+
+  .logo-icon {
+    color: #0066cc; // Bleu olympique comme dans le header
+    font-size: 2rem;
+    margin-right: 0.75rem;
+  }
 }
 
 .footer-title {
-  color: #f1f1f1;
+  color: #333;
   font-size: 1.2rem;
-  margin-bottom: 1rem;
-  font-weight: 500;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
   position: relative;
+  display: inline-block;
+
+  span {
+    font-weight: normal;
+    color: #000;
+  }
 
   &::after {
     content: '';
     position: absolute;
     left: 0;
     bottom: -0.5rem;
-    width: 40px;
+    width: 30px;
     height: 2px;
-    background-color: #e63946; // Couleur d'accent olympique
+    background-color: #0066cc; // Bleu olympique pour la ligne
+    border-radius: 3px;
   }
 }
 
 .footer-description {
-  line-height: 1.6;
-  color: #c9c9c9;
-  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
 }
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.social-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #0066cc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.3s ease;
+  overflow: hidden; // Pour empêcher le débordement des icônes
+  text-decoration: none; // Pour éviter le soulignement par défaut des liens
+
+  .material-icons {
+    font-size: 20px; // Taille d'icône plus adaptée
+    line-height: 1; // Empêche l'espacement vertical supplémentaire
+    width: 20px; // Taille fixe
+    height: 20px; // Taille fixe
+    display: flex; // Flexbox pour centrer l'icône
+    align-items: center; // Centrage vertical
+    justify-content: center; // Centrage horizontal
+  }
+
+  &:hover {
+    background-color: darken(#0066cc, 10%);
+    transform: translateY(-3px);
+  }
+}
+
 
 .footer-links {
   list-style: none;
@@ -52,55 +125,142 @@
   margin: 0;
 
   li {
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
   }
 
   a {
-    color: #c9c9c9;
+    color: #555;
     text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.2s ease-in-out;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+    position: relative;
+    padding-left: 0;
+    font-weight: 500;
+
+    &::before {
+      content: "⟫";
+      position: absolute;
+      left: -15px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      color: #0066cc; // Bleu olympique comme dans le header
+    }
 
     &:hover {
-      color: #e63946; // Couleur d'accent olympique
+      color: #0066cc; // Bleu olympique au survol comme dans le header
+      padding-left: 15px;
+
+      &::before {
+        opacity: 1;
+        left: 0;
+      }
     }
   }
 }
 
-.social-links {
+.newsletter-section {
+  min-width: 300px;
+}
+
+.newsletter-desc {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.newsletter-form {
   display: flex;
-  gap: 1rem;
+  margin-bottom: 1rem;
+}
 
-  a {
-    color: #fff;
-    font-size: 1.5rem;
-    transition: color 0.2s ease-in-out;
+.newsletter-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(0, 102, 204, 0.2);
+  border-radius: 50px 0 0 50px;
+  outline: none;
+  font-size: 0.95rem;
+  background-color: white;
+  color: #333;
 
-    &:hover {
-      color: #e63946; // Couleur d'accent olympique
-    }
+  &::placeholder {
+    color: #aaa;
+  }
+
+  &:focus {
+    border-color: #0066cc;
+  }
+}
+
+.newsletter-btn {
+  background-color: #0066cc; // Bleu olympique comme dans le header
+  border: none;
+  color: white;
+  padding: 0 1.25rem;
+  border-radius: 0 50px 50px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: darken(#0066cc, 10%);
   }
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  text-align: center;
+  background-color: #0066cc; // Bleu olympique comme dans le header
+  padding: 1.5rem 0;
+
+  .footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0;
+    padding-bottom: 0;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
 }
 
 .copyright {
-  color: #888;
-  font-size: 0.85rem;
+  color: white;
+  font-size: 0.9rem;
+  margin: 0;
 }
 
-// Media queries pour la responsivité
+.footer-bottom-links {
+  display: flex;
+  gap: 1.5rem;
+
+  a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: white;
+    }
+  }
+}
+
+// Media queries pour la responsive
 @media (max-width: 768px) {
   .footer-container {
+    padding: 0 1rem;
+  }
+
+  .footer-links-container {
     flex-direction: column;
   }
 
-  .footer-section {
-    min-width: 100%;
+  .footer-bottom .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-bottom-links {
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }

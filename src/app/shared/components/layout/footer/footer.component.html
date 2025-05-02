@@ -1,61 +1,74 @@
+<!-- footer.component.html -->
 <footer class="footer">
-  <div class="footer-container">
-    <div class="footer-section">
-      <h3 class="footer-title">Jeux Olympiques 2025</h3>
-      <p class="footer-description">
-        Vivez l'expérience des Jeux Olympiques 2025 en direct et découvrez l'excellence sportive mondiale.
-      </p>
-    </div>
+  <div class="footer-main">
+    <div class="footer-container">
+      <div class="footer-section about-section">
+        <div class="footer-logo">
+          <span class="logo-icon material-icons">sports</span>
+          <h3 class="footer-title">JO<span>2025</span></h3>
+        </div>
+        <p class="footer-description">
+          Vivez l'expérience des Jeux Olympiques 2025 en direct et découvrez l'excellence sportive mondiale.
+        </p>
+        <div class="social-links">
+          <a href="https://facebook.com" target="_blank" aria-label="Facebook" class="social-btn">
+            <span class="material-icons">facebook</span>
+          </a>
+          <a href="https://twitter.com" target="_blank" aria-label="Twitter" class="social-btn">
+            <span class="material-icons">twitter</span>
+          </a>
+          <a href="https://instagram.com" target="_blank" aria-label="Instagram" class="social-btn">
+            <span class="material-icons">instagram</span>
+          </a>
+          <a href="https://youtube.com" target="_blank" aria-label="Youtube" class="social-btn">
+            <span class="material-icons">youtube</span>
+          </a>
+        </div>
+      </div>
 
-    <div class="footer-section">
-      <h3 class="footer-title">Navigation</h3>
-      <ul class="footer-links">
-        <li><a routerLink="/home">Accueil</a></li>
-        <li><a routerLink="/events">Épreuves</a></li>
-        <li><a routerLink="/offers">Billetterie</a></li>
-      </ul>
-    </div>
+      <div class="footer-links-container">
+        <div class="footer-section">
+          <h3 class="footer-title">Liens Rapides</h3>
+          <ul class="footer-links">
+            <li><a routerLink="/home">Accueil</a></li>
+            <li><a routerLink="/events">Épreuves</a></li>
+            <li><a routerLink="/offres">Billetterie</a></li>
+            <li><a routerLink="/news">Actualités</a></li>
+          </ul>
+        </div>
 
-    <div class="footer-section">
-      <h3 class="footer-title">Informations</h3>
-      <ul class="footer-links">
-        <li><a routerLink="/about">À propos</a></li>
-        <li><a routerLink="/contact">Contact</a></li>
-        <li><a routerLink="/faq">FAQ</a></li>
-      </ul>
-    </div>
+        <div class="footer-section">
+          <h3 class="footer-title">Informations</h3>
+          <ul class="footer-links">
+            <li><a routerLink="/about">À propos</a></li>
+            <li><a routerLink="/contact">Contact</a></li>
+            <li><a routerLink="/faq">FAQ</a></li>
+            <li><a routerLink="/venues">Sites olympiques</a></li>
+          </ul>
+        </div>
 
-    <div class="footer-section">
-      <h3 class="footer-title">Légal</h3>
-      <ul class="footer-links">
-        <li><a routerLink="/terms">Conditions générales</a></li>
-        <li><a routerLink="/privacy">Politique de confidentialité</a></li>
-        <li><a routerLink="/cookies">Cookies</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-section">
-      <h3 class="footer-title">Suivez-nous</h3>
-      <div class="social-links">
-        <a href="https://facebook.com" target="_blank" aria-label="Facebook">
-          <span class="material-icons">facebook</span>
-        </a>
-        <a href="https://twitter.com" target="_blank" aria-label="Twitter">
-          <span class="material-icons">twitter</span>
-        </a>
-        <a href="https://instagram.com" target="_blank" aria-label="Instagram">
-          <span class="material-icons">instagram</span>
-        </a>
-        <a href="https://youtube.com" target="_blank" aria-label="Youtube">
-          <span class="material-icons">youtube</span>
-        </a>
+        <div class="footer-section newsletter-section">
+          <h3 class="footer-title">Newsletter</h3>
+          <p class="newsletter-desc">Restez informé des dernières actualités et offres des JO 2025.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Votre email" class="newsletter-input" required>
+            <button type="submit" class="newsletter-btn">
+              <span class="material-icons">send</span>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="footer-bottom">
-    <p class="copyright">
-      &copy; {{ currentYear }} Jeux Olympiques 2025. Tous droits réservés.
-    </p>
+    <div class="footer-container">
+      <p class="copyright">&copy; 2024 Jeux Olympiques 2025. Tous droits réservés.</p>
+      <div class="footer-bottom-links">
+        <a routerLink="/privacy">Politique de confidentialité</a>
+        <a routerLink="/terms">Conditions d'utilisation</a>
+        <a routerLink="/cookies">Cookies</a>
+      </div>
+    </div>
   </div>
 </footer>
