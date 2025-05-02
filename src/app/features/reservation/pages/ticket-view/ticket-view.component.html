@@ -38,7 +38,12 @@
 
         <div class="qr-section">
           <div class="qr-container">
-            <img [src]="reservation.qrCode" alt="QR Code de la réservation">
+            <!-- Remplacer l'image par le composant QR Code -->
+            <qrcode
+              [qrdata]="getQrCodeData()"
+              [width]="200"
+              [errorCorrectionLevel]="'M'">
+            </qrcode>
           </div>
           <p class="scan-info">Scannez ce code pour accéder à l'événement</p>
         </div>

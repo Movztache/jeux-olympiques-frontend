@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { CurrencyPipe, DatePipe, NgIf } from '@angular/common';
+import { QRCodeComponent } from 'angularx-qrcode';
 
 @Component({
   selector: 'app-ticket-view',
@@ -23,7 +24,8 @@ import { CurrencyPipe, DatePipe, NgIf } from '@angular/common';
     MatChipsModule,
     CurrencyPipe,
     DatePipe,
-    NgIf
+    NgIf,
+    QRCodeComponent
   ],
   styleUrls: ['./ticket-view.component.scss']
 })
@@ -63,6 +65,23 @@ export class TicketViewComponent implements OnInit {
         this.router.navigate(['/reservations']);
       }
     });
+  }
+
+  // Nouvelle méthode pour générer les données du QR code
+  getQrCodeData(): string {
+    if (!this.reservation) return '';
+
+    // Créer un objet contenant les informations essentielles du billet
+    const ticketData = {
+      id: this.reservation.reservationId,
+      key: this.reservation.reservationKey,
+      offer: this.reservation.offer?.name,
+      qty: this.reservation.quantity,
+      date: this.reservation.reservationDate
+    };
+
+    // Convertir en JSON pour inclusion dans le QR code
+    return JSON.stringify(ticketData);
   }
 
   print(): void {

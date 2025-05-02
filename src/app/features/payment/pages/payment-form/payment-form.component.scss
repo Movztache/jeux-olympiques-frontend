@@ -1,0 +1,51 @@
+/* src/app/features/payment/payment-form/payment-form.component.scss */
+.payment-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.order-summary {
+  background-color: #f5f5f5;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.total {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  border-top: 1px solid #ddd;
+  padding-top: 0.5rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+
+  mat-form-field {
+    flex: 1;
+  }
+}
+
+mat-card {
+  margin-bottom: 2rem;
+}
+
+mat-card-actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+button {
+  min-width: 120px;
+}
+
+mat-spinner {
+  margin: 0 auto;
+}
