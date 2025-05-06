@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
     this.router.events.pipe(
       filter((event): event is RouterEvent => event instanceof NavigationStart || event instanceof NavigationEnd)
     ).subscribe(event => {
-      console.log('Navigation Event:', event.constructor.name, 'URL:', (event as any).url);
+      // console.log('Navigation Event:', event.constructor.name, 'URL:', (event as any).url);
     });
   }
 }

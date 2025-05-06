@@ -8,6 +8,7 @@ import { provideEffects } from '@ngrx/effects';
 
 import { routes } from './app.routes';
 import { tokenInterceptor } from './core/authentication/token.interceptor';
+import { loggingInterceptor } from './core/interceptors/logging.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,7 +17,7 @@ export const appConfig: ApplicationConfig = {
       withDebugTracing()
     ),
     provideHttpClient(
-      withInterceptors([tokenInterceptor])
+      withInterceptors([loggingInterceptor, tokenInterceptor])
     ),
     provideStore(),
     provideEffects(),

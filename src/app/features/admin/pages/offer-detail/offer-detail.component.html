@@ -1,0 +1,98 @@
+<div class="offer-detail-container">
+  <div class="header-actions">
+    <h1>Détails de l'offre</h1>
+    <button mat-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon> Retour à la liste
+    </button>
+  </div>
+
+  @if (error) {
+    <div class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+      <app-button
+        variant="primary"
+        icon="arrow_back"
+        iconPosition="left"
+        (btnClick)="goBack()">
+        Retour à la liste
+      </app-button>
+    </div>
+  }
+
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Chargement des détails de l'offre...</p>
+    </div>
+  } @else {
+    <ng-container *ngIf="(offer$ | async) as offer">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{ offer.name }}</mat-card-title>
+          <mat-card-subtitle>
+            <mat-chip class="chip-primary chip-type">
+              <span style="color: white !important;">{{ offer.offerType }}</span>
+            </mat-chip>
+            <mat-chip [ngClass]="{'chip-primary chip-available-detail': isOfferAvailable(offer), 'chip-secondary chip-available-detail': !isOfferAvailable(offer)}">
+              <span style="color: white !important;">{{ isOfferAvailable(offer) ? 'Disponible' : 'Non disponible' }}</span>
+            </mat-chip>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="offer-info">
+            <div class="info-section">
+              <h3>Informations générales</h3>
+              <div class="info-item">
+                <span class="info-label">ID:</span>
+                <span class="info-value">{{ offer.offerId }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Prix:</span>
+                <span class="info-value">{{ offer.price | currency:'EUR' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Nombre de personnes:</span>
+                <span class="info-value">{{ offer.personCount }}</span>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="info-section">
+              <h3>Description</h3>
+              <p class="description">{{ offer.description || 'Aucune description disponible.' }}</p>
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <app-button
+            variant="primary"
+            icon="edit"
+            iconPosition="left"
+            (btnClick)="editOffer(offer)">
+            Modifier
+          </app-button>
+
+          <app-button
+            [variant]="isOfferAvailable(offer) ? 'primary' : 'secondary'"
+            [icon]="isOfferAvailable(offer) ? 'toggle_on' : 'toggle_off'"
+            iconPosition="left"
+            (btnClick)="toggleOfferAvailability(offer)">
+            {{ isOfferAvailable(offer) ? 'Désactiver' : 'Activer' }}
+          </app-button>
+
+          <app-button
+            variant="secondary"
+            icon="delete"
+            iconPosition="left"
+            (btnClick)="deleteOffer(offer)">
+            Supprimer
+          </app-button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-container>
+  }
+</div>

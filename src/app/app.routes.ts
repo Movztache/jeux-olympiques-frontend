@@ -36,7 +36,7 @@ export const routes: Routes = [
 
       { path: 'auth', loadChildren: () => import('./features/auth/auth.routing').then(m => m.AUTH_ROUTES) },
 
-      { path: 'admin',loadChildren: () => import('./features/admin/admin.routing').then(m => m.ADMIN_ROUTES) },
+      { path: 'admin',loadChildren: () => import('./features/admin/admin.routing').then(m => m.ADMIN_ROUTES), canActivate: [authGuard, roleGuard(['Admin'])] },
 
       // Redirection de toute route inconnue vers home
       { path: '**', redirectTo: 'home' }
