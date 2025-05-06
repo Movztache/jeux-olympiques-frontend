@@ -1,0 +1,363 @@
+.offer-list-container {
+  padding: 1.5rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Classes utilitaires pour l'alignement du texte */
+.text-center {
+  text-align: center !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+/* Styles spécifiques pour les puces */
+.chip-type {
+  width: 70px !important; /* Largeur fixe pour les puces de type */
+  height: 20px !important;
+  min-height: 20px !important;
+  box-sizing: border-box !important;
+}
+
+.centered-chip-text {
+  color: white !important;
+  display: block !important; /* Changer en block au lieu de flex */
+  width: 100% !important;
+  text-align: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 20px !important; /* Hauteur de ligne fixe pour centrer verticalement */
+  font-size: 12px !important; /* Taille de police uniforme */
+  font-weight: 500 !important; /* Graisse de police uniforme */
+  letter-spacing: 0 !important; /* Espacement des lettres uniforme */
+}
+
+/* Style pour centrer verticalement le libellé de recherche */
+.centered-label {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  transform: translateY(-4px) !important; /* Ajustement vertical réduit pour éviter la troncature */
+  height: auto !important;
+  overflow: visible !important;
+  line-height: normal !important;
+  padding-top: 2px !important;
+}
+
+.chip-available {
+  width: 40px !important; /* Largeur fixe pour les puces de disponibilité */
+}
+
+/* Styles pour les boutons d'action */
+.action-buttons-cell {
+  padding: 0 !important;
+}
+
+.action-buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px; /* Petit espacement entre les boutons */
+}
+
+.action-button {
+  width: 28px !important;
+  height: 28px !important;
+  line-height: 28px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  .mat-icon {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    line-height: 18px !important;
+  }
+}
+
+.view-button, .edit-button {
+  color: #0066cc !important; /* Bleu olympique */
+}
+
+.toggle-on-button {
+  color: #0066cc !important; /* Bleu olympique */
+}
+
+.toggle-off-button {
+  color: #ee334e !important; /* Rouge olympique */
+}
+
+.delete-button {
+  color: #ee334e !important; /* Rouge olympique */
+}
+
+.debug-info {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  p {
+    margin-bottom: 0.5rem;
+  }
+
+  button {
+    margin-top: 0.5rem;
+  }
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 500;
+  }
+}
+
+.search-section {
+  margin-bottom: 1.5rem;
+
+  .search-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .search-field-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .search-field {
+    flex: 1;
+    max-width: 500px;
+
+    ::ng-deep {
+      .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
+
+      .mat-mdc-text-field-wrapper {
+        background-color: white;
+        border-radius: 28px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+        padding: 0 8px;
+      }
+
+      .mat-mdc-text-field-wrapper:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .mat-mdc-form-field-flex {
+        height: 48px;
+        align-items: center;
+      }
+
+      .mat-mdc-form-field-infix {
+        padding: 0;
+      }
+
+      /* Centrer le libellé */
+      .mat-mdc-form-field-label-wrapper {
+        top: 0;
+        padding-top: 0;
+        overflow: visible;
+        height: auto !important;
+        min-height: 24px !important;
+      }
+
+      .mat-mdc-form-field-label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-left: -24px; /* Ajustement pour compenser l'icône */
+        transform: translateY(-8px) !important; /* Ajustement vertical pour remonter le libellé */
+      }
+
+      /* Style du libellé quand le champ est focus */
+      .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label {
+        color: #0066cc !important;
+        opacity: 1 !important;
+      }
+
+      /* Cacher le placeholder quand le champ est focus */
+      .mat-mdc-form-field.mat-focused input::placeholder {
+        color: transparent !important;
+      }
+    }
+  }
+
+  .search-icon-button {
+    color: #666;
+  }
+
+  .refresh-button {
+    margin-left: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: rotate(30deg);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+.table-container {
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.offers-table {
+  width: 100%;
+  table-layout: fixed !important; /* Force le respect des largeurs de colonnes */
+
+  /* Styles pour toutes les cellules */
+  td.mat-cell, th.mat-header-cell {
+    height: 48px !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    box-sizing: border-box !important;
+  }
+
+  .mat-column-offerId {
+    width: 50px !important;
+    max-width: 50px !important;
+  }
+
+  .mat-column-name {
+    width: 180px !important;
+    max-width: 180px !important;
+  }
+
+  .mat-column-price {
+    width: 80px !important;
+    max-width: 80px !important;
+    text-align: left !important;
+  }
+
+  .mat-column-offerType {
+    width: 70px !important;
+    max-width: 70px !important;
+    text-align: left !important;
+
+    mat-chip {
+      margin: 0 auto 0 0 !important; /* Aligner à gauche */
+      display: flex !important;
+      justify-content: center !important;
+      padding: 0 !important;
+      height: 20px !important; /* Hauteur fixe */
+      min-height: 20px !important;
+    }
+  }
+
+  .mat-column-personCount {
+    width: 70px !important;
+    max-width: 70px !important;
+    text-align: left !important;
+  }
+
+  .mat-column-available {
+    width: 70px !important;
+    max-width: 70px !important;
+    text-align: left !important;
+
+    mat-chip {
+      margin: 0 auto 0 0 !important; /* Aligner à gauche */
+      display: flex !important;
+      justify-content: center !important;
+      padding: 0 !important;
+      height: 20px !important; /* Hauteur fixe */
+      min-height: 20px !important;
+    }
+  }
+
+  .mat-column-actions {
+    width: 120px !important;
+    max-width: 120px !important;
+    text-align: center !important;
+    padding: 0 !important;
+  }
+
+  /* Style pour centrer le contenu des cellules */
+  .text-center {
+    text-align: center !important;
+  }
+}
+
+.loading-container,
+.error-container,
+.no-offers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  text-align: center;
+
+  mat-icon {
+    font-size: 3rem;
+    height: 3rem;
+    width: 3rem;
+    margin-bottom: 1rem;
+    color: #9e9e9e;
+  }
+
+  p {
+    font-size: 1.125rem;
+    color: rgba(0, 0, 0, 0.7);
+    margin-bottom: 1.5rem;
+  }
+}
+
+.error-container {
+  mat-icon {
+    color: #f44336;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .filter-card mat-card-content {
+    flex-direction: column;
+    align-items: stretch;
+
+    .search-field {
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .offers-table {
+    .mat-column-personCount,
+    .mat-column-offerType {
+      display: none;
+    }
+  }
+}
