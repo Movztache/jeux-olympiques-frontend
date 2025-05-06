@@ -1,0 +1,184 @@
+.offer-form-container {
+  padding: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 500;
+  }
+}
+
+mat-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-content {
+  padding: 1rem;
+}
+
+.form-row {
+  margin-bottom: 1rem;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  /* Styles pour les champs en erreur */
+  ::ng-deep .mat-form-field.ng-invalid.ng-touched {
+    .mat-form-field-outline {
+      color: #f44336 !important;
+      opacity: 1 !important;
+    }
+
+    .mat-form-field-label {
+      color: #f44336 !important;
+    }
+
+    .mat-form-field-required-marker {
+      color: #f44336 !important;
+    }
+
+    .mat-icon {
+      color: #f44336 !important;
+    }
+
+    /* Afficher les erreurs du serveur */
+    .mat-error {
+      display: block !important;
+    }
+  }
+}
+
+.form-row-inline {
+  display: flex;
+  gap: 1rem;
+
+  mat-form-field {
+    flex: 1;
+  }
+
+  .form-field-toggle {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    padding: 0 1rem;
+
+    /* Pas de style personnalisé pour le toggle switch - utilisation des couleurs par défaut */
+  }
+
+  /* Fin des styles du formulaire */
+
+  .info-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    padding: 0 1rem;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+
+    .info-label {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.6);
+      margin-bottom: 4px;
+    }
+
+    .info-value {
+      font-size: 16px;
+      font-weight: 500;
+      margin: 0;
+    }
+  }
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.loading-container,
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 1.5rem;
+
+  mat-icon {
+    font-size: 3rem;
+    height: 3rem;
+    width: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.125rem;
+    color: rgba(0, 0, 0, 0.7);
+    margin-bottom: 1.5rem;
+  }
+}
+
+.error-container {
+  flex-direction: row !important;
+  background-color: #ffebee !important;
+  border-left: 4px solid #f44336 !important;
+  text-align: left !important;
+  padding: 1rem !important;
+  animation: fadeIn 0.3s ease-in-out;
+  display: flex !important;
+  align-items: center !important; /* Centrer verticalement les éléments */
+  min-height: 48px !important; /* Hauteur minimale pour assurer un bon espacement */
+
+  mat-icon {
+    color: #f44336;
+    font-size: 24px !important;
+    height: 24px !important;
+    width: 24px !important;
+    margin-right: 1rem !important;
+    margin-bottom: 0 !important;
+    flex-shrink: 0 !important;
+  }
+
+  p {
+    color: #d32f2f !important;
+    font-weight: 500 !important;
+    margin: 0 !important;
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+    display: block !important; /* Changer en block au lieu de flex */
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .header-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .form-row-inline {
+    flex-direction: column;
+    gap: 0;
+  }
+}

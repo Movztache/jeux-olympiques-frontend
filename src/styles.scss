@@ -2,3 +2,58 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Styles globaux pour les puces */
+.chip-primary, .chip-secondary {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  color: white !important;
+  font-weight: 500 !important;
+  height: 20px !important;
+  padding: 0 6px !important;
+  font-size: 11px !important;
+  text-align: center !important;
+
+  /* S'assurer que le texte est bien blanc */
+  ::ng-deep .mat-chip-ripple {
+    color: white !important;
+  }
+
+  ::ng-deep span {
+    color: white !important;
+  }
+
+  /* Forcer la couleur blanche pour le texte et le centrage */
+  ::ng-deep .mat-mdc-chip-action-label {
+    color: white !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    text-align: center !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+  }
+
+  ::ng-deep .mdc-evolution-chip__text-label {
+    color: white !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    text-align: center !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+  }
+}
+
+.chip-primary {
+  background-color: #0066cc !important; /* Bleu olympique du header/footer */
+}
+
+.chip-secondary {
+  background-color: #ee334e !important; /* Rouge olympique */
+}
+
+/* Pas de style personnalisé pour les slide-toggles - utilisation des couleurs par défaut */

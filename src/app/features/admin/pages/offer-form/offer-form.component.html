@@ -1,0 +1,124 @@
+<div class="offer-form-container">
+  <div class="header-actions">
+    <h1>{{ isEditMode ? 'Modifier une offre' : 'Créer une offre' }}</h1>
+    <button mat-button color="primary" (click)="cancel()">
+      <mat-icon>arrow_back</mat-icon> Retour à la liste
+    </button>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <mat-icon color="warn" aria-hidden="true">error</mat-icon>
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>{{ isEditMode ? 'Chargement des données...' : 'Création en cours...' }}</p>
+  </div>
+
+  <form *ngIf="!loading" [formGroup]="offerForm" (ngSubmit)="onSubmit()">
+      <mat-card>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Nom de l'offre</mat-label>
+              <input matInput formControlName="name" placeholder="Entrez le nom de l'offre" required>
+              <mat-error *ngIf="offerForm.get('name')?.hasError('required')">
+                Le nom est obligatoire
+              </mat-error>
+              <mat-error *ngIf="offerForm.get('name')?.hasError('maxlength')">
+                Le nom ne doit pas dépasser 100 caractères
+              </mat-error>
+              <mat-error *ngIf="offerForm.get('name')?.hasError('serverError')">
+                {{ offerForm.get('name')?.getError('serverError') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" placeholder="Entrez une description" rows="4"></textarea>
+              <mat-error *ngIf="offerForm.get('description')?.hasError('maxlength')">
+                La description ne doit pas dépasser 500 caractères
+              </mat-error>
+              <mat-error *ngIf="offerForm.get('description')?.hasError('serverError')">
+                {{ offerForm.get('description')?.getError('serverError') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row form-row-inline">
+            <mat-form-field appearance="outline">
+              <mat-label>Prix</mat-label>
+              <input matInput type="number" formControlName="price" placeholder="0.00" required>
+              <span matTextSuffix>€</span>
+              <mat-error *ngIf="offerForm.get('price')?.hasError('required')">
+                Le prix est obligatoire
+              </mat-error>
+              <mat-error *ngIf="offerForm.get('price')?.hasError('min')">
+                Le prix doit être positif
+              </mat-error>
+              <mat-error *ngIf="offerForm.get('price')?.hasError('serverError')">
+                {{ offerForm.get('price')?.getError('serverError') }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Type d'offre</mat-label>
+              <mat-select formControlName="offerType" required>
+                <mat-option *ngFor="let type of offerTypes" [value]="type">{{ type }}</mat-option>
+              </mat-select>
+              <mat-hint>Le nombre de personnes sera automatiquement déterminé par le type d'offre</mat-hint>
+              <mat-error *ngIf="offerForm.get('offerType')?.hasError('required')">
+                Le type d'offre est obligatoire
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row form-row-inline">
+            <ng-container *ngIf="offerForm.get('offerType')?.value !== 'CUSTOM'; else personCountInput">
+              <div class="info-field">
+                <p class="info-label">Nombre de personnes:</p>
+                <p class="info-value">
+                  <ng-container [ngSwitch]="offerForm.get('offerType')?.value">
+                    <span *ngSwitchCase="'SOLO'">1 personne</span>
+                    <span *ngSwitchCase="'DUO'">2 personnes</span>
+                    <span *ngSwitchCase="'TRIO'">3 personnes</span>
+                    <span *ngSwitchDefault>Déterminé par le type d'offre</span>
+                  </ng-container>
+                </p>
+              </div>
+            </ng-container>
+
+            <ng-template #personCountInput>
+              <mat-form-field appearance="outline">
+                <mat-label>Nombre de personnes</mat-label>
+                <input matInput type="number" formControlName="personCount" min="4" required>
+                <mat-hint>Minimum 4 personnes pour le type custom</mat-hint>
+                <mat-error *ngIf="offerForm.get('personCount')?.hasError('required')">
+                  Le nombre de personnes est obligatoire
+                </mat-error>
+                <mat-error *ngIf="offerForm.get('personCount')?.hasError('min')">
+                  Le nombre de personnes doit être au moins 4 pour le type custom
+                </mat-error>
+              </mat-form-field>
+            </ng-template>
+
+            <div class="form-field-toggle">
+              <mat-slide-toggle formControlName="available">
+                {{ offerForm.get('available')?.value ? 'Disponible' : 'Non disponible' }}
+              </mat-slide-toggle>
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-button type="button" (click)="cancel()">Annuler</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="offerForm.invalid">
+            {{ isEditMode ? 'Mettre à jour' : 'Créer' }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+  </form>
+</div>

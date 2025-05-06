@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -48,7 +49,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private salesService: SalesService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {
     this.filterForm = this.fb.group({
       period: ['month'],
@@ -150,5 +152,9 @@ export class DashboardComponent implements OnInit {
         }
       });
     }
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
   }
 }
