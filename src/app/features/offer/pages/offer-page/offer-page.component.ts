@@ -36,12 +36,12 @@ export class OfferPageComponent implements OnInit {
     private router: Router
   ) {
     this.offers$ = this.offerService.getAllOffers();
-    console.log('OffresComponent - constructeur');
+    // console.log('OffresComponent - constructeur');
   }
 
   ngOnInit(): void {
     // Récupérer toutes les offres
-    console.log('OffresComponent - ngOnInit');
+    // console.log('OffresComponent - ngOnInit');
     this.offers$ = this.offerService.getAllOffers();
 
     // Récupérer les types d'offres uniques pour le filtrage
@@ -51,7 +51,7 @@ export class OfferPageComponent implements OnInit {
       },
       err => {
         this.error = "Impossible de charger les offres";
-        console.error(err);
+        // console.error(err);
       }
     );
   }
@@ -76,6 +76,6 @@ export class OfferPageComponent implements OnInit {
 
   public reserve(offer: Offer): void {
     // À implémenter plus tard logique de réservation
-    console.log('Réservation pour:', offer);
+    // console.log('Réservation pour:', offer);
   }
 }

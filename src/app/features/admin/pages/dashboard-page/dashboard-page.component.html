@@ -1,5 +1,32 @@
 <!-- src/app/features/dashboard/dashboard.component.html -->
 <div class="dashboard-container">
+  <!-- Accès rapide -->
+  <div class="quick-access-cards">
+    <mat-card class="quick-access-card" (click)="navigateTo('/admin/offers')">
+      <mat-icon>list_alt</mat-icon>
+      <h3>Gestion des offres</h3>
+      <p>Consulter, créer, modifier ou supprimer des offres</p>
+    </mat-card>
+
+    <mat-card class="quick-access-card" (click)="navigateTo('/admin/offers/create')">
+      <mat-icon>add_circle</mat-icon>
+      <h3>Créer une offre</h3>
+      <p>Ajouter une nouvelle offre au catalogue</p>
+    </mat-card>
+
+    <mat-card class="quick-access-card">
+      <mat-icon>event</mat-icon>
+      <h3>Gestion des événements</h3>
+      <p>Gérer les événements (à venir)</p>
+    </mat-card>
+
+    <mat-card class="quick-access-card">
+      <mat-icon>people</mat-icon>
+      <h3>Gestion des utilisateurs</h3>
+      <p>Gérer les comptes utilisateurs (à venir)</p>
+    </mat-card>
+  </div>
+
   <!-- Filtres du dashboard -->
   <mat-card class="filter-card">
     <mat-card-content>

@@ -136,18 +136,35 @@ body {
     border-radius: 4px;
     z-index: 1;
     padding: 0.5rem 0;
+    margin-top: 5px; /* Ajouter un peu d'espace entre le lien et le menu */
 
     a {
       color: #333;
-      padding: 0.5rem 1rem;
+      padding: 0.7rem 1rem; /* Augmenter légèrement la hauteur des éléments du menu */
+      margin: 2px 0; /* Ajouter un petit espace entre les éléments */
       display: block;
       text-decoration: none;
       font-weight: normal;
       text-transform: none;
       font-size: 0.9rem;
+      border: none; /* Supprimer toutes les bordures */
+      position: relative;
 
       &:hover {
-        background-color: #f5f5f5;
+        background-color: #f9f9f9; /* Gris très léger au survol */
+        color: #333; /* Maintenir la couleur du texte en noir */
+      }
+
+      &:active, &:focus {
+        background-color: #f5f5f5; /* Gris léger au clic */
+        color: #333; /* Maintenir la couleur du texte en noir */
+        outline: none; /* Supprimer le contour de focus */
+      }
+
+      &.active {
+        font-weight: 500; /* Texte légèrement plus gras pour l'item actif */
+        color: #333; /* Noir pour le texte */
+        background-color: #f5f5f5; /* Gris léger pour le fond */
       }
     }
   }
