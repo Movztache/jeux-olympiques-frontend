@@ -58,17 +58,30 @@
               {{isOfferAvailable(offer) ? 'Disponible' : 'Non disponible'}}
             </mat-chip>
           </div>
-          <p class="offer-description" *ngIf="offer.description">
-            {{offer.description | slice:0:120}}{{offer.description.length > 120 ? '...' : ''}}
+          <p class="offer-description">
+            {{offer.description ? (offer.description | slice:0:120) + (offer.description.length > 120 ? '...' : '') : 'Aucune description disponible pour cette offre.'}}
           </p>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-stroked-button color="primary" (click)="viewOfferDetails(offer)">
-            <mat-icon>visibility</mat-icon> Détails
-          </button>
-          <button mat-raised-button color="accent" [disabled]="!isOfferAvailable(offer)" (click)="reserve(offer)">
-            <mat-icon>calendar_today</mat-icon> Réserver
-          </button>
+          <div class="card-actions-top">
+            <button mat-stroked-button color="primary" (click)="viewOfferDetails(offer)">
+              <mat-icon>visibility</mat-icon> Détails
+            </button>
+          </div>
+          <div class="card-actions-bottom">
+            <div class="quantity-selector">
+              <button mat-icon-button (click)="decreaseQuantity(offer.offerId)">
+                <mat-icon>remove</mat-icon>
+              </button>
+              <span class="quantity-value">{{ getQuantity(offer.offerId) }}</span>
+              <button mat-icon-button (click)="increaseQuantity(offer.offerId)">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+            <button mat-raised-button color="accent" class="add-to-cart-button" [disabled]="!isOfferAvailable(offer)" (click)="reserve(offer)">
+              <mat-icon>shopping_cart</mat-icon> Ajouter
+            </button>
+          </div>
         </mat-card-actions>
       </mat-card>
     </div>

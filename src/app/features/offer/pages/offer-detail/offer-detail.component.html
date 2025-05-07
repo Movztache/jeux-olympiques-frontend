@@ -70,9 +70,20 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-raised-button class="reserve-button" [disabled]="!isOfferAvailable(offer)" (click)="reserve(offer)">
-          <mat-icon>calendar_today</mat-icon> Réserver maintenant
-        </button>
+        <div class="reservation-actions">
+          <div class="quantity-selector">
+            <button mat-icon-button (click)="quantity = quantity > 1 ? quantity - 1 : 1">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span class="quantity-value">{{ quantity }}</span>
+            <button mat-icon-button (click)="quantity = quantity + 1">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <button mat-raised-button class="reserve-button" [disabled]="!isOfferAvailable(offer)" (click)="reserve(offer)">
+            <mat-icon>shopping_cart</mat-icon> Ajouter au panier
+          </button>
+        </div>
       </mat-card-actions>
     </mat-card>
   </div>
