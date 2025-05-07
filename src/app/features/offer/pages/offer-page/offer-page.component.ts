@@ -7,10 +7,13 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { OfferService } from '../../../../core/services/offer.service';
+import { CartService } from '../../../../core/services/cart.service';
 import { Offer, isOfferAvailable } from '../../../../core/models/offer.model';
 
 @Component({
@@ -25,7 +28,9 @@ import { Offer, isOfferAvailable } from '../../../../core/models/offer.model';
     MatChipsModule,
     MatProgressSpinnerModule,
     MatBadgeModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSnackBarModule,
+    FormsModule
   ],
   styleUrls: ['./offer-page.component.scss']
 })
@@ -38,9 +43,14 @@ export class OfferPageComponent implements OnInit {
   offerTypes: string[] = [];
   error: string | null = null;
 
+  // Map pour stocker les quantités par offre
+  quantityMap: Map<number, number> = new Map<number, number>();
+
   constructor(
     private offerService: OfferService,
-    private router: Router
+    private router: Router,
+    private cartService: CartService,
+    private snackBar: MatSnackBar
   ) {
     this.offers$ = this.offerService.getAllOffers();
     // console.log('OffresComponent - constructeur');
@@ -67,7 +77,12 @@ export class OfferPageComponent implements OnInit {
         this.applyFilters();
 
         // Récupérer les types d'offres uniques pour le filtrage
-        this.offerTypes = [...new Set(offers.map(offer => offer.offerType))];
+        // Définir l'ordre logique des types d'offres
+        const orderMap: { [key: string]: number } = { 'SOLO': 1, 'DUO': 2, 'TRIO': 3, 'CUSTOM': 4 };
+
+        // Récupérer les types uniques et les trier selon l'ordre défini
+        this.offerTypes = [...new Set(offers.map(offer => offer.offerType))]
+          .sort((a, b) => (orderMap[a] || 999) - (orderMap[b] || 999));
       },
       err => {
         this.error = "Impossible de charger les offres";
@@ -114,8 +129,74 @@ export class OfferPageComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
+  /**
+   * Obtient la quantité pour une offre spécifique
+   * @param offerId ID de l'offre
+   * @returns La quantité pour cette offre (par défaut 1)
+   */
+  getQuantity(offerId: number): number {
+    return this.quantityMap.get(offerId) || 1;
+  }
+
+  /**
+   * Augmente la quantité pour une offre spécifique
+   * @param offerId ID de l'offre
+   */
+  increaseQuantity(offerId: number): void {
+    const currentQuantity = this.getQuantity(offerId);
+    this.quantityMap.set(offerId, currentQuantity + 1);
+  }
+
+  /**
+   * Diminue la quantité pour une offre spécifique
+   * @param offerId ID de l'offre
+   */
+  decreaseQuantity(offerId: number): void {
+    const currentQuantity = this.getQuantity(offerId);
+    if (currentQuantity > 1) {
+      this.quantityMap.set(offerId, currentQuantity - 1);
+    }
+  }
+
+  /**
+   * Ajoute une offre au panier
+   * @param offer L'offre à ajouter au panier
+   */
   public reserve(offer: Offer): void {
-    // À implémenter plus tard logique de réservation
-    // console.log('Réservation pour:', offer);
+    if (!this.isOfferAvailable(offer)) {
+      this.snackBar.open("Cette offre n'est pas disponible à la réservation.", "Fermer", {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'top'
+      });
+      return;
+    }
+
+    const quantity = this.getQuantity(offer.offerId);
+
+    // Ajouter l'offre au panier
+    this.cartService.addToCart(offer.offerId, quantity).subscribe({
+      next: (cartItem) => {
+        // Afficher un message de succès
+        this.snackBar.open(`${offer.name} a été ajouté à votre panier`, "Voir le panier", {
+          duration: 5000,
+          panelClass: ['success-snackbar'],
+          verticalPosition: 'top',
+        }).onAction().subscribe(() => {
+          this.router.navigate(['/panier']);
+        });
+
+        // Réinitialiser la quantité à 1 après l'ajout au panier
+        this.quantityMap.set(offer.offerId, 1);
+      },
+      error: (error) => {
+        console.error('Erreur lors de l\'ajout au panier', error);
+        this.snackBar.open("Une erreur est survenue lors de l'ajout au panier", "Fermer", {
+          duration: 3000,
+          panelClass: ['error-snackbar'],
+          verticalPosition: 'top'
+        });
+      }
+    });
   }
 }

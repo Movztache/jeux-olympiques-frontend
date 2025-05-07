@@ -1,6 +1,20 @@
 <div class="cart-item">
   <div class="product-info" data-label="Produit">
-    <h3>{{ item.offerName }}</h3>
+    <div class="product-details">
+      <h3>{{ item.offerName }}</h3>
+      <div class="product-meta">
+        <span class="offer-type" *ngIf="item.offerType">
+          {{ item.offerType }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="persons" data-label="Personnes">
+    <div class="persons-badge">
+      <mat-icon>people</mat-icon>
+      <span>{{ item.personCount || 1 }}</span>
+    </div>
   </div>
 
   <div class="price" data-label="Prix">
@@ -8,21 +22,23 @@
   </div>
 
   <div class="quantity" data-label="Quantité">
-    <button mat-icon-button (click)="decreaseQuantity()" [disabled]="item.quantity <= 1">
-      <mat-icon>remove</mat-icon>
-    </button>
-    <span class="quantity-value">{{ item.quantity }}</span>
-    <button mat-icon-button (click)="increaseQuantity()">
-      <mat-icon>add</mat-icon>
-    </button>
+    <div class="quantity-controls">
+      <button mat-mini-fab color="primary" class="quantity-button" (click)="decreaseQuantity()" [disabled]="item.quantity <= 1">
+        <mat-icon>remove</mat-icon>
+      </button>
+      <span class="quantity-value">{{ item.quantity }}</span>
+      <button mat-mini-fab color="primary" class="quantity-button" (click)="increaseQuantity()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
   </div>
 
   <div class="total" data-label="Total">
-    {{ item.totalPrice | currency:'EUR' }}
+    <span class="total-price">{{ item.totalPrice | currency:'EUR' }}</span>
   </div>
 
   <div class="actions" data-label="Actions">
-    <button mat-icon-button color="warn" (click)="onRemove()" aria-label="Supprimer l'article">
+    <button mat-mini-fab color="warn" (click)="onRemove()" aria-label="Supprimer l'article">
       <mat-icon>delete</mat-icon>
     </button>
   </div>
