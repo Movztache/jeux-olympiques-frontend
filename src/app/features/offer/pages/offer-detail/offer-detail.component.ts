@@ -11,7 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { Observable, switchMap, of, catchError } from 'rxjs';
 
 import { OfferService } from '../../../../core/services/offer.service'; // Assurez-vous que le chemin est correct
-import { Offer } from '../../../../core/models/offer.model'; // Assurez-vous que le chemin est correct
+import { Offer, isOfferAvailable } from '../../../../core/models/offer.model'; // Assurez-vous que le chemin est correct
 
 @Component({
   selector: 'app-offer-detail',
@@ -69,8 +69,13 @@ export class OfferDetailComponent implements OnInit {
     this.router.navigate(['/offres']);
   }
 
+  // Fonction pour vérifier si une offre est disponible (utilisée dans le template)
+  isOfferAvailable(offer: Offer): boolean {
+    return isOfferAvailable(offer);
+  }
+
   reserve(offer: Offer): void {
-    if (!offer.available) {
+    if (!this.isOfferAvailable(offer)) {
       alert("Cette offre n'est pas disponible à la réservation.");
       return;
     }
