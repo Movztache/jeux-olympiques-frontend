@@ -1,47 +1,72 @@
 <div class="offers-container">
-  <!-- Filtres par type d'offre -->
-  <div class="filters">
-    <h2>Filtrer par type</h2>
-    <div class="filter-chips">
-      <button mat-button
-              [class.active]="selectedType === null"
-              (click)="filterByType(null)">
-        Tous
-      </button>
-      <button mat-button
-              *ngFor="let type of offerTypes"
-              [class.active]="selectedType === type"
-              (click)="filterByType(type)">
-        {{type}}
-      </button>
+  <!-- En-tête de la page -->
+  <div class="offers-header">
+    <h1>Découvrez nos offres</h1>
+    <p class="subtitle">Trouvez l'offre parfaite pour votre visite aux Jeux Olympiques</p>
+  </div>
+
+  <!-- Filtres par type d'offre et disponibilité -->
+  <div class="filters-section">
+    <div class="filters-header">
+      <h3>Filtrer les offres</h3>
+    </div>
+    <div class="filters-row">
+      <div class="filter-group">
+        <label class="filter-label">Type d'offre</label>
+        <div class="filter-buttons">
+          <button mat-flat-button
+                  class="filter-button"
+                  [class.active]="selectedType === null"
+                  (click)="filterByType(null)">
+            <mat-icon>filter_list</mat-icon> Tous
+          </button>
+          <button mat-flat-button
+                  class="filter-button"
+                  *ngFor="let type of offerTypes"
+                  [class.active]="selectedType === type"
+                  (click)="filterByType(type)">
+            {{type}}
+          </button>
+        </div>
+      </div>
+      <div class="filter-group availability-filter">
+        <label class="filter-label">Disponibilité</label>
+        <button mat-flat-button
+                class="filter-button"
+                [class.active]="showOnlyAvailable"
+                (click)="toggleAvailabilityFilter()">
+          <mat-icon>{{ showOnlyAvailable ? 'check_circle' : 'filter_alt' }}</mat-icon>
+          {{ showOnlyAvailable ? 'Uniquement disponibles' : 'Toutes les offres' }}
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- Liste des offres -->
-  <div class="offers-list" *ngIf="(offers$ | async) as offers; else loading">
-    <div *ngIf="offers.length > 0; else noOffers">
-      <mat-card class="offer-card" *ngFor="let offer of offers">
+  <div class="offers-content" *ngIf="(offers$ | async) as offers; else loading">
+    <div class="offers-grid" *ngIf="offers.length > 0; else noOffers">
+      <mat-card class="offer-card" *ngFor="let offer of offers" [class.unavailable]="!isOfferAvailable(offer)">
         <mat-card-header>
           <mat-card-title>{{offer.name}}</mat-card-title>
-          <mat-card-subtitle>{{offer.price | currency:'EUR'}}</mat-card-subtitle>
+          <mat-card-subtitle class="price-tag">{{offer.price | currency:'EUR'}}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="offer-chips">
-            <mat-chip>{{offer.offerType}}</mat-chip>
-            <mat-chip>{{offer.personCount}} personne(s)</mat-chip>
-            <mat-chip [color]="offer.available ? 'primary' : 'warn'">
-              {{offer.available ? 'Disponible' : 'Non disponible'}}
+            <mat-chip class="type-chip">{{offer.offerType}}</mat-chip>
+            <mat-chip class="persons-chip">{{offer.personCount}} personne<span *ngIf="offer.personCount > 1">s</span></mat-chip>
+            <mat-chip class="status-chip" [class.available]="isOfferAvailable(offer)" [class.unavailable]="!isOfferAvailable(offer)">
+              {{isOfferAvailable(offer) ? 'Disponible' : 'Non disponible'}}
             </mat-chip>
           </div>
           <p class="offer-description" *ngIf="offer.description">
-            {{offer.description | slice:0:150}}{{offer.description.length > 150 ? '...' : ''}}
+            {{offer.description | slice:0:120}}{{offer.description.length > 120 ? '...' : ''}}
           </p>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button color="primary" (click)="viewOfferDetails(offer)">
-            <mat-icon>visibility</mat-icon> Voir détails
+          <button mat-stroked-button color="primary" (click)="viewOfferDetails(offer)">
+            <mat-icon>visibility</mat-icon> Détails
           </button>
-          <button mat-raised-button color="accent" [disabled]="!offer.available" (click)="reserve(offer)">
+          <button mat-raised-button color="accent" [disabled]="!isOfferAvailable(offer)" (click)="reserve(offer)">
             <mat-icon>calendar_today</mat-icon> Réserver
           </button>
         </mat-card-actions>
