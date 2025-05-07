@@ -2,9 +2,10 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError, forkJoin, of } from 'rxjs';
+import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { Offer } from '../models/offer.model';
 
 // Interface pour les articles du panier (basée sur votre CartItemDTO)
 export interface CartItem {
@@ -14,6 +15,8 @@ export interface CartItem {
   offerName: string;
   offerPrice: number;
   totalPrice: number;
+  personCount?: number; // Nombre de personnes par billet (SOLO=1, DUO=2, etc.)
+  offerType?: string;   // Type d'offre (SOLO, DUO, TRIO, CUSTOM)
 }
 
 // Interface pour le résumé du panier
@@ -53,9 +56,52 @@ export class CartService {
         console.error('Erreur lors du chargement du panier', error);
         return throwError(() => new Error('Erreur lors du chargement du panier'));
       }),
+      switchMap(items => {
+        // Si le panier est vide, pas besoin de récupérer les détails des offres
+        if (items.length === 0) {
+          return of(items);
+        }
+
+        // Récupérer les détails de chaque offre pour obtenir personCount et offerType
+        const offerIds = items.map(item => item.offerId);
+        const uniqueOfferIds = [...new Set(offerIds)];
+
+        // Créer un tableau de requêtes pour récupérer les détails de chaque offre
+        const offerRequests = uniqueOfferIds.map(id =>
+          this.http.get<Offer>(`${environment.apiUrl}/offers/${id}`)
+        );
+
+        // Exécuter toutes les requêtes en parallèle
+        return forkJoin(offerRequests).pipe(
+          map(offers => {
+            // Créer un dictionnaire des offres par ID pour un accès facile
+            const offerMap = new Map<number, Offer>();
+            offers.forEach(offer => {
+              offerMap.set(offer.offerId, offer);
+            });
+
+            // Enrichir chaque article du panier avec les informations de l'offre
+            return items.map(item => {
+              const offer = offerMap.get(item.offerId);
+              if (offer) {
+                return {
+                  ...item,
+                  personCount: offer.personCount,
+                  offerType: offer.offerType
+                };
+              }
+              return item;
+            });
+          })
+        );
+      }),
       tap(items => {
         this.cartItemsSubject.next(items);
         this.loadCartSummary(); // Charger le résumé du panier
+      }),
+      catchError(error => {
+        console.error('Erreur lors de l\'enrichissement du panier', error);
+        return throwError(() => new Error('Erreur lors du chargement du panier'));
       })
     ).subscribe();
   }
@@ -87,7 +133,8 @@ export class CartService {
       quantity: quantity,
       offerName: '',  // Ces champs seront remplis par le backend
       offerPrice: 0,
-      totalPrice: 0
+      totalPrice: 0,
+      // Les champs personCount et offerType seront remplis par le backend
     };
 
     return this.http.post<CartItem>(`${this.apiUrl}/items`, payload).pipe(
@@ -108,14 +155,39 @@ export class CartService {
    * @param quantity Nouvelle quantité
    */
   updateCartItemQuantity(cartId: number, quantity: number): Observable<CartItem> {
+    // Sauvegarder l'article actuel avant la mise à jour
+    const currentItems = this.cartItemsSubject.getValue();
+    const itemToUpdate = currentItems.find(item => item.cartId === cartId);
+
     return this.http.put<CartItem>(`${this.apiUrl}/items/${cartId}?quantity=${quantity}`, {}).pipe(
       catchError(error => {
         console.error('Erreur lors de la mise à jour du panier', error);
         return throwError(() => new Error('Erreur lors de la mise à jour du panier'));
       }),
-      tap(updatedItem => {
-        // Mettre à jour la liste d'articles et le résumé
-        this.loadCart();
+      switchMap(updatedItem => {
+        // Préserver les informations d'offre (personCount et offerType)
+        if (itemToUpdate && updatedItem) {
+          updatedItem = {
+            ...updatedItem,
+            personCount: itemToUpdate.personCount,
+            offerType: itemToUpdate.offerType
+          };
+
+          // Mettre à jour localement l'article dans le panier
+          const updatedItems = currentItems.map(item =>
+            item.cartId === cartId ? updatedItem : item
+          );
+          this.cartItemsSubject.next(updatedItems);
+
+          // Mettre à jour le résumé du panier
+          this.loadCartSummary();
+
+          return of(updatedItem);
+        } else {
+          // Si l'article n'est pas trouvé, recharger tout le panier
+          this.loadCart();
+          return of(updatedItem);
+        }
       })
     );
   }
