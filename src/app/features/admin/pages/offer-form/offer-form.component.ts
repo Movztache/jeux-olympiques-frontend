@@ -329,6 +329,22 @@ export class OfferFormComponent implements OnInit {
    * Marque tous les champs d'un FormGroup comme touchés
    * Utile pour afficher les erreurs de validation
    */
+  // Helpers pour vérifier les erreurs dans le template
+  hasError(controlName: string, errorName: string): boolean {
+    const control = this.offerForm.get(controlName);
+    return control ? control.hasError(errorName) : false;
+  }
+
+  getError(controlName: string, errorName: string): any {
+    const control = this.offerForm.get(controlName);
+    return control ? control.getError(errorName) : null;
+  }
+
+  getControlValue(controlName: string): any {
+    const control = this.offerForm.get(controlName);
+    return control ? control.value : null;
+  }
+
   private markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();
