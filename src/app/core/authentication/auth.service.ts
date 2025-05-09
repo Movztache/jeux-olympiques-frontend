@@ -211,12 +211,39 @@ export class AuthService {
       return false;
     }
 
+    // Log pour déboguer les rôles de l'utilisateur
+    console.log('Utilisateur courant:', currentUser);
+    console.log('Rôles de l\'utilisateur:', currentUser.roles);
+    console.log('Vérification des rôles:', roles);
+
+    // Fonction helper pour vérifier si un rôle correspond
+    const hasRoleName = (roleName: string) => {
+      const hasRole = currentUser.roles.some(role => {
+        // Log pour déboguer chaque rôle
+        console.log('Vérification du rôle:', role, 'avec roleName:', roleName);
+
+        // Si le rôle est une chaîne de caractères
+        if (typeof role === 'string') {
+          return role.toLowerCase() === roleName.toLowerCase();
+        }
+
+        // Si le rôle est un objet avec une propriété roleName
+        if (typeof role === 'object' && role !== null && role.roleName) {
+          return role.roleName.toLowerCase() === roleName.toLowerCase();
+        }
+
+        return false;
+      });
+      console.log('Résultat de la vérification pour', roleName, ':', hasRole);
+      return hasRole;
+    };
+
     if (Array.isArray(roles)) {
       // Vérifier si l'utilisateur possède au moins un des rôles fournis
-      return roles.some(role => currentUser.roles.includes(role));
+      return roles.some(roleName => hasRoleName(roleName));
     } else {
       // Vérifier un seul rôle
-      return currentUser.roles.includes(roles);
+      return hasRoleName(roles);
     }
   }
 
