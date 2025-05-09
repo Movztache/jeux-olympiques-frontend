@@ -14,10 +14,10 @@
       <p>Ajouter une nouvelle offre au catalogue</p>
     </mat-card>
 
-    <mat-card class="quick-access-card">
-      <mat-icon>event</mat-icon>
-      <h3>Gestion des événements</h3>
-      <p>Gérer les événements (à venir)</p>
+    <mat-card class="quick-access-card" (click)="navigateTo('/admin/create-event')">
+      <mat-icon>feed</mat-icon>
+      <h3>Gestion des Actualités</h3>
+      <p>Créer et gérer les actualités du site</p>
     </mat-card>
 
     <mat-card class="quick-access-card" (click)="navigateTo('/admin/users')">

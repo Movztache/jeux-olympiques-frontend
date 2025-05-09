@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ProfilService } from '../../../../core/services/profil.service';
-import { Router } from '@angular/router';
+import {Router, ActivatedRoute, RouterLink} from '@angular/router';
 
 // Modules Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -22,7 +22,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    RouterLink
   ],
   templateUrl: './profil-edit.component.html',
   styleUrl: './profil-edit.component.scss'
@@ -36,7 +37,8 @@ export class ProfilEditComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private profilService: ProfilService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     // Initialisation du formulaire avec validation
     this.profilForm = this.fb.group({
@@ -73,7 +75,7 @@ export class ProfilEditComponent implements OnInit {
 
   // Annuler les modifications et retourner à la page de profil
   cancel(): void {
-    this.router.navigate(['/profile']);
+    this.router.navigate(['..'], { relativeTo: this.route });
   }
 
   // Soumettre les modifications du profil
@@ -83,7 +85,7 @@ export class ProfilEditComponent implements OnInit {
       this.profilService.updateUserProfile(this.profilForm.value).subscribe({
         next: () => {
           console.log('Profil mis à jour avec succès');
-          this.router.navigate(['/profile']);
+          this.router.navigate(['..'], { relativeTo: this.route });
         },
         error: (error) => {
           console.error('Erreur lors de la mise à jour du profil', error);
