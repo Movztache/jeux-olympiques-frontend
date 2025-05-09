@@ -39,16 +39,7 @@ $user-color: #2196f3;
       }
     }
 
-    .search-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      mat-form-field {
-        width: 300px;
-        margin-bottom: -1.25em;
-      }
-    }
+    /* Les styles de la barre de recherche sont maintenant dans le composant SearchBarComponent */
   }
 
   .table-container {
@@ -174,13 +165,7 @@ $user-color: #2196f3;
       flex-direction: column;
       align-items: flex-start;
 
-      .search-container {
-        width: 100%;
-
-        mat-form-field {
-          width: 100%;
-        }
-      }
+      /* Les styles responsifs de la barre de recherche sont maintenant dans le composant SearchBarComponent */
     }
 
     .table-container {

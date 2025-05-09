@@ -18,17 +18,30 @@
     <ng-container *ngIf="isAdmin">
       <div class="dropdown" [class.open]="adminMenuOpen"
            (mouseenter)="openAdminMenu()"
-           (mouseleave)="closeAdminMenu()">
-        <a class="dropdown-toggle" routerLinkActive="active">
+           (mouseleave)="closeAdminMenu()"
+           (click)="adminMenuOpen = !adminMenuOpen">
+        <a class="dropdown-toggle" routerLinkActive="active" tabindex="0" (keydown.enter)="openAdminMenu()" (keydown.space)="openAdminMenu()">
           ADMIN <span class="arrow">▼</span>
         </a>
-        <div class="dropdown-content"
+        <div class="dropdown-content modern-dropdown"
              (mouseenter)="onAdminDropdownEnter()"
              (mouseleave)="onAdminDropdownLeave()">
-          <a routerLink="/admin" routerLinkActive="active">Tableau de bord</a>
-          <a routerLink="/admin/offers" routerLinkActive="active">Gestion des offres</a>
-          <a routerLink="/admin/offers/create" routerLinkActive="active">Créer une offre</a>
-          <a routerLink="/admin/create-event" routerLinkActive="active">Créer un événement</a>
+          <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <span class="menu-icon"><mat-icon>dashboard</mat-icon></span>
+            <span class="menu-text">Tableau de bord</span>
+          </a>
+          <a routerLink="/admin/offers" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+            <span class="menu-icon"><mat-icon>local_offer</mat-icon></span>
+            <span class="menu-text">Gestion des offres</span>
+          </a>
+          <a routerLink="/admin/users" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+            <span class="menu-icon"><mat-icon>people</mat-icon></span>
+            <span class="menu-text">Gestion des Utilisateurs</span>
+          </a>
+          <a routerLink="/admin/create-event" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+            <span class="menu-icon"><mat-icon>event</mat-icon></span>
+            <span class="menu-text">Créer un événement</span>
+          </a>
         </div>
       </div>
     </ng-container>
@@ -60,11 +73,17 @@
         <button class="icon-button dropdown-toggle">
           <img src="https://img.icons8.com/ios-filled/20/ffffff/user.png" alt="User" />
         </button>
-        <div class="dropdown-content user-menu"
+        <div class="dropdown-content user-menu modern-dropdown"
              (mouseenter)="onUserDropdownEnter()"
              (mouseleave)="onUserDropdownLeave()">
-          <a routerLink="/profile">Mon Profil</a>
-          <a (click)="logout()">Déconnexion</a>
+          <a routerLink="/profile">
+            <span class="menu-icon"><mat-icon>account_circle</mat-icon></span>
+            <span class="menu-text">Mon Profil</span>
+          </a>
+          <a (click)="logout()">
+            <span class="menu-icon"><mat-icon>logout</mat-icon></span>
+            <span class="menu-text">Déconnexion</span>
+          </a>
         </div>
       </div>
     </ng-container>
