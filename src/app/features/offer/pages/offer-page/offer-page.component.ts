@@ -69,9 +69,9 @@ export class OfferPageComponent implements OnInit {
   loadOffers(): void {
     this.offerService.getAllOffers().subscribe(
       offers => {
-        console.log('Offres reçues du backend:', offers);
-        console.log('Nombre d\'offres disponibles:', offers.filter(o => isOfferAvailable(o)).length);
-        console.log('Nombre d\'offres non disponibles:', offers.filter(o => !isOfferAvailable(o)).length);
+        // console.log('Offres reçues du backend:', offers);
+        // console.log('Nombre d\'offres disponibles:', offers.filter(o => isOfferAvailable(o)).length);
+        // console.log('Nombre d\'offres non disponibles:', offers.filter(o => !isOfferAvailable(o)).length);
 
         this.allOffers = offers;
         this.applyFilters();
