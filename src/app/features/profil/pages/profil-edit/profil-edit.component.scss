@@ -1,0 +1,72 @@
+.profil-edit-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: #0066cc;
+    margin: 0;
+  }
+
+  button {
+    border-radius: 20px;
+
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+}
+
+.content-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.form-row {
+  margin-bottom: 1rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.loading-indicator {
+  margin: 1rem 0;
+  color: #666;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.error-message {
+  margin: 1rem 0;
+  color: #f44336;
+  background-color: #ffeeee;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* Styles responsifs */
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
