@@ -70,13 +70,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   closeAdminMenu(): void {
-    // Utiliser un délai pour éviter la fermeture immédiate
+    // Utiliser un délai plus long pour éviter la fermeture immédiate
     // ce qui permettra le survol du contenu du menu
     setTimeout(() => {
       if (!this.isHoveringAdminDropdown) {
         this.adminMenuOpen = false;
       }
-    }, 100);
+    }, 300); // Délai augmenté à 300ms pour donner plus de temps à l'utilisateur
   }
 
   openUserMenu(): void {
@@ -85,12 +85,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   closeUserMenu(): void {
-    // Utiliser un délai pour éviter la fermeture immédiate
+    // Utiliser un délai plus long pour éviter la fermeture immédiate
     setTimeout(() => {
       if (!this.isHoveringUserDropdown) {
         this.userMenuOpen = false;
       }
-    }, 100);
+    }, 300); // Délai augmenté à 300ms pour donner plus de temps à l'utilisateur
   }
 
   // Variables pour suivre l'état du survol

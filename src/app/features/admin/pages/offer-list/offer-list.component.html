@@ -1,19 +1,17 @@
 <div class="offer-list-container">
-  <div class="debug-info">
-    <p>Statut de l'authentification: {{ isAuthenticated ? 'Connecté' : 'Non connecté' }}</p>
-    <p>Rôle Admin: {{ hasAdminRole ? 'Oui' : 'Non' }}</p>
-    <p>URL de l'API: {{ apiUrl }}</p>
-    <app-button
-      variant="primary"
-      icon="api"
-      iconPosition="left"
-      (btnClick)="testApiCall()">
-      Tester l'appel API
-    </app-button>
-  </div>
-
-  <div class="header-actions">
+  <div class="header-row">
     <h1>Gestion des offres</h1>
+
+    <app-search-bar
+      [searchTerm]="searchControl.value || ''"
+      (searchTermChange)="searchControl.setValue($event)"
+      (searchChange)="applyFilter()"
+      (refresh)="refreshOffers()"
+      placeholder="Rechercher une offre..."
+      label="Rechercher"
+      refreshTooltip="Rafraîchir la liste"
+    ></app-search-bar>
+
     <app-button
       variant="primary"
       icon="add"
@@ -21,22 +19,6 @@
       (btnClick)="createOffer()">
       Nouvelle offre
     </app-button>
-  </div>
-
-  <div class="search-section">
-    <div class="search-container">
-      <mat-form-field appearance="outline" class="search-field">
-        <mat-label>Rechercher</mat-label>
-        <input matInput [formControl]="searchControl" placeholder="Rechercher une offre...">
-        <button *ngIf="searchControl.value" matSuffix mat-icon-button aria-label="Effacer" (click)="searchControl.setValue(''); applyFilter()">
-          <mat-icon>close</mat-icon>
-        </button>
-        <mat-icon matPrefix>search</mat-icon>
-      </mat-form-field>
-      <button mat-mini-fab color="primary" aria-label="Rafraîchir" (click)="refreshOffers()" matTooltip="Rafraîchir la liste">
-        <mat-icon>refresh</mat-icon>
-      </button>
-    </div>
   </div>
 
   @if (error) {
@@ -70,7 +52,9 @@
           <!-- Name Column -->
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom </th>
-            <td mat-cell *matCellDef="let offer"> {{offer.name}} </td>
+            <td mat-cell *matCellDef="let offer">
+              <span class="offer-name">{{offer.name}}</span>
+            </td>
           </ng-container>
 
           <!-- Price Column -->
@@ -109,10 +93,7 @@
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef class="text-center"> Actions </th>
             <td mat-cell *matCellDef="let offer" class="action-buttons-cell">
-              <div class="action-buttons-container">
-                <button mat-icon-button class="action-button view-button" (click)="viewOffer(offer)" matTooltip="Voir les détails">
-                  <mat-icon>visibility</mat-icon>
-                </button>
+              <div class="action-buttons-container" (click)="$event.stopPropagation()">
 
                 <button mat-icon-button class="action-button edit-button" (click)="editOffer(offer)" matTooltip="Modifier">
                   <mat-icon>edit</mat-icon>
@@ -133,13 +114,13 @@
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="offer-row" (click)="viewOffer(row)"></tr>
         </table>
 
         <mat-paginator
           [length]="sortedOffers.length"
-          [pageSize]="5"
-          [pageSizeOptions]="[5, 10, 25, 50]"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="pageSizeOptions"
           (page)="onPageChange($event)"
           showFirstLastButtons
           aria-label="Sélectionner une page">

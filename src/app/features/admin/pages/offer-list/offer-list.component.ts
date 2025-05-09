@@ -16,6 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Observable, catchError, debounceTime, distinctUntilChanged, map, of, startWith, switchMap } from 'rxjs';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
+import { SearchBarComponent } from '../../../../shared/components/search-bar/search-bar.component';
 
 import { OfferService } from '../../../../core/services/offer.service';
 import { Offer, isOfferAvailable } from '../../../../core/models/offer.model';
@@ -43,7 +44,8 @@ import { environment } from '../../../../../environments/environment';
     MatPaginatorModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    ButtonComponent
+    ButtonComponent,
+    SearchBarComponent
   ],
   templateUrl: './offer-list.component.html',
   styleUrls: ['./offer-list.component.scss']
@@ -61,8 +63,8 @@ export class OfferListComponent implements OnInit, AfterViewInit {
   currentSortDirection: SortDirection = '';
 
   // Variables pour la pagination
-  pageSize = 5;
-  pageSizeOptions = [5, 10, 25, 50];
+  pageSize = 10;
+  pageSizeOptions = [10, 25, 50];
   currentPage = 0;
   totalOffers = 0;
   displayedColumns: string[] = ['name', 'price', 'offerType', 'personCount', 'available', 'actions'];
