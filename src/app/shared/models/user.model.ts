@@ -1,5 +1,5 @@
 // Définir l'interface Rule
-export interface Rule {
+export interface Role {
   id?: number;
   name: string;
   description?: string;
@@ -15,5 +15,5 @@ export interface User {
   password?: string;
   userKey?: string;
   roles: string[];
-  rule?: Rule; // Relation avec Rule (optionnelle)
+  role?: Role; // Relation avec Rule (optionnelle)
 }
