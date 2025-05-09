@@ -208,6 +208,13 @@ export class OfferListComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * Applique le filtre de recherche (pour la compatibilité avec le nouveau design de la barre de recherche)
+   */
+  applyFilter(): void {
+    this.filterOffers(this.searchControl.value || '');
+  }
+
   filterOffers(searchTerm: string): void {
     this.loading = true;
 

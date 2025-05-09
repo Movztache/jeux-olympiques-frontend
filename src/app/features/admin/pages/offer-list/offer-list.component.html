@@ -25,18 +25,17 @@
 
   <div class="search-section">
     <div class="search-container">
-      <div class="search-field-container">
-        <mat-form-field appearance="outline" class="search-field">
-          <mat-label class="centered-label">Rechercher une offre</mat-label>
-          <input matInput [formControl]="searchControl">
-          <button mat-icon-button matSuffix class="search-icon-button">
-            <mat-icon>search</mat-icon>
-          </button>
-        </mat-form-field>
-        <button mat-mini-fab color="primary" (click)="refreshOffers()" matTooltip="Rafraîchir la liste" class="refresh-button">
-          <mat-icon>refresh</mat-icon>
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Rechercher</mat-label>
+        <input matInput [formControl]="searchControl" placeholder="Rechercher une offre...">
+        <button *ngIf="searchControl.value" matSuffix mat-icon-button aria-label="Effacer" (click)="searchControl.setValue(''); applyFilter()">
+          <mat-icon>close</mat-icon>
         </button>
-      </div>
+        <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
+      <button mat-mini-fab color="primary" aria-label="Rafraîchir" (click)="refreshOffers()" matTooltip="Rafraîchir la liste">
+        <mat-icon>refresh</mat-icon>
+      </button>
     </div>
   </div>
 
