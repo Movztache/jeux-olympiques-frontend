@@ -1,8 +1,9 @@
-// src/app/features/profil/pages/profil-view/profil-view.component.ts
+// src/app/features/profil/pages/profil-edit/profil-edit.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ProfilService } from '../../services/profil.service';
+import { ProfilService } from '../../../../core/services/profil.service';
+import { Router } from '@angular/router';
 
 // Modules Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -12,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-profil-view',
+  selector: 'app-profil-edit',
   standalone: true,
   imports: [
     CommonModule,
@@ -23,26 +24,25 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatIconModule
   ],
-  templateUrl: './profil-view.component.html',
-  styleUrls: ['./profil-view.component.scss']
+  templateUrl: './profil-edit.component.html',
+  styleUrl: './profil-edit.component.scss'
 })
-export class ProfilViewComponent implements OnInit {
+export class ProfilEditComponent implements OnInit {
   profilForm: FormGroup;
-  editMode = false;
+  editMode = true; // Toujours en mode édition par défaut
   loading = false;
   errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
-    private profilService: ProfilService
+    private profilService: ProfilService,
+    private router: Router
   ) {
     // Initialisation du formulaire avec validation
     this.profilForm = this.fb.group({
-      nom: ['', Validators.required],
-      prenom: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      adresse: [''],
-      telephone: ['']
+      lastName: ['', Validators.required],
+      firstName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]]
     });
   }
 
@@ -57,13 +57,10 @@ export class ProfilViewComponent implements OnInit {
       next: (userData) => {
         // Remplir le formulaire avec les données
         this.profilForm.patchValue({
-          nom: userData.nom || '',
-          prenom: userData.prenom || '',
-          email: userData.email || '',
-          adresse: userData.adresse || '',
-          telephone: userData.telephone || ''
+          lastName: userData.lastName || '',
+          firstName: userData.firstName || '',
+          email: userData.email || ''
         });
-        this.profilForm.disable(); // Mode lecture par défaut
         this.loading = false;
       },
       error: (error) => {
@@ -74,14 +71,9 @@ export class ProfilViewComponent implements OnInit {
     });
   }
 
-  // Basculer entre mode lecture et mode édition
-  toggleEditMode(): void {
-    this.editMode = !this.editMode;
-    if (this.editMode) {
-      this.profilForm.enable();
-    } else {
-      this.profilForm.disable();
-    }
+  // Annuler les modifications et retourner à la page de profil
+  cancel(): void {
+    this.router.navigate(['/profile']);
   }
 
   // Soumettre les modifications du profil
@@ -91,8 +83,7 @@ export class ProfilViewComponent implements OnInit {
       this.profilService.updateUserProfile(this.profilForm.value).subscribe({
         next: () => {
           console.log('Profil mis à jour avec succès');
-          this.toggleEditMode();
-          this.loading = false;
+          this.router.navigate(['/profile']);
         },
         error: (error) => {
           console.error('Erreur lors de la mise à jour du profil', error);

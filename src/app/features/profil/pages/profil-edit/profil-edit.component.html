@@ -1,29 +1,27 @@
-<!-- src/app/features/profil/pages/profil-view/profil-view.component.html -->
-<div class="profil-container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Mon Profil</mat-card-title>
-      <button mat-icon-button color="primary" (click)="toggleEditMode()"
-              [disabled]="loading">
-        <mat-icon>{{ editMode ? 'close' : 'edit' }}</mat-icon>
-      </button>
-    </mat-card-header>
+<div class="profil-edit-container">
+  <div class="page-header">
+    <h1>Modifier mon profil</h1>
+    <button mat-button color="primary" routerLink="/profile">
+      <mat-icon>arrow_back</mat-icon> Retour au profil
+    </button>
+  </div>
 
+  <mat-card class="content-card">
     <mat-card-content>
       <div *ngIf="loading" class="loading-indicator">
-        Chargement...
+        <p>Chargement de vos informations...</p>
       </div>
 
       <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
 
-      <form [formGroup]="profilForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="profilForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
         <div class="form-row">
           <mat-form-field appearance="outline">
             <mat-label>Nom</mat-label>
-            <input matInput formControlName="nom">
-            <mat-error *ngIf="profilForm.get('nom')?.errors?.['required']">
+            <input matInput formControlName="lastName">
+            <mat-error *ngIf="profilForm.get('lastName')?.errors?.['required']">
               Le nom est requis
             </mat-error>
           </mat-form-field>
@@ -32,8 +30,8 @@
         <div class="form-row">
           <mat-form-field appearance="outline">
             <mat-label>Prénom</mat-label>
-            <input matInput formControlName="prenom">
-            <mat-error *ngIf="profilForm.get('prenom')?.errors?.['required']">
+            <input matInput formControlName="firstName">
+            <mat-error *ngIf="profilForm.get('firstName')?.errors?.['required']">
               Le prénom est requis
             </mat-error>
           </mat-form-field>
@@ -52,26 +50,14 @@
           </mat-form-field>
         </div>
 
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Adresse</mat-label>
-            <input matInput formControlName="adresse">
-          </mat-form-field>
-        </div>
+        <!-- Champs supplémentaires si nécessaire -->
 
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Téléphone</mat-label>
-            <input matInput formControlName="telephone">
-          </mat-form-field>
-        </div>
-
-        <div class="form-actions" *ngIf="editMode">
+        <div class="form-actions">
           <button mat-raised-button color="primary" type="submit"
                   [disabled]="profilForm.invalid || loading">
             Enregistrer
           </button>
-          <button mat-button type="button" (click)="toggleEditMode()">
+          <button mat-button type="button" (click)="cancel()">
             Annuler
           </button>
         </div>
