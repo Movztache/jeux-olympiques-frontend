@@ -1,13 +1,14 @@
 // src/app/core/models/user.model.ts
 
-// Définition des interfaces pour Rule, Cart, Log et ReservationModel
+// Définition des interfaces pour Role, Cart, Log et ReservationModel
 // que nous pouvons simplifier pour l'instant
 
-export interface Rule {
+export interface Role {
   id?: number;
   name?: string;
+  roleName?: string;
   description?: string;
-  // Ajoutez d'autres propriétés selon votre entité Rule
+  // Ajoutez d'autres propriétés selon votre entité Role
 }
 
 export interface Cart {
@@ -33,8 +34,10 @@ export interface User {
   password?: string; // Optionnel car souvent non retourné par l'API
   email: string;
   userKey?: string;
-  rule?: Rule;
-  roles: string[]; // Ajout de la propriété roles qui manquait
+  role?: Role;
+  roles: (Role | string)[]; // Tableau de rôles (objets Role ou chaînes de caractères)
+  roleId?: number; // ID du rôle (1 pour Admin, 2 pour User)
+  roleName?: string; // Nom du rôle (Admin, User)
 
   // Ces relations peuvent être optionnelles car elles sont souvent
   // chargées séparément ou sur demande

@@ -47,6 +47,11 @@
   padding-top: 2px !important;
 }
 
+/* Style pour le préfixe de l'icône de recherche */
+::ng-deep .mat-form-field-prefix {
+  margin-right: 8px;
+}
+
 .chip-available {
   width: 40px !important; /* Largeur fixe pour les puces de disponibilité */
 }
@@ -127,16 +132,12 @@
   margin-bottom: 1.5rem;
 
   .search-container {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .search-field-container {
     display: flex;
     align-items: center;
     width: 100%;
-    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+    gap: 10px;
   }
 
   .search-field {
