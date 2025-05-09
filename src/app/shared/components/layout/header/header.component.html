@@ -12,7 +12,7 @@
 
   <nav class="nav-links" [class.open]="isMenuOpen">
     <a routerLink="/home" routerLinkActive="active">ACCUEIL</a>
-    <a routerLink="/events" routerLinkActive="active">ÉPREUVES</a>
+    <a routerLink="/events" routerLinkActive="active">ACTUALITÉS</a>
     <a routerLink="/offres" routerLinkActive="active">BILLETTERIE</a>
 
     <ng-container *ngIf="isAdmin">
@@ -40,7 +40,7 @@
           </a>
           <a routerLink="/admin/create-event" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
             <span class="menu-icon"><mat-icon>event</mat-icon></span>
-            <span class="menu-text">Créer un événement</span>
+            <span class="menu-text">Gestion des Actualités</span>
           </a>
         </div>
       </div>
@@ -79,6 +79,14 @@
           <a routerLink="/profile">
             <span class="menu-icon"><mat-icon>account_circle</mat-icon></span>
             <span class="menu-text">Mon Profil</span>
+          </a>
+          <a routerLink="/profile/tickets">
+            <span class="menu-icon"><mat-icon>confirmation_number</mat-icon></span>
+            <span class="menu-text">Mes Billets</span>
+          </a>
+          <a routerLink="/profile/purchases">
+            <span class="menu-icon"><mat-icon>receipt_long</mat-icon></span>
+            <span class="menu-text">Historique d'Achats</span>
           </a>
           <a (click)="logout()">
             <span class="menu-icon"><mat-icon>logout</mat-icon></span>
