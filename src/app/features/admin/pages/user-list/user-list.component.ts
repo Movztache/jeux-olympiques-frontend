@@ -17,6 +17,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
 
+import { SearchBarComponent } from '../../../../shared/components/search-bar/search-bar.component';
+
 import { UserService } from '../../../../core/services/user.service';
 import {Role, User} from '../../../../core/models/user.model';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
@@ -41,7 +43,8 @@ import { RoleChangeDialogComponent } from '../../components/role-change-dialog/r
     MatSnackBarModule,
     MatSlideToggleModule,
     MatDialogModule,
-    MatChipsModule
+    MatChipsModule,
+    SearchBarComponent
   ],
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
@@ -59,7 +62,7 @@ export class UserListComponent implements OnInit {
 
   // Pagination
   pageSize = 10;
-  pageSizeOptions: number[] = [5, 10, 25, 50];
+  pageSizeOptions: number[] = [10, 25, 50];
   pageIndex = 0;
 
   // Recherche

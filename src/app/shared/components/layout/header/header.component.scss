@@ -118,53 +118,133 @@ body {
 .dropdown {
   position: relative;
   display: inline-block;
+  /* Suppression du padding vertical pour maintenir l'alignement */
 
   .dropdown-toggle {
     display: flex;
     align-items: center;
     cursor: pointer;
+    position: relative;
+    transition: color 0.3s ease;
+    padding: 0 12px; /* Garde uniquement le padding horizontal */
+    margin: 0 -12px; /* Compense le padding horizontal */
+    border-radius: 4px; /* Ajoute des coins arrondis pour un aspect plus moderne */
+    height: 100%; /* S'assure que la hauteur est la même que les autres liens */
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04); /* Léger fond gris au survol */
+    }
+
+    &.active {
+      color: #0066cc;
+    }
+
+    .arrow {
+      transition: transform 0.3s ease;
+      margin-left: 6px; /* Ajoute un peu d'espace entre le texte et la flèche */
+    }
+  }
+
+  &.open .dropdown-toggle .arrow {
+    transform: rotate(180deg);
   }
 
   .dropdown-content {
     display: none;
     position: absolute;
-    top: 120%;
-    left: 0;
-    min-width: 180px;
+    top: 100%; /* Positionne le menu juste en dessous du bouton */
+    left: -20px; /* Décale légèrement le menu vers la gauche pour mieux l'aligner */
+    min-width: 240px;
     background-color: white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
     z-index: 1;
-    padding: 0.5rem 0;
-    margin-top: 5px; /* Ajouter un peu d'espace entre le lien et le menu */
+    padding: 8px 0;
+    margin-top: 10px; /* Espace réduit mais suffisant */
+    overflow: hidden;
+    transition: all 0.3s ease;
 
+    /* Ajoute une zone invisible plus grande pour faciliter le passage de la souris vers le menu */
+    &::before {
+      content: '';
+      position: absolute;
+      top: -20px; /* Zone plus grande que margin-top */
+      left: -20px; /* Étend la zone sur les côtés */
+      width: calc(100% + 40px); /* Élargit la zone de 20px de chaque côté */
+      height: 20px;
+      background-color: transparent;
+    }
+  }
+
+  .modern-dropdown {
     a {
       color: #333;
-      padding: 0.7rem 1rem; /* Augmenter légèrement la hauteur des éléments du menu */
-      margin: 2px 0; /* Ajouter un petit espace entre les éléments */
-      display: block;
+      padding: 10px 16px;
+      margin: 4px 8px;
+      display: flex;
+      align-items: center;
       text-decoration: none;
       font-weight: normal;
-      text-transform: none;
       font-size: 0.9rem;
-      border: none; /* Supprimer toutes les bordures */
+      border-radius: 6px;
+      transition: all 0.2s ease;
       position: relative;
+      overflow: hidden;
 
-      &:hover {
-        background-color: #f9f9f9; /* Gris très léger au survol */
-        color: #333; /* Maintenir la couleur du texte en noir */
+      .menu-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+
+        mat-icon {
+          font-size: 20px;
+          height: 20px;
+          width: 20px;
+          color: #666;
+          transition: color 0.2s ease;
+        }
       }
 
-      &:active, &:focus {
-        background-color: #f5f5f5; /* Gris léger au clic */
-        color: #333; /* Maintenir la couleur du texte en noir */
-        outline: none; /* Supprimer le contour de focus */
+      .menu-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &:hover {
+        background-color: rgba(0, 102, 204, 0.05);
+        transform: translateX(2px);
+
+        .menu-icon mat-icon {
+          color: #0066cc;
+        }
+      }
+
+      &:active {
+        background-color: rgba(0, 102, 204, 0.1);
+        transform: translateX(0);
       }
 
       &.active {
-        font-weight: 500; /* Texte légèrement plus gras pour l'item actif */
-        color: #333; /* Noir pour le texte */
-        background-color: #f5f5f5; /* Gris léger pour le fond */
+        background-color: rgba(0, 102, 204, 0.1);
+        font-weight: 500;
+        color: #0066cc;
+
+        .menu-icon mat-icon {
+          color: #0066cc;
+        }
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 4px;
+          background-color: #0066cc;
+          border-radius: 0 2px 2px 0;
+        }
       }
     }
   }
@@ -172,6 +252,18 @@ body {
   // Afficher le menu quand la classe .open est présente
   &.open .dropdown-content {
     display: block;
+    animation: fadeInDown 0.3s ease forwards;
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
@@ -179,6 +271,23 @@ body {
   .dropdown-content {
     right: 0;
     left: auto;
+    min-width: 200px;
+
+    a {
+      &:last-child {
+        .menu-icon mat-icon {
+          color: #e74c3c; /* Rouge pour l'icône de déconnexion */
+        }
+
+        &:hover {
+          background-color: rgba(231, 76, 60, 0.05);
+
+          .menu-icon mat-icon {
+            color: #e74c3c;
+          }
+        }
+      }
+    }
   }
 }
 

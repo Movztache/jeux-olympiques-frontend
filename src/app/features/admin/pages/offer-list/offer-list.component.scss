@@ -1,3 +1,9 @@
+$primary-color: #0066cc;
+$accent-color: #ff4081;
+$success-color: #4caf50;
+$error-color: #f44336;
+$warning-color: #ff9800;
+
 .offer-list-container {
   padding: 1.5rem;
   max-width: 1600px;
@@ -115,108 +121,43 @@
   }
 }
 
-.header-actions {
+.header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 20px;
+  flex-wrap: nowrap;
+  gap: 20px;
 
   h1 {
-    margin: 0;
-    font-size: 1.75rem;
+    font-size: 24px;
     font-weight: 500;
+    margin: 0;
+    position: relative;
+    padding-bottom: 8px;
+    flex-shrink: 0;
+    min-width: 200px;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 195px;
+      height: 3px;
+      background: linear-gradient(to right, $primary-color, $accent-color);
+      border-radius: 3px;
+    }
   }
-}
 
-.search-section {
-  margin-bottom: 1.5rem;
-
-  .search-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    gap: 10px;
-  }
-
-  .search-field {
-    flex: 1;
+  app-search-bar {
+    flex-grow: 1;
     max-width: 500px;
-
-    ::ng-deep {
-      .mat-mdc-form-field-subscript-wrapper {
-        display: none;
-      }
-
-      .mat-mdc-text-field-wrapper {
-        background-color: white;
-        border-radius: 28px !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        transition: box-shadow 0.3s ease;
-        padding: 0 8px;
-      }
-
-      .mat-mdc-text-field-wrapper:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      .mat-mdc-form-field-flex {
-        height: 48px;
-        align-items: center;
-      }
-
-      .mat-mdc-form-field-infix {
-        padding: 0;
-      }
-
-      /* Centrer le libellé */
-      .mat-mdc-form-field-label-wrapper {
-        top: 0;
-        padding-top: 0;
-        overflow: visible;
-        height: auto !important;
-        min-height: 24px !important;
-      }
-
-      .mat-mdc-form-field-label {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        margin-left: -24px; /* Ajustement pour compenser l'icône */
-        transform: translateY(-8px) !important; /* Ajustement vertical pour remonter le libellé */
-      }
-
-      /* Style du libellé quand le champ est focus */
-      .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label {
-        color: #0066cc !important;
-        opacity: 1 !important;
-      }
-
-      /* Cacher le placeholder quand le champ est focus */
-      .mat-mdc-form-field.mat-focused input::placeholder {
-        color: transparent !important;
-      }
-    }
+    margin: 0 auto; /* Centre la barre de recherche */
   }
 
-  .search-icon-button {
-    color: #666;
-  }
-
-  .refresh-button {
-    margin-left: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: rotate(30deg);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
+  app-button {
+    flex-shrink: 0;
   }
 }
 
@@ -240,6 +181,20 @@
     box-sizing: border-box !important;
   }
 
+  /* Style pour les lignes cliquables */
+  tr.offer-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(0, 102, 204, 0.05);
+    }
+
+    &:active {
+      background-color: rgba(0, 102, 204, 0.1);
+    }
+  }
+
   .mat-column-offerId {
     width: 50px !important;
     max-width: 50px !important;
@@ -248,6 +203,12 @@
   .mat-column-name {
     width: 180px !important;
     max-width: 180px !important;
+
+    .offer-name {
+      color: #0066cc;
+      font-weight: 500;
+      position: relative;
+    }
   }
 
   .mat-column-price {
@@ -339,26 +300,34 @@
 }
 
 @media (max-width: 768px) {
-  .header-actions {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
+  .offer-list-container {
+    .header-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 15px;
 
-  .filter-card mat-card-content {
-    flex-direction: column;
-    align-items: stretch;
+      h1 {
+        min-width: 100%;
+        text-align: left;
+      }
 
-    .search-field {
-      margin-right: 0;
-      margin-bottom: 1rem;
+      app-search-bar {
+        max-width: 100%;
+        margin: 0;
+        order: 2;
+      }
+
+      app-button {
+        align-self: flex-start;
+        order: 3;
+      }
     }
-  }
 
-  .offers-table {
-    .mat-column-personCount,
-    .mat-column-offerType {
-      display: none;
+    .offers-table {
+      .mat-column-personCount,
+      .mat-column-offerType {
+        display: none;
+      }
     }
   }
 }
