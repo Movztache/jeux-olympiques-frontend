@@ -1,0 +1,98 @@
+<div class="purchase-history-container">
+  <div class="page-header">
+    <h1>Historique d'Achats</h1>
+    <button mat-button color="primary" routerLink="/profile">
+      <mat-icon>arrow_back</mat-icon> Retour au profil
+    </button>
+  </div>
+
+  <mat-card class="content-card">
+    <mat-card-content>
+      <!-- Indicateur de chargement -->
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Chargement de votre historique d'achats...</p>
+      </div>
+
+      <!-- Message d'erreur -->
+      <div *ngIf="error && !loading" class="error-container">
+        <mat-icon color="warn">error</mat-icon>
+        <p>Impossible de charger votre historique d'achats. Veuillez réessayer plus tard.</p>
+      </div>
+
+      <!-- Aucun achat -->
+      <div *ngIf="!loading && !error && purchases.length === 0" class="empty-container">
+        <mat-icon>receipt_long</mat-icon>
+        <p>Vous n'avez pas encore effectué d'achats.</p>
+        <button mat-raised-button color="primary" routerLink="/offres">
+          Découvrir les offres
+        </button>
+      </div>
+
+      <!-- Liste des achats -->
+      <div *ngIf="!loading && !error && purchases.length > 0" class="purchases-list">
+        <table mat-table [dataSource]="purchases" class="purchases-table">
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let purchase">{{ formatDate(purchase.date) }}</td>
+          </ng-container>
+
+          <!-- Total Amount Column -->
+          <ng-container matColumnDef="totalAmount">
+            <th mat-header-cell *matHeaderCellDef>Montant</th>
+            <td mat-cell *matCellDef="let purchase">{{ purchase.totalAmount }} €</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Statut</th>
+            <td mat-cell *matCellDef="let purchase">
+              <span class="status-chip" [style.background-color]="getStatusColor(purchase.status)">
+                {{ purchase.status }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let purchase">
+              <button mat-icon-button color="primary" (click)="toggleExpand(purchase)"
+                      [attr.aria-label]="expandedPurchase === purchase ? 'Masquer les détails' : 'Afficher les détails'">
+                <mat-icon>{{ expandedPurchase === purchase ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let purchase; columns: displayedColumns;"
+              [class.expanded-row]="expandedPurchase === purchase"
+              class="purchase-row"></tr>
+        </table>
+
+        <!-- Détails de l'achat -->
+        <div class="purchase-details" *ngIf="expandedPurchase">
+          <h3>Détails de la commande #{{ expandedPurchase.id }}</h3>
+          <div class="purchase-items">
+            <div class="purchase-item" *ngFor="let item of expandedPurchase.items">
+              <div class="item-info">
+                <h4>{{ item.name }}</h4>
+                <p class="item-type">Type: {{ item.offerType }}</p>
+              </div>
+              <div class="item-quantity">
+                <p>Quantité: {{ item.quantity }}</p>
+              </div>
+              <div class="item-price">
+                <p>{{ item.price }} €</p>
+              </div>
+            </div>
+            <div class="purchase-total">
+              <p>Total: <strong>{{ expandedPurchase.totalAmount }} €</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
