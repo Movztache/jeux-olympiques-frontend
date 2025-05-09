@@ -58,7 +58,6 @@ export class PaymentService {
           const reservationDTO: ReservationCreateDTO = {
             offerId: item.offerId,
             quantity: item.quantity,
-            userKey: userKey,
             paymentInfo: formattedPaymentInfo
           };
 

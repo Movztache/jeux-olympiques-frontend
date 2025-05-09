@@ -27,7 +27,10 @@ export class ProfilService {
    * Récupère les informations du profil de l'utilisateur connecté
    */
   getUserProfile(): Observable<UserProfile> {
-    return this.http.get<UserProfile>(`${this.apiUrl}/me`).pipe(
+    // Utiliser l'endpoint approprié selon votre API backend
+    // Si votre backend n'a pas d'endpoint spécifique pour l'utilisateur connecté,
+    // nous pouvons utiliser l'ID de l'utilisateur connecté depuis le service d'authentification
+    return this.http.get<UserProfile>(`${this.apiUrl}/profil`).pipe(
       catchError(error => {
         console.error('Erreur lors de la récupération du profil:', error);
         throw error;
