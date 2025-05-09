@@ -1,0 +1,170 @@
+<div class="my-tickets-container">
+  <div class="page-header">
+    <h1>Mes Billets</h1>
+    <button mat-button color="primary" routerLink="/profile">
+      <mat-icon>arrow_back</mat-icon> Retour au profil
+    </button>
+  </div>
+
+  <mat-card class="content-card">
+    <mat-card-content>
+      <!-- Indicateur de chargement -->
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Chargement de vos billets...</p>
+      </div>
+
+      <!-- Message d'erreur -->
+      <div *ngIf="error && !loading" class="error-container">
+        <mat-icon color="warn">error</mat-icon>
+        <p>Impossible de charger vos billets. Veuillez réessayer plus tard.</p>
+      </div>
+
+      <!-- Aucun billet -->
+      <div *ngIf="!loading && !error && tickets.length === 0" class="empty-container">
+        <mat-icon>confirmation_number</mat-icon>
+        <p>Vous n'avez pas encore de billets.</p>
+        <button mat-raised-button color="primary" routerLink="/offres">
+          Découvrir les offres
+        </button>
+      </div>
+
+      <!-- Liste des billets -->
+      <div *ngIf="!loading && !error && tickets.length > 0" class="tickets-content">
+        <mat-tab-group animationDuration="300ms" mat-stretch-tabs="false" mat-align-tabs="start">
+          <mat-tab label="À venir ({{ upcomingTickets.length }})">
+            <div class="tab-content">
+              <div *ngIf="upcomingTickets.length === 0" class="empty-tab">
+                <p>Vous n'avez pas de billets à venir.</p>
+              </div>
+              <div class="tickets-grid" *ngIf="upcomingTickets.length > 0">
+                <mat-card class="ticket-card" *ngFor="let ticket of upcomingTickets"
+                          [class.selected]="selectedTicket === ticket"
+                          (click)="selectTicket(ticket)">
+                  <div class="ticket-header">
+                    <span class="ticket-id">{{ ticket.id }}</span>
+                    <span class="ticket-type">{{ ticket.offerType }}</span>
+                  </div>
+                  <div class="ticket-content">
+                    <h3 class="event-name">{{ ticket.eventName }}</h3>
+                    <p class="event-date">
+                      <mat-icon>event</mat-icon>
+                      {{ formatDate(ticket.eventDate) }} à {{ formatTime(ticket.eventDate) }}
+                    </p>
+                    <p class="event-location">
+                      <mat-icon>location_on</mat-icon>
+                      {{ ticket.eventLocation }}
+                    </p>
+                    <p class="seat-info">
+                      <mat-icon>chair</mat-icon>
+                      {{ ticket.seatInfo }}
+                    </p>
+                  </div>
+                </mat-card>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Passés ({{ pastTickets.length }})">
+            <div class="tab-content">
+              <div *ngIf="pastTickets.length === 0" class="empty-tab">
+                <p>Vous n'avez pas de billets passés.</p>
+              </div>
+              <div class="tickets-grid" *ngIf="pastTickets.length > 0">
+                <mat-card class="ticket-card past-ticket" *ngFor="let ticket of pastTickets"
+                          [class.selected]="selectedTicket === ticket"
+                          (click)="selectTicket(ticket)">
+                  <div class="ticket-header">
+                    <span class="ticket-id">{{ ticket.id }}</span>
+                    <span class="ticket-type">{{ ticket.offerType }}</span>
+                  </div>
+                  <div class="ticket-content">
+                    <h3 class="event-name">{{ ticket.eventName }}</h3>
+                    <p class="event-date">
+                      <mat-icon>event</mat-icon>
+                      {{ formatDate(ticket.eventDate) }} à {{ formatTime(ticket.eventDate) }}
+                    </p>
+                    <p class="event-location">
+                      <mat-icon>location_on</mat-icon>
+                      {{ ticket.eventLocation }}
+                    </p>
+                    <p class="seat-info">
+                      <mat-icon>chair</mat-icon>
+                      {{ ticket.seatInfo }}
+                    </p>
+                    <div class="used-badge" *ngIf="ticket.isUsed">
+                      <mat-icon>check_circle</mat-icon> Utilisé
+                    </div>
+                  </div>
+                </mat-card>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+
+        <!-- Détails du billet sélectionné -->
+        <div class="ticket-details" *ngIf="selectedTicket">
+          <h2>Détails du billet</h2>
+          <div class="ticket-details-content">
+            <div class="ticket-info">
+              <h3>{{ selectedTicket.eventName }}</h3>
+              <p class="detail-item">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">{{ formatDate(selectedTicket.eventDate) }} à {{ formatTime(selectedTicket.eventDate) }}</span>
+              </p>
+              <p class="detail-item">
+                <span class="detail-label">Lieu:</span>
+                <span class="detail-value">{{ selectedTicket.eventLocation }}</span>
+              </p>
+              <p class="detail-item">
+                <span class="detail-label">Siège:</span>
+                <span class="detail-value">{{ selectedTicket.seatInfo }}</span>
+              </p>
+              <p class="detail-item">
+                <span class="detail-label">Type:</span>
+                <span class="detail-value">{{ selectedTicket.offerType }}</span>
+              </p>
+              <p class="detail-item">
+                <span class="detail-label">Prix:</span>
+                <span class="detail-value">{{ selectedTicket.price }} €</span>
+              </p>
+              <p class="detail-item">
+                <span class="detail-label">Statut:</span>
+                <span class="detail-value" [class.used-status]="selectedTicket.isUsed">
+                  {{ selectedTicket.isUsed ? 'Utilisé' : 'Valide' }}
+                </span>
+              </p>
+            </div>
+
+            <div class="qr-code-container">
+              <button mat-raised-button color="primary" (click)="toggleQRCode()" *ngIf="!selectedTicket.isUsed">
+                <mat-icon>qr_code</mat-icon>
+                {{ showQRCode ? 'Masquer le QR Code' : 'Afficher le QR Code' }}
+              </button>
+
+              <div class="qr-code" *ngIf="showQRCode && !selectedTicket.isUsed">
+                <qrcode
+                  [qrdata]="selectedTicket.qrCode"
+                  [width]="180"
+                  [errorCorrectionLevel]="'M'"
+                  cssClass="qrcode">
+                </qrcode>
+                <p class="qr-code-info">Présentez ce QR code à l'entrée de l'événement</p>
+              </div>
+
+              <div class="used-message" *ngIf="selectedTicket.isUsed">
+                <mat-icon>check_circle</mat-icon>
+                <p>Ce billet a déjà été utilisé</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="ticket-actions">
+            <button mat-button color="primary" (click)="selectedTicket = null">
+              <mat-icon>arrow_back</mat-icon> Retour aux billets
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

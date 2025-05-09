@@ -1,0 +1,66 @@
+<div class="profile-dashboard-container">
+  <div class="profile-header">
+    <h1>Mon Espace Personnel</h1>
+    <p class="welcome-message">Bienvenue, <span class="user-name">{{ userName }}</span></p>
+  </div>
+
+  <div class="dashboard-cards">
+    <!-- Carte Profil -->
+    <mat-card class="dashboard-card profile-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>account_circle</mat-icon>
+        <mat-card-title>Mon Profil</mat-card-title>
+        <mat-card-subtitle>Gérer vos informations personnelles</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Email:</strong> {{ userEmail }}</p>
+        <p>Modifiez vos informations personnelles et mettez à jour vos coordonnées.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" [routerLink]="['/profile/edit']">
+          <mat-icon>edit</mat-icon> Modifier mon profil
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Carte Billets -->
+    <mat-card class="dashboard-card tickets-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>confirmation_number</mat-icon>
+        <mat-card-title>Mes Billets</mat-card-title>
+        <mat-card-subtitle>Accédez à vos billets pour les événements</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Consultez vos billets pour les événements à venir et accédez à vos QR codes.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="accent" [routerLink]="['/profile/tickets']">
+          <mat-icon>qr_code</mat-icon> Voir mes billets
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Carte Historique d'achats -->
+    <mat-card class="dashboard-card purchases-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>receipt_long</mat-icon>
+        <mat-card-title>Historique d'Achats</mat-card-title>
+        <mat-card-subtitle>Consultez vos achats précédents</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Retrouvez l'historique de vos commandes et les détails de vos achats.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" [routerLink]="['/profile/purchases']">
+          <mat-icon>history</mat-icon> Voir mon historique
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div class="additional-actions">
+    <button mat-button color="warn" (click)="navigateTo('/auth/logout')">
+      <mat-icon>exit_to_app</mat-icon> Déconnexion
+    </button>
+  </div>
+</div>
