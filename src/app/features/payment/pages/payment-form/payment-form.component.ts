@@ -54,7 +54,7 @@ export class PaymentFormComponent implements OnInit {
   // Total du panier
   orderTotal = 0;
   // Détails de l'événement (pour la compatibilité avec le code existant)
-  eventDetails = { name: 'Billets Jeux Olympiques', date: '2024-07-26', time: '10:00' };
+  eventDetails = { name: 'Vibe Tickets', date: '2024-07-26', time: '10:00' };
 
   ngOnInit(): void {
     // Récupérer le total du panier
