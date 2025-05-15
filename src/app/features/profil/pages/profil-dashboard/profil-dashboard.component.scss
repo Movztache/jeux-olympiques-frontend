@@ -11,8 +11,22 @@
   h1 {
     font-size: 2rem;
     font-weight: 500;
-    margin-bottom: 0.5rem;
-    color: #0066cc;
+    margin-bottom: 1rem;
+    color: #333;
+    position: relative;
+    padding-bottom: 0.75rem;
+    display: inline-block;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 330px;
+      height: 3px;
+      background: linear-gradient(to right, #0066cc, #9c27b0);
+      border-radius: 3px;
+    }
   }
 
   .welcome-message {
