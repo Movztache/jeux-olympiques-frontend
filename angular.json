@@ -20,7 +20,7 @@
             "allowedCommonJsDependencies": [
               "qrcode"
             ],
-            "outputPath": "dist/jeux-olympiques-frontend",
+            "outputPath": "dist/vibe-ticket-frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -82,10 +82,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "jeux-olympiques-frontend:build:production"
+              "buildTarget": "vibe-ticket-frontend:build:production"
             },
             "development": {
-              "buildTarget": "jeux-olympiques-frontend:build:development"
+              "buildTarget": "vibe-ticket-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
