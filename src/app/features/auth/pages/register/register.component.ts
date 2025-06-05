@@ -1,7 +1,7 @@
 // Le composant d'inscription des utilisateurs dans l'application
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Pour les directives communes comme *ngIf, *ngFor
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; // Pour la gestion des formulaires réactifs
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms'; // Pour la gestion des formulaires réactifs
 import {Router, RouterLink} from '@angular/router'; // Pour la navigation après inscription
 import { AuthService } from '../../../../core/authentication/auth.service'; // Service d'authentification
 
@@ -27,8 +27,20 @@ export class RegisterComponent {
       firstName: ['', [Validators.required]], // Prénom (obligatoire)
       lastName: ['', [Validators.required]], // Nom (obligatoire)
       email: ['', [Validators.required, Validators.email]], // Email (obligatoire et format email)
-      password: ['', [Validators.required, Validators.minLength(8)]] // Mot de passe (obligatoire, 8 caractères min)
-    });
+      password: ['', [Validators.required, Validators.minLength(8)]], // Mot de passe (obligatoire, 8 caractères min)
+      confirmPassword: ['', [Validators.required]] // Confirmation mot de passe (obligatoire)
+    }, { validators: this.passwordMatchValidator }); // Validation personnalisée pour vérifier que les mots de passe correspondent
+  }
+
+  // Validateur personnalisé pour vérifier que les mots de passe correspondent
+  passwordMatchValidator(control: AbstractControl): { [key: string]: any } | null {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+
+    if (password && confirmPassword && password.value !== confirmPassword.value) {
+      return { passwordMismatch: true };
+    }
+    return null;
   }
 
   // Méthode appelée lors de la soumission du formulaire
@@ -41,7 +53,7 @@ export class RegisterComponent {
     this.isSubmitting = true; // Activation de l'indicateur de chargement
     this.errorMessage = ''; // Réinitialisation du message d'erreur
 
-    // Appel au service d'authentification pour enregistrer l'utilisateur
+    // Appel au service d'authentification pour enregistrer l'utilisateur (avec confirmPassword)
     this.authService.register(this.registerForm.value)
       .subscribe({
         next: () => {

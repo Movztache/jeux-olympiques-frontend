@@ -88,19 +88,14 @@ export class UserListComponent implements OnInit {
     this.loading = true;
     this.userService.getAllUsers().subscribe({
       next: (users) => {
-        console.log('Utilisateurs récupérés:', users);
         // Vérifier que chaque utilisateur a un userId valide
         this.users = users.map(user => {
-          if (user.userId === undefined || user.userId === null) {
-            console.warn(`Utilisateur sans ID valide:`, user);
-          }
           return user;
         });
         this.applyFilter();
         this.loading = false;
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des utilisateurs', error);
         this.snackBar.open('Erreur lors du chargement des utilisateurs', 'Fermer', {
           duration: 3000,
           verticalPosition: 'top'
@@ -274,8 +269,6 @@ export class UserListComponent implements OnInit {
           // Forcer la mise à jour de la vue
           this.users = [...this.users];
           this.applyFilter();
-        } else {
-          console.warn('Utilisateur non trouvé dans la liste après mise à jour');
         }
 
         this.snackBar.open(`Rôle de l'utilisateur mis à jour avec succès`, 'Fermer', {
@@ -354,7 +347,6 @@ export class UserListComponent implements OnInit {
             });
           },
           error: (error) => {
-            console.error('Erreur lors de la suppression de l\'utilisateur', error);
             this.snackBar.open('Erreur lors de la suppression de l\'utilisateur', 'Fermer', {
               duration: 3000,
               verticalPosition: 'top'

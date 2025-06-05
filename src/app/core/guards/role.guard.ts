@@ -10,7 +10,7 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
 
     // Vérifier d'abord si l'utilisateur est connecté
     if (!authService.isLoggedIn()) {
-      return router.createUrlTree(['/auth/login'], {
+      return router.createUrlTree(['/authentication/login'], {
         queryParams: { returnUrl: state.url }
       });
     }

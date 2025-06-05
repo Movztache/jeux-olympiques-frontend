@@ -26,9 +26,6 @@ export class UserService {
   getAllUsers(): Observable<User[]> {
     return this.http.get<any[]>(this.apiUrl).pipe(
       map(response => {
-        // Log pour déboguer la réponse complète du backend
-        console.log('Réponse complète du backend:', response);
-
         // Le backend renvoie une liste de maps, nous devons les convertir en objets User
         return response.map(userMap => this.mapToUser(userMap));
       })
@@ -71,15 +68,8 @@ export class UserService {
    * @param userMap Objet Map retourné par le backend
    */
   private mapToUser(userMap: any): User {
-    // Log pour déboguer la structure de l'objet reçu
-    console.log('Mapping user object:', userMap);
-
     // Vérifier différentes propriétés possibles pour l'ID utilisateur
     const userId = userMap.userId || userMap.id || userMap.user_id || null;
-
-    if (userId === null || userId === undefined) {
-      console.warn('Aucun ID utilisateur trouvé dans l\'objet:', userMap);
-    }
 
     // Traiter les rôles
     let roles = [];

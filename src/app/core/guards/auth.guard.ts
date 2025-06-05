@@ -12,7 +12,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 
   // Stockage de l'URL demandée pour y rediriger après connexion
-  return router.createUrlTree(['/auth/login'], {
+  return router.createUrlTree(['/authentication/login'], {
     queryParams: { returnUrl: state.url }
   });
 };

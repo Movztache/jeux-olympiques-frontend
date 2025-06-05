@@ -146,7 +146,6 @@ export class DashboardComponent implements OnInit {
           this.loading = false;
         },
         error: (err) => {
-          console.error('Erreur lors du chargement des statistiques par période:', err);
           this.error = true;
           this.loading = false;
         }

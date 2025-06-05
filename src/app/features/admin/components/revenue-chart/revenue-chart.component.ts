@@ -189,7 +189,6 @@ export class RevenueChartComponent implements AfterViewInit, OnChanges {
         break;
       case 'pdf':
         // Pour générer un PDF, vous auriez besoin d'une bibliothèque supplémentaire comme jsPDF
-        console.log('PDF download not implemented yet');
         return;
     }
 

@@ -32,7 +32,6 @@ export class ProfilService {
     // nous pouvons utiliser l'ID de l'utilisateur connecté depuis le service d'authentification
     return this.http.get<UserProfile>(`${this.apiUrl}/profil`).pipe(
       catchError(error => {
-        console.error('Erreur lors de la récupération du profil:', error);
         throw error;
       })
     );
