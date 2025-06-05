@@ -44,7 +44,7 @@ export class AuthService {
   }
 
   login(loginRequest: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<any>(`${this.apiUrl}/auth/login`, loginRequest)
+    return this.http.post<any>(`${this.apiUrl}/authentication/login`, loginRequest)
       .pipe(
         map((response: any) => {
           // Transformer la réponse API en structure AuthResponse attendue
@@ -72,7 +72,7 @@ export class AuthService {
   }
 
   register(registerRequest: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, registerRequest)
+    return this.http.post<AuthResponse>(`${this.apiUrl}/authentication/register`, registerRequest)
       .pipe(
         tap(response => {
           if (response && response.accessToken) {
@@ -126,7 +126,7 @@ export class AuthService {
   }
 
   refreshUserInfo(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/auth/me`)
+    return this.http.get<User>(`${this.apiUrl}/authentication/me`)
       .pipe(
         tap(user => {
           this.storeUserInfo(user);
@@ -149,7 +149,6 @@ export class AuthService {
     }
 
     // Vous pouvez ajouter ici de la journalisation ou d'autres traitements
-    console.error(errorMessage);
 
     // Retourner un observable avec un message d'erreur
     return throwError(() => new Error(errorMessage));
@@ -157,7 +156,7 @@ export class AuthService {
 
   // Pour la demande de réinitialisation de mot de passe
   forgotPassword(email: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/auth/forgot-password`, { email })
+    return this.http.post<any>(`${this.apiUrl}/authentication/forgot-password`, { email })
       .pipe(
         catchError(this.handleError)
       );
@@ -165,7 +164,7 @@ export class AuthService {
 
   // Pour la réinitialisation de mot de passe
   resetPassword(token: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/auth/reset-password`, { token, password })
+    return this.http.post<any>(`${this.apiUrl}/authentication/reset-password`, { token, password })
       .pipe(
         catchError(this.handleError)
       );
@@ -173,7 +172,7 @@ export class AuthService {
 
   // Pour vérifier la validité d'un token de réinitialisation
   verifyResetToken(token: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/auth/verify-reset-token/${token}`)
+    return this.http.get<any>(`${this.apiUrl}/authentication/verify-reset-token/${token}`)
       .pipe(
         catchError(this.handleError)
       );
@@ -200,7 +199,6 @@ export class AuthService {
 
       return true;
     } catch (error) {
-      console.error('Erreur lors de la validation du token:', error);
       return false;
     }
   }

@@ -18,13 +18,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
 
       { path: 'offres', loadChildren: () => import('./features/offer/offer.routing').then(m => m.OFFER_ROUTES)},
-      // Billetterie accessible à tous
-      // {
-      //   path: 'offres',
-      //   loadChildren: () => import('./features/offer/offer.routes').then(m => m.OFFER_ROUTES)
-      // },
-      //
-      // // Panier accessible à tous
+
       {path: 'panier',loadChildren: () => import('./features/panier/cart.routing').then(m => m.PANIER_ROUTES) },
 
       {path: 'reservations',loadChildren: () => import('./features/reservation/reservation.routing').then(m => m.RESERVATIONS_ROUTES),},
@@ -34,7 +28,7 @@ export const routes: Routes = [
       //
       { path: 'profile', loadChildren: () => import('./features/profil/profil.routing').then(m => m.PROFIL_ROUTES), canActivate : [authGuard] },
 
-      { path: 'auth', loadChildren: () => import('./features/auth/auth.routing').then(m => m.AUTH_ROUTES) },
+      { path: 'authentication', loadChildren: () => import('./features/auth/auth.routing').then(m => m.AUTH_ROUTES) },
 
       { path: 'admin',loadChildren: () => import('./features/admin/admin.routing').then(m => m.ADMIN_ROUTES), canActivate: [authGuard, roleGuard(['Admin'])] },
 

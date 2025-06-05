@@ -68,6 +68,22 @@
         </div>
       </div>
 
+      <!-- Champ confirmation mot de passe -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirmer le mot de passe</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          placeholder="Confirmez votre mot de passe">
+        <div *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched" class="error-message">
+          <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Confirmation du mot de passe requise</span>
+        </div>
+        <div *ngIf="registerForm.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched" class="error-message">
+          <span>Les mots de passe ne correspondent pas</span>
+        </div>
+      </div>
+
       <div class="form-actions">
         <button
           type="submit"
@@ -79,6 +95,6 @@
   </div>
 
   <div class="form-links">
-    <p>Déjà inscrit ? <a routerLink="/auth/login">Se connecter</a></p>
+    <p>Déjà inscrit ? <a routerLink="/authentication/login">Se connecter</a></p>
   </div>
 </div>

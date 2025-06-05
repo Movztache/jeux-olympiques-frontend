@@ -97,7 +97,6 @@ export class OfferListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     // Ajouter un identifiant unique à la fenêtre pour vérifier si la page se recharge
     const pageId = Date.now().toString();
-    console.log('Page chargée avec ID:', pageId);
     (window as any).pageLoadId = pageId;
 
     // Charger les offres immédiatement au démarrage
@@ -257,23 +256,19 @@ export class OfferListComponent implements OnInit, AfterViewInit {
 
   loadOffers(searchTerm: string): Observable<Offer[]> {
     this.loading = true;
-    console.log('Chargement des offres...');
     return this.offerService.getAllOffers().pipe(
       map(offers => {
-        console.log('Offres reçues:', offers);
         if (searchTerm) {
           const filteredOffers = offers.filter(offer =>
             offer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             offer.offerType.toLowerCase().includes(searchTerm.toLowerCase())
           );
-          console.log('Offres filtrées:', filteredOffers);
           return filteredOffers;
         }
         return offers;
       }),
       catchError(err => {
         this.error = "Impossible de charger les offres. Veuillez réessayer.";
-        console.error('Erreur lors du chargement des offres:', err);
         return of([]);
       }),
       map(offers => {

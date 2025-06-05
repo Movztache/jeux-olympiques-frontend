@@ -87,17 +87,15 @@ export class ResetPasswordComponent implements OnInit {
           this.resetSuccess = true;
           // Redirection vers login après 3 secondes
           setTimeout(() => {
-            this.router.navigate(['/auth/login'])
+            this.router.navigate(['/authentication/login'])
               .then(navigationSuccess => {
                 // Gestion du cas où la navigation échoue
                 if (!navigationSuccess) {
-                  console.warn('Navigation vers la page de connexion a échoué');
                   this.errorMessage = "Navigation vers la page de connexion impossible. Veuillez utiliser le lien 'Retour à la connexion'.";
                 }
               })
               .catch(err => {
                 // Gestion des erreurs de navigation
-                console.error('Erreur lors de la navigation :', err);
                 this.errorMessage = "Une erreur s'est produite. Veuillez utiliser le lien 'Retour à la connexion'.";
                 this.resetSuccess = false;
               });

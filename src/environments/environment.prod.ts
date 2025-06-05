@@ -1,5 +1,5 @@
 // src/environments/environment.prod.ts
 export const environment = {
   production: true,
-  apiUrl: 'https://api.vibe-ticket.com/api'
+  apiUrl: 'http://13.36.187.182:8080/api'
 };

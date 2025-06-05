@@ -28,7 +28,7 @@ import { filter } from 'rxjs/operators';
   `]
 })
 export class AppComponent implements OnInit {
-  title = 'jeux-olympiques-frontend';
+  title = 'vibe-ticket-frontend';
 
   // constructor(private router: Router) {
   //   this.router.events.subscribe(event => {
