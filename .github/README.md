@@ -1,8 +1,8 @@
-# 🚀 GitHub Actions CI/CD - Vibe-ticket Frontend
+# GitHub Actions CI/CD - Vibe-ticket Frontend
 
 Ce dossier contient la configuration GitHub Actions pour le déploiement automatique du frontend Angular de Vibe-ticket sur AWS.
 
-## 📋 Vue d'ensemble
+## Vue d'ensemble
 
 Le workflow automatise complètement le déploiement de l'application Angular sur AWS avec :
 - **Build** automatique de l'application Angular 19
@@ -10,7 +10,7 @@ Le workflow automatise complètement le déploiement de l'application Angular su
 - **Upload** de l'application sur S3
 - **Invalidation** du cache CloudFront
 
-## 🔧 Configuration requise
+## Configuration requise
 
 ### Secrets GitHub à configurer
 
@@ -28,7 +28,7 @@ L'utilisateur AWS doit avoir les permissions suivantes :
 - **CloudFront** : Création/gestion de distributions, invalidation de cache
 - **IAM** : Création de politiques pour CloudFront OAC
 
-## 🚀 Déclenchement du workflow
+## Déclenchement du workflow
 
 ### Automatique
 - **Push sur `main`** : Déploiement automatique complet
@@ -36,35 +36,35 @@ L'utilisateur AWS doit avoir les permissions suivantes :
 ### Manuel
 - **Workflow Dispatch** : Exécution manuelle depuis l'onglet Actions de GitHub
 
-## 📊 Étapes du workflow
+## Étapes du workflow
 
-### 1. 🔨 Build Angular Application
+### 1. Build Angular Application
 - Installation de Node.js 20
 - Installation des dépendances (`npm ci`)
 - Build de production (`npm run build`)
 - Upload des artefacts de build
 
-### 2. 🏗️ Deploy Infrastructure
+### 2. Deploy Infrastructure
 - Configuration des credentials AWS
-- Installation de Terraform 1.5.0
+- Installation de Terraform 1.12.1
 - Initialisation et validation Terraform
 - Application de l'infrastructure (S3 + CloudFront)
 - Commit automatique de l'état Terraform
 
-### 3. 🌐 Deploy Application to S3
+### 3. Deploy Application to S3
 - Téléchargement des artefacts de build
 - Synchronisation avec S3 (avec optimisation du cache)
 - Invalidation du cache CloudFront
 - Affichage des URLs de déploiement
 
-## 🌍 URLs de déploiement
+## URLs de déploiement
 
 Après un déploiement réussi, l'application est accessible via :
 
 - **S3 Direct** : `http://vibe-ticket-frontend-prod-[suffix].s3-website.eu-west-3.amazonaws.com`
 - **CloudFront** : `http://[distribution-id].cloudfront.net`
 
-## 🔄 Gestion de l'état Terraform
+## Gestion de l'état Terraform
 
 **Stratégie simplifiée** : L'état Terraform est versionné dans le repository pour faciliter le déploiement.
 
@@ -74,20 +74,20 @@ Après un déploiement réussi, l'application est accessible via :
 ✅ **Rollback facile** : Retour en arrière possible  
 ✅ **CI/CD simple** : Pas de configuration complexe  
 
-## 🚀 Premier déploiement
+## Premier déploiement
 
 1. **Configurez les secrets GitHub** avec vos clés AWS
 2. **Commitez et pushez** pour déclencher le déploiement :
 
 ```bash
 git add .github/
-git commit -m "🚀 Add GitHub Actions CI/CD workflow"
+git commit -m "Add GitHub Actions CI/CD workflow"
 git push origin main
 ```
 
 3. **Surveillez l'exécution** dans l'onglet **Actions** de GitHub
 
-## 🚨 Dépannage
+## Dépannage
 
 ### Échec du build Angular
 - Vérifier les dépendances dans `package.json`
@@ -105,4 +105,4 @@ git push origin main
 
 ---
 
-🎯 **Objectif** : Déploiement automatisé, simple et fiable pour les Jeux Olympiques France 2025 !
+**Objectif** : Déploiement automatisé, simple et fiable pour les Jeux Olympiques France 2025 !
