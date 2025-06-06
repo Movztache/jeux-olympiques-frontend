@@ -219,8 +219,8 @@ jobs:
             --distribution-id ${{ needs.deploy-infrastructure.outputs.cloudfront-distribution-id }} \
             --paths "/*"
 
-      # Récupération et affichage final des URLs
-      - name: Final Deployment URLs
+      # Récupération et affichage final des URLs de déploiement
+      - name: Display Final Deployment URLs
         id: final-urls
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
@@ -229,7 +229,7 @@ jobs:
           unzip terraform.zip
           sudo mv terraform /usr/local/bin/
 
-          # Initialisation et récupération des outputs
+          # Initialisation et récupération des outputs Terraform
           terraform init
           CLOUDFRONT_URL=$(terraform output -raw cloudfront_url_http)
           S3_URL="http://${{ needs.deploy-infrastructure.outputs.bucket-name }}.s3-website.${{ env.AWS_REGION }}.amazonaws.com"
@@ -238,22 +238,30 @@ jobs:
           echo "cloudfront-url=$CLOUDFRONT_URL" >> $GITHUB_OUTPUT
           echo "s3-url=$S3_URL" >> $GITHUB_OUTPUT
 
+          # Affichage très visible des URLs finales
           echo ""
-          echo "=========================================="
-          echo "✅ DÉPLOIEMENT TERMINÉ AVEC SUCCÈS !"
-          echo "=========================================="
+          echo "################################################################"
+          echo "################################################################"
+          echo "##                                                            ##"
+          echo "##              ✅ DÉPLOIEMENT RÉUSSI ✅                     ##"
+          echo "##                                                            ##"
+          echo "##  VOTRE APPLICATION VIBE-TICKET EST MAINTENANT EN LIGNE !  ##"
+          echo "##                                                            ##"
+          echo "################################################################"
           echo ""
-          echo "VOTRE APPLICATION EST ACCESSIBLE SUR :"
-          echo ""
-          echo "URL PRINCIPALE (CloudFront) :"
+          echo "URL PRINCIPALE (CloudFront - Recommandée) :"
           echo "   $CLOUDFRONT_URL"
           echo ""
-          echo "URL ALTERNATIVE (S3 Direct) :"
+          echo "URL ALTERNATIVE (S3 Direct - Secours) :"
           echo "   $S3_URL"
           echo ""
-          echo "=========================================="
-          echo "✅ Vibe-ticket est maintenant en ligne !"
-          echo "=========================================="
+          echo "################################################################"
+          echo "##                                                            ##"
+          echo "##    ✅ COPIEZ L'URL CLOUDFRONT CI-DESSUS POUR ACCÉDER      ##"
+          echo "##       À VOTRE APPLICATION DÉPLOYÉE                        ##"
+          echo "##                                                            ##"
+          echo "################################################################"
+          echo "################################################################"
 
   # =============================================================================
   # JOB 4: NOTIFICATION FINALE DE SUCCÈS
@@ -265,24 +273,30 @@ jobs:
     if: success()
 
     steps:
-      - name: Success Summary
+      - name: Final Success Summary
         run: |
           echo ""
-          echo "=================================================="
-          echo "                                                  "
-          echo "        DÉPLOIEMENT RÉUSSI !                     "
-          echo "                                                  "
-          echo "   Vibe-ticket Frontend est maintenant           "
-          echo "   déployé et accessible !                       "
-          echo "                                                  "
-          echo "   URL: ${{ needs.deploy-application.outputs.application-url }}"
-          echo "                                                  "
-          echo "=================================================="
+          echo "################################################################"
+          echo "################################################################"
+          echo "##                                                            ##"
+          echo "##                    ✅ SUCCÈS TOTAL ✅                     ##"
+          echo "##                                                            ##"
+          echo "##           TOUS LES JOBS ONT ÉTÉ EXÉCUTÉS                  ##"
+          echo "##                AVEC SUCCÈS !                              ##"
+          echo "##                                                            ##"
+          echo "################################################################"
           echo ""
-          echo "✅ Tous les jobs ont été exécutés avec succès :"
-          echo "   ✅ Build Angular"
-          echo "   ✅ Deploy Infrastructure"
-          echo "   ✅ Deploy Application"
+          echo "✅ Jobs terminés avec succès :"
+          echo "   ✅ Build Angular Application"
+          echo "   ✅ Deploy Infrastructure (Terraform)"
+          echo "   ✅ Deploy Application (S3 + CloudFront)"
           echo ""
-          echo "Application accessible sur :"
-          echo "   ${{ needs.deploy-application.outputs.application-url }}"
+          echo "################################################################"
+          echo "##                                                            ##"
+          echo "##              VOTRE APPLICATION EST EN LIGNE               ##"
+          echo "##                                                            ##"
+          echo "##    URL CLOUDFRONT (À COPIER) :                            ##"
+          echo "##    ${{ needs.deploy-application.outputs.application-url }}"
+          echo "##                                                            ##"
+          echo "################################################################"
+          echo "################################################################"
