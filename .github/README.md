@@ -16,10 +16,10 @@ Le workflow automatise complètement le déploiement de l'application Angular su
 
 Dans les paramètres de votre repository GitHub (`Settings > Secrets and variables > Actions`), ajoutez :
 
-| Secret | Description | Exemple |
-|--------|-------------|---------|
-| `AWS_ACCESS_KEY_ID` | Clé d'accès AWS | `AKIA...` |
-| `AWS_SECRET_ACCESS_KEY` | Clé secrète AWS | `wJalrXUt...` |
+| Secret | Description | Comment obtenir |
+|--------|-------------|-----------------|
+| `AWS_ACCESS_KEY_ID` | Clé d'accès AWS | `aws configure get aws_access_key_id` |
+| `AWS_SECRET_ACCESS_KEY` | Clé secrète AWS | `aws configure get aws_secret_access_key` |
 
 ### Permissions AWS requises
 
@@ -64,22 +64,6 @@ Après un déploiement réussi, l'application est accessible via :
 - **S3 Direct** : `http://vibe-ticket-frontend-prod-[suffix].s3-website.eu-west-3.amazonaws.com`
 - **CloudFront** : `http://[distribution-id].cloudfront.net`
 
-## 📁 Structure des fichiers
-
-```
-.github/
-├── workflows/
-│   └── deploy.yml          # Workflow principal de déploiement
-└── README.md              # Cette documentation
-
-terraform/frontend/
-├── main.tf                # Configuration Terraform principale
-├── variables.tf           # Variables Terraform
-├── terraform.tfvars       # Valeurs des variables (versionnées)
-├── terraform.tfstate      # État Terraform (versionnée)
-└── outputs.tf             # Outputs Terraform
-```
-
 ## 🔄 Gestion de l'état Terraform
 
 **Stratégie simplifiée** : L'état Terraform est versionné dans le repository pour faciliter le déploiement.
@@ -90,22 +74,18 @@ terraform/frontend/
 ✅ **Rollback facile** : Retour en arrière possible  
 ✅ **CI/CD simple** : Pas de configuration complexe  
 
-### Sécurité :
-- Les secrets AWS sont dans GitHub Secrets
-- L'état ne contient pas d'informations sensibles
-- Repository privé recommandé
+## 🚀 Premier déploiement
 
-## 🛠️ Maintenance
+1. **Configurez les secrets GitHub** avec vos clés AWS
+2. **Commitez et pushez** pour déclencher le déploiement :
 
-### Mise à jour des versions
-- **Node.js** : Modifier `NODE_VERSION` dans `deploy.yml`
-- **Terraform** : Modifier `TERRAFORM_VERSION` dans `deploy.yml`
-- **Angular** : Mise à jour via `package.json`
+```bash
+git add .github/
+git commit -m "🚀 Add GitHub Actions CI/CD workflow"
+git push origin main
+```
 
-### Surveillance
-- **Logs** : Consultables dans l'onglet Actions de GitHub
-- **Notifications** : Configurables dans les paramètres du repository
-- **Status badges** : Ajoutables au README principal
+3. **Surveillez l'exécution** dans l'onglet **Actions** de GitHub
 
 ## 🚨 Dépannage
 
@@ -114,7 +94,7 @@ terraform/frontend/
 - Consulter les logs de build dans Actions
 
 ### Échec Terraform
-- Vérifier les credentials AWS
+- Vérifier les credentials AWS dans les secrets GitHub
 - Vérifier les quotas AWS (buckets S3, distributions CloudFront)
 - Consulter les logs Terraform dans Actions
 
@@ -122,14 +102,6 @@ terraform/frontend/
 - Vérifier les permissions S3
 - Vérifier l'existence du bucket
 - Consulter les logs AWS CLI dans Actions
-
-## 📞 Support
-
-Pour toute question ou problème :
-1. Consulter les logs dans l'onglet Actions
-2. Vérifier la configuration des secrets GitHub
-3. Valider les permissions AWS
-4. Contacter l'équipe DevOps si nécessaire
 
 ---
 

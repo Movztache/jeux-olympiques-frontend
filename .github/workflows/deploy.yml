@@ -76,6 +76,23 @@ jobs:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
         
+      # Debug des secrets (sans afficher les valeurs)
+      - name: 🔍 Debug Secrets
+        run: |
+          echo "Vérification des secrets AWS..."
+          if [ -z "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
+            echo "❌ AWS_ACCESS_KEY_ID est vide ou manquant"
+            exit 1
+          else
+            echo "✅ AWS_ACCESS_KEY_ID est configuré"
+          fi
+          if [ -z "${{ secrets.AWS_SECRET_ACCESS_KEY }}" ]; then
+            echo "❌ AWS_SECRET_ACCESS_KEY est vide ou manquant"
+            exit 1
+          else
+            echo "✅ AWS_SECRET_ACCESS_KEY est configuré"
+          fi
+        
       # Configuration d'AWS CLI
       - name: ⚙️ Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -83,6 +100,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+          
+      # Test de connexion AWS
+      - name: 🔗 Test AWS Connection
+        run: |
+          echo "Test de connexion AWS..."
+          aws sts get-caller-identity
           
       # Installation de Terraform
       - name: 🔧 Setup Terraform
@@ -124,7 +147,16 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add terraform/frontend/terraform.tfstate*
+          
+          # Vérifier s'il y a des changements dans les fichiers d'état
+          if [ -f "terraform/frontend/terraform.tfstate" ]; then
+            git add terraform/frontend/terraform.tfstate
+          fi
+          if [ -f "terraform/frontend/terraform.tfstate.backup" ]; then
+            git add terraform/frontend/terraform.tfstate.backup
+          fi
+          
+          # Commit seulement s'il y a des changements
           if git diff --staged --quiet; then
             echo "Aucun changement d'état Terraform à committer"
           else
