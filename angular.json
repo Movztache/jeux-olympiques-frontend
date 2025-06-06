@@ -3,11 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-<<<<<<< HEAD
     "vibe-ticket-frontend": {
-=======
-    "jeux-olympiques-frontend": {
->>>>>>> origin/main
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -51,15 +47,12 @@
           },
           "configurations": {
             "production": {
-<<<<<<< HEAD
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-=======
->>>>>>> origin/main
               "budgets": [
                 {
                   "type": "initial",

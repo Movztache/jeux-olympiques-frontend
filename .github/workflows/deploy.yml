@@ -1,0 +1,207 @@
+# =============================================================================
+# WORKFLOW GITHUB ACTIONS - CI/CD FRONTEND ANGULAR
+# Déploiement automatique sur AWS S3 + CloudFront avec Terraform
+# =============================================================================
+
+name: 🚀 Deploy Frontend to AWS
+
+# Déclencheurs du workflow
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # Permet l'exécution manuelle
+
+# Variables d'environnement globales
+env:
+  NODE_VERSION: '20'
+  TERRAFORM_VERSION: '1.5.0'
+  AWS_REGION: 'eu-west-3'
+  WORKING_DIRECTORY: './terraform/frontend'
+
+# Définition des jobs
+jobs:
+  # =============================================================================
+  # JOB 1: BUILD DE L'APPLICATION ANGULAR
+  # =============================================================================
+  build:
+    name: 🔨 Build Angular Application
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Checkout du code source
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        
+      # Configuration de Node.js
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      # Installation des dépendances
+      - name: 📦 Install Dependencies
+        run: npm ci
+        
+      # Build de l'application Angular en mode production
+      - name: 🏗️ Build Angular Application
+        run: npm run build
+        
+      # Upload des artefacts de build
+      - name: 📤 Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: angular-build
+          path: dist/vibe-ticket-frontend/
+          retention-days: 1
+
+  # =============================================================================
+  # JOB 2: DÉPLOIEMENT DE L'INFRASTRUCTURE TERRAFORM
+  # =============================================================================
+  deploy-infrastructure:
+    name: 🏗️ Deploy Infrastructure
+    runs-on: ubuntu-latest
+    needs: build
+    
+    # Permissions pour l'écriture dans le repository (pour l'état Terraform)
+    permissions:
+      contents: write
+      
+    outputs:
+      bucket-name: ${{ steps.terraform-output.outputs.bucket-name }}
+      cloudfront-distribution-id: ${{ steps.terraform-output.outputs.cloudfront-distribution-id }}
+    
+    steps:
+      # Checkout du code source
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        
+      # Configuration d'AWS CLI
+      - name: ⚙️ Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          
+      # Installation de Terraform
+      - name: 🔧 Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+          
+      # Initialisation de Terraform
+      - name: 🚀 Terraform Init
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: terraform init
+        
+      # Validation de la configuration Terraform
+      - name: ✅ Terraform Validate
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: terraform validate
+        
+      # Plan Terraform (pour information)
+      - name: 📋 Terraform Plan
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: terraform plan -no-color
+        
+      # Application de Terraform
+      - name: 🚀 Terraform Apply
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: terraform apply -auto-approve -no-color
+        
+      # Récupération des outputs Terraform
+      - name: 📊 Get Terraform Outputs
+        id: terraform-output
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: |
+          echo "bucket-name=$(terraform output -raw bucket_name)" >> $GITHUB_OUTPUT
+          echo "cloudfront-distribution-id=$(terraform output -raw cloudfront_distribution_id)" >> $GITHUB_OUTPUT
+          
+      # Commit de l'état Terraform mis à jour
+      - name: 💾 Commit Terraform State
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add terraform/frontend/terraform.tfstate*
+          if git diff --staged --quiet; then
+            echo "Aucun changement d'état Terraform à committer"
+          else
+            git commit -m "🤖 Update Terraform state after deployment [skip ci]"
+            git push
+          fi
+
+  # =============================================================================
+  # JOB 3: DÉPLOIEMENT DE L'APPLICATION SUR S3
+  # =============================================================================
+  deploy-application:
+    name: 🌐 Deploy Application to S3
+    runs-on: ubuntu-latest
+    needs: [build, deploy-infrastructure]
+    
+    steps:
+      # Checkout du code source
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        
+      # Configuration d'AWS CLI
+      - name: ⚙️ Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          
+      # Téléchargement des artefacts de build
+      - name: 📥 Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: angular-build
+          path: dist/vibe-ticket-frontend/
+          
+      # Synchronisation avec S3
+      - name: 🔄 Sync to S3
+        run: |
+          aws s3 sync dist/vibe-ticket-frontend/ s3://${{ needs.deploy-infrastructure.outputs.bucket-name }}/ \
+            --delete \
+            --cache-control "public, max-age=31536000" \
+            --exclude "*.html" \
+            --exclude "*.json"
+          
+          # Upload des fichiers HTML avec un cache plus court
+          aws s3 sync dist/vibe-ticket-frontend/ s3://${{ needs.deploy-infrastructure.outputs.bucket-name }}/ \
+            --delete \
+            --cache-control "public, max-age=0, must-revalidate" \
+            --include "*.html" \
+            --include "*.json"
+            
+      # Invalidation du cache CloudFront
+      - name: 🔄 Invalidate CloudFront Cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ needs.deploy-infrastructure.outputs.cloudfront-distribution-id }} \
+            --paths "/*"
+            
+      # Affichage des URLs de déploiement
+      - name: 🎉 Deployment Summary
+        run: |
+          echo "✅ Déploiement terminé avec succès !"
+          echo "🌐 Application déployée sur:"
+          echo "   - S3: http://${{ needs.deploy-infrastructure.outputs.bucket-name }}.s3-website.${{ env.AWS_REGION }}.amazonaws.com"
+          echo "   - CloudFront: Récupération de l'URL en cours..."
+          
+      # Récupération et affichage de l'URL CloudFront
+      - name: 🔗 Get CloudFront URL
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: |
+          # Installation de Terraform pour récupérer les outputs
+          curl -fsSL https://releases.hashicorp.com/terraform/${{ env.TERRAFORM_VERSION }}/terraform_${{ env.TERRAFORM_VERSION }}_linux_amd64.zip -o terraform.zip
+          unzip terraform.zip
+          sudo mv terraform /usr/local/bin/
+          
+          # Initialisation et récupération des outputs
+          terraform init
+          CLOUDFRONT_URL=$(terraform output -raw cloudfront_url_http)
+          echo "🚀 URL CloudFront: $CLOUDFRONT_URL"
+          echo "📱 Votre application Vibe-ticket est maintenant accessible !"

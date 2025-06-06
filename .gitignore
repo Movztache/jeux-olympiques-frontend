@@ -43,8 +43,8 @@ Thumbs.db
 # Terraform
 **/.terraform/
 **/.terraform.lock.hcl
-**/terraform.tfvars
-**/terraform.tfstate
-**/terraform.tfstate.backup
 **/*.tfplan
 **/*.tfplan.*
+
+# Note: terraform.tfstate et terraform.tfvars sont maintenant versionnés pour simplifier le déploiement
+# Comme demandé par l'utilisateur pour faciliter le CI/CD avec GitHub Actions
