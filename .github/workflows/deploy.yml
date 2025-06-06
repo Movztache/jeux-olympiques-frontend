@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: angular-build
-          path: dist/vibe-ticket-frontend/
+          path: dist/vibe-ticket-frontend/browser/
           retention-days: 1
 
   # =============================================================================
@@ -194,19 +194,19 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: angular-build
-          path: dist/vibe-ticket-frontend/
+          path: dist/vibe-ticket-frontend/browser/
 
       # Synchronisation avec S3
       - name: Sync to S3
         run: |
-          aws s3 sync dist/vibe-ticket-frontend/ s3://${{ needs.deploy-infrastructure.outputs.bucket-name }}/ \
+          aws s3 sync dist/vibe-ticket-frontend/browser/ s3://${{ needs.deploy-infrastructure.outputs.bucket-name }}/ \
             --delete \
             --cache-control "public, max-age=31536000" \
             --exclude "*.html" \
             --exclude "*.json"
-          
+
           # Upload des fichiers HTML avec un cache plus court
-          aws s3 sync dist/vibe-ticket-frontend/ s3://${{ needs.deploy-infrastructure.outputs.bucket-name }}/ \
+          aws s3 sync dist/vibe-ticket-frontend/browser/ s3://${{ needs.deploy-infrastructure.outputs.bucket-name }}/ \
             --delete \
             --cache-control "public, max-age=0, must-revalidate" \
             --include "*.html" \
