@@ -1,0 +1,97 @@
+<div class="news-list-container">
+  <!-- En-tête de la page -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <h1>Actualités</h1>
+        <p class="subtitle">Découvrez les dernières nouvelles et événements de Vibe-ticket</p>
+      </div>
+      
+      <!-- Barre de recherche -->
+      <div class="search-section">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Rechercher un article...</mat-label>
+          <input matInput [formControl]="searchControl" placeholder="Titre de l'article">
+          <mat-icon matSuffix>search</mat-icon>
+          <button 
+            *ngIf="isSearchActive()" 
+            matSuffix 
+            mat-icon-button 
+            (click)="clearSearch()"
+            matTooltip="Effacer la recherche">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-form-field>
+        
+        <button 
+          mat-icon-button 
+          (click)="refresh()" 
+          matTooltip="Actualiser"
+          class="refresh-btn">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenu principal -->
+  <div class="main-content">
+    <!-- Indicateur de chargement -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Chargement des actualités...</p>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div *ngIf="error && !loading" class="error-container">
+      <mat-icon>error_outline</mat-icon>
+      <h3>Erreur de chargement</h3>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+        Réessayer
+      </button>
+    </div>
+
+    <!-- Aucun résultat -->
+    <div *ngIf="!loading && !error && !hasNews()" class="no-results-container">
+      <mat-icon>article</mat-icon>
+      <h3>{{ isSearchActive() ? 'Aucun résultat trouvé' : 'Aucune actualité disponible' }}</h3>
+      <p>
+        {{ isSearchActive() 
+          ? 'Essayez avec d\'autres mots-clés ou effacez votre recherche.' 
+          : 'Les actualités seront bientôt disponibles.' }}
+      </p>
+      <button 
+        *ngIf="isSearchActive()" 
+        mat-stroked-button 
+        color="primary" 
+        (click)="clearSearch()">
+        <mat-icon>clear</mat-icon>
+        Effacer la recherche
+      </button>
+    </div>
+
+    <!-- Grille des actualités -->
+    <div *ngIf="!loading && !error && hasNews()" class="news-grid">
+      <app-news-card 
+        *ngFor="let article of news; trackBy: trackByNewsId"
+        [news]="article"
+        class="news-item">
+      </app-news-card>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="!loading && !error && hasNews() && !isSearchActive()" class="pagination-container">
+      <mat-paginator
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageIndex]="currentPage"
+        [pageSizeOptions]="pageSizeOptions"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)"
+        aria-label="Sélectionner la page des actualités">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

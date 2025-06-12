@@ -119,7 +119,7 @@ $transition-normal: all 0.3s ease;
   font-weight: 500;
   letter-spacing: 0.3px;
   transition: $transition-normal;
-  background-color: white;
+  background-color: var(--surface-primary);
   color: $dark-gray;
   border: none;
   box-shadow: $shadow-sm;
@@ -142,7 +142,7 @@ $transition-normal: all 0.3s ease;
   }
 
   &.availability-filter-button {
-    background-color: white;
+    background-color: var(--surface-primary);
 
     &.active {
       background-color: #4caf50;
@@ -184,7 +184,7 @@ $transition-normal: all 0.3s ease;
   flex-direction: column;
   box-shadow: $shadow-sm;
   border: none;
-  background-color: white;
+  background-color: var(--surface-primary);
   /* Assurer une hauteur minimale pour toutes les cartes */
   min-height: 400px;
 
@@ -329,7 +329,7 @@ $transition-normal: all 0.3s ease;
       .quantity-selector {
         display: flex;
         align-items: center;
-        background-color: white;
+        background-color: var(--surface-elevated);
         border-radius: 20px;
         padding: 0;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

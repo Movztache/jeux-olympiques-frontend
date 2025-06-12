@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../../../core/authentication/auth.service';
 import { CartService } from '../../../../core/services/cart.service';
 import { Subscription } from 'rxjs';
@@ -27,6 +27,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   adminMenuOpen = false;
   userMenuOpen = false;
   private subscriptions: Subscription[] = [];
+
+
 
   constructor(
     private authService: AuthService,

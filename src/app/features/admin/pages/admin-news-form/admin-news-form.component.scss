@@ -1,0 +1,388 @@
+.admin-news-form-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: calc(100vh - 140px);
+}
+
+.page-header {
+  margin-bottom: 2rem;
+  
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+}
+
+.title-section {
+  flex: 1;
+  
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+    background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin: 0;
+  }
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  
+  a {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: 500;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.main-content {
+  min-height: 400px;
+}
+
+.loading-container,
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+    color: #bdc3c7;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+  }
+  
+  p {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin: 0 0 2rem 0;
+    max-width: 400px;
+    line-height: 1.6;
+  }
+}
+
+.error-container mat-icon {
+  color: #f44336;
+}
+
+.news-form {
+  .form-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    align-items: start;
+  }
+}
+
+.form-content {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  
+  .full-width {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+  
+  .mat-mdc-form-field-subscript-wrapper {
+    margin-top: 0.5rem;
+  }
+}
+
+.image-preview {
+  margin: 1rem 0 2rem 0;
+  
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+  }
+  
+  img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+  }
+}
+
+.publication-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e9ecef;
+  
+  h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+  }
+  
+  .publish-checkbox {
+    margin-bottom: 1rem;
+  }
+  
+  .publish-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin: 0;
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #0066cc;
+    }
+  }
+}
+
+.form-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.actions-card,
+.info-card,
+.tips-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  
+  h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  
+  button {
+    width: 100%;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: none;
+    padding: 0.75rem 1rem;
+    
+    mat-icon {
+      margin-right: 8px;
+    }
+    
+    mat-spinner {
+      margin-right: 8px;
+    }
+    
+    &.preview-btn {
+      border-color: #0066cc;
+      color: #0066cc;
+    }
+    
+    &.save-btn {
+      background-color: #0066cc;
+    }
+    
+    &.publish-btn {
+      background-color: #f5a623;
+    }
+    
+    &.cancel-btn {
+      border-color: #7f8c8d;
+      color: #7f8c8d;
+    }
+  }
+}
+
+.info-card {
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    .label {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      font-weight: 500;
+    }
+    
+    .value {
+      font-size: 0.9rem;
+      color: #2c3e50;
+      font-weight: 600;
+      text-align: right;
+      
+      &.status {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        
+        &.published {
+          color: #2e7d32;
+        }
+        
+        &:not(.published) {
+          color: #f57c00;
+        }
+        
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+  }
+}
+
+.tips-card {
+  .tips-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      line-height: 1.4;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: #f5a623;
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .admin-news-form-container {
+    padding: 1rem;
+  }
+  
+  .news-form .form-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .form-sidebar {
+    order: -1;
+    
+    .actions-card .action-buttons {
+      flex-direction: row;
+      flex-wrap: wrap;
+      
+      button {
+        flex: 1;
+        min-width: 120px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header .header-content {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  
+  .form-content {
+    padding: 1.5rem;
+  }
+  
+  .actions-card,
+  .info-card,
+  .tips-card {
+    padding: 1rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-news-form-container {
+    padding: 0.5rem;
+  }
+  
+  .form-content {
+    padding: 1rem;
+  }
+  
+  .title-section h1 {
+    font-size: 1.5rem;
+  }
+}

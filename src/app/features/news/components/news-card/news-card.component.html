@@ -1,0 +1,86 @@
+<mat-card 
+  class="news-card" 
+  [class.compact]="compact"
+  [class.unpublished]="!news.published"
+  (click)="viewDetail()">
+  
+  <!-- Image de l'actualité -->
+  <div class="news-image" *ngIf="hasImage()">
+    <img
+      [src]="news.imageUrl"
+      [alt]="news.title"
+      (error)="onImageError($event)"
+      loading="lazy">
+
+    <!-- Badge de statut -->
+    <div class="status-badge" *ngIf="!news.published">
+      <mat-icon>visibility_off</mat-icon>
+      <span>Brouillon</span>
+    </div>
+  </div>
+
+  <!-- Contenu de la carte -->
+  <mat-card-content class="news-content">
+    <!-- En-tête avec métadonnées -->
+    <div class="news-header">
+      <div class="news-meta">
+        <span class="author">{{ getAuthorName() }}</span>
+        <span class="separator">•</span>
+        <span class="date">{{ getTimeAgo() }}</span>
+      </div>
+      
+      <!-- Actions admin -->
+      <div class="news-actions" *ngIf="showActions" (click)="$event.stopPropagation()">
+        <button 
+          mat-icon-button 
+          [matTooltip]="news.published ? 'Dépublier' : 'Publier'"
+          (click)="onTogglePublish($event)"
+          [class.published]="news.published">
+          <mat-icon>{{ news.published ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+        
+        <button 
+          mat-icon-button 
+          matTooltip="Modifier"
+          (click)="onEdit($event)"
+          class="edit-btn">
+          <mat-icon>edit</mat-icon>
+        </button>
+        
+        <button 
+          mat-icon-button 
+          matTooltip="Supprimer"
+          (click)="onDelete($event)"
+          class="delete-btn">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Titre -->
+    <h3 class="news-title">{{ news.title }}</h3>
+
+    <!-- Description -->
+    <p class="news-description" [class.compact]="compact">
+      {{ compact ? getTruncatedDescription(100) : getTruncatedDescription(200) }}
+    </p>
+
+    <!-- Footer avec bouton de lecture -->
+    <div class="news-footer">
+      <button 
+        mat-stroked-button 
+        color="primary" 
+        class="read-more-btn"
+        (click)="viewDetail()">
+        <mat-icon>article</mat-icon>
+        Lire l'article
+      </button>
+      
+      <!-- Indicateur de modification -->
+      <span class="modified-indicator" *ngIf="news.updatedDate">
+        <mat-icon>edit</mat-icon>
+        Modifié
+      </span>
+    </div>
+  </mat-card-content>
+</mat-card>

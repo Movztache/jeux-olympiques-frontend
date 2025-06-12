@@ -45,7 +45,7 @@ $user-color: #2196f3;
   .table-container {
     position: relative;
     min-height: 400px;
-    background-color: white;
+    background-color: var(--surface-primary);
     border-radius: 8px;
     overflow: hidden;
 

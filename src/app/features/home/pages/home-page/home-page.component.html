@@ -1,72 +1,108 @@
 <div class="home-container">
-  <header class="hero">
-    <h1>Bienvenue sur Vibe Tickets 2025</h1>
-    <img src="assets/pictures/banner.png" alt="Banner">
-  </header>
+  <!-- Hero Section Moderne - Plateforme Généraliste -->
+  <section class="hero-modern">
+    <div class="hero-background">
+      <div class="hero-gradient"></div>
+      <div class="hero-pattern"></div>
+    </div>
 
-  <section class="intro">
-    <p>Vibe Tickets est la plateforme unique où toutes les émotions convergent. Que ce soit pour la musique entraînante, le frisson du théâtre ou la passion du sport, Vibe Tickets est l'endroit incontournable pour trouver votre prochaine expérience vibrante. À l'image des plus grands rassemblements mondiaux, nous connectons les envies aux événements qui font palpiter le cœur et créent des souvenirs inoubliables. Avec Vibe Tickets, préparez-vous à vivre des moments exceptionnels et à partager des émotions intenses, où que vous soyez et quels que soient vos centres d'intérêt.</p>
-    <p>Plongez au cœur d'un univers d'événements captivants. Sur Vibe Tickets, découvrez aisément une multitude d'opportunités pour vivre des moments forts. Des mélodies entraînantes aux récits théâtraux poignants, en passant par l'intensité des compétitions sportives, notre plateforme vous offre un accès direct à un éventail d'expériences enrichissantes. Grâce à une navigation fluide et un design actuel, dénichez sans effort le laissez-passer pour vos prochaines émotions et préparez-vous à créer des souvenirs mémorables. Avec Vibe Tickets, l'excitation est à portée de clics.</p>
-  </section>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="title-main">Vibe Tickets</span>
+        <span class="title-sub">Votre plateforme de billetterie en ligne</span>
+      </h1>
 
-  <section class="sports">
-    <h2>Quelques sports</h2>
-    <div class="sports-grid">
-      <app-card
-        cardType="sport"
-        imgSrc="assets/pictures/vtt.webp"
-        imgAlt="Cyclisme Mountain Bike"
-        description="Cyclisme Mountain Bike">
-      </app-card>
+      <p class="hero-description">
+        Découvrez une expérience unique où chaque billet devient une porte vers l'extraordinaire.
+        Concerts, spectacles, événements sportifs, festivals... Vivez l'intensité de chaque moment.
+      </p>
 
-      <app-card
-        cardType="sport"
-        imgSrc="assets/pictures/escrime.webp"
-        imgAlt="Escrime"
-        description="Escrime">
-      </app-card>
-
-      <app-card
-        cardType="sport"
-        imgSrc="assets/pictures/natation.webp"
-        imgAlt="Natation"
-        description="Natation">
-      </app-card>
-
-      <app-card
-        cardType="sport"
-        imgSrc="assets/pictures/gym.webp"
-        imgAlt="Gymnastique Artistique"
-        description="Gymnastique Artistique">
-      </app-card>
-
-      <app-card
-        cardType="sport"
-        imgSrc="assets/pictures/judo.webp"
-        imgAlt="Judo"
-        description="Judo">
-      </app-card>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">1000+</span>
+          <span class="stat-label">Événements</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <span class="stat-label">Catégories</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">24/7</span>
+          <span class="stat-label">Disponible</span>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="news-highlights">
-    <h2>Actualités</h2>
-    <div class="news-grid">
-      <app-card
-        cardType="news"
-        title="Nouveau record du monde pour le 400m nage libre"
-        description="Le nageur australien bat le record du monde lors des séries éliminatoires."
-        linkUrl="#"
-        linkText="Lire la suite">
-      </app-card>
+  <!-- Section de transition vers le carrousel -->
+  <section class="transition-section">
+    <div class="transition-content">
+      <h2 class="section-title">
+        <span class="title-text">Billets Disponibles</span>
+        <span class="title-underline"></span>
+      </h2>
+      <p class="section-subtitle">
+        Découvrez notre sélection d'événements et réservez vos billets en quelques clics
+      </p>
+    </div>
+  </section>
 
-      <app-card
-        cardType="news"
-        title="La gymnaste française remporte l'or"
-        description="Une performance exceptionnelle qui fait la fierté de toute la nation."
-        linkUrl="#"
-        linkText="Lire la suite">
-      </app-card>
+  <!-- Carrousel des billets disponibles -->
+  <app-ticket-carousel></app-ticket-carousel>
+
+  <!-- Section Actualités Dynamiques -->
+  <section class="news-highlights">
+    <div class="news-header">
+      <h2>
+        <span class="title-text">Actualités</span>
+        <span class="title-underline"></span>
+      </h2>
+      <p class="news-subtitle">Découvrez les dernières nouvelles de Vibe-ticket</p>
+    </div>
+
+    <!-- Indicateur de chargement -->
+    <div *ngIf="newsLoading" class="news-loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Chargement des actualités...</p>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div *ngIf="newsError && !newsLoading" class="news-error">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ newsError }}</p>
+      <button mat-stroked-button color="primary" (click)="loadLatestNews()">
+        <mat-icon>refresh</mat-icon>
+        Réessayer
+      </button>
+    </div>
+
+    <!-- Grille des actualités -->
+    <div *ngIf="!newsLoading && !newsError && hasNews()" class="news-grid">
+      <app-news-card
+        *ngFor="let article of latestNews; trackBy: trackByNewsId"
+        [news]="article"
+        [compact]="true"
+        class="news-item">
+      </app-news-card>
+    </div>
+
+    <!-- Message si aucune actualité -->
+    <div *ngIf="!newsLoading && !newsError && !hasNews()" class="news-empty">
+      <mat-icon>article</mat-icon>
+      <h3>Aucune actualité disponible</h3>
+      <p>Les actualités seront bientôt disponibles.</p>
+    </div>
+
+    <!-- Bouton "Voir toutes les actualités" -->
+    <div *ngIf="hasNews()" class="news-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="viewAllNews()"
+        class="view-all-btn">
+        <mat-icon>article</mat-icon>
+        Voir toutes les actualités
+      </button>
     </div>
   </section>
 

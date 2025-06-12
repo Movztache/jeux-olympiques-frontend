@@ -1,13 +1,14 @@
 .app-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Assure que le conteneur prend toute la hauteur de la fenêtre */
+  min-height: 100vh;
 }
 
 .main-content {
-  flex: 1; /* Permet au contenu principal de prendre tout l'espace disponible */
-  padding: 2rem 1rem; /* Ajoutez du padding selon vos besoins */
+  flex: 1;
+  padding: 0;
   max-width: 1800px;
   width: 100%;
   margin: 0 auto;
+  margin-top: 70px;
 }

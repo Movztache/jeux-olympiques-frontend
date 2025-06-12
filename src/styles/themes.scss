@@ -1,0 +1,93 @@
+// Variables de thème pour Vibe Tickets
+// Mode clair (par défaut)
+:root,
+[data-theme="light"] {
+  // Couleurs principales
+  --primary-color: #0066cc;
+  --primary-color-rgb: 0, 102, 204;
+  --primary-dark: #004499;
+  --accent-color: #f5a623;
+  --accent-light: #ffc947;
+  
+  // Couleurs de fond
+  --background-primary: #ffffff;
+  --background-secondary: #f8f9fa;
+  --background-tertiary: #f0f4f8;
+  
+  // Couleurs de texte
+  --text-primary: #2c3e50;
+  --text-secondary: #7f8c8d;
+  --text-light: #95a5a6;
+  --text-inverse: #ffffff;
+  
+  // Couleurs de surface
+  --surface-primary: #ffffff;
+  --surface-secondary: #f8f9fa;
+  --surface-elevated: #ffffff;
+  
+  // Couleurs de bordure
+  --border-primary: rgba(0, 0, 0, 0.1);
+  --border-secondary: rgba(0, 0, 0, 0.05);
+  
+  // Ombres
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+  
+  // Gradients
+  --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, #e67e22 100%);
+  --gradient-hero: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
+
+// Mode sombre
+[data-theme="dark"] {
+  // Couleurs principales (légèrement ajustées pour le mode sombre)
+  --primary-color: #4a9eff;
+  --primary-color-rgb: 74, 158, 255;
+  --primary-dark: #2980b9;
+  --accent-color: #ffc947;
+  --accent-light: #ffd700;
+  
+  // Couleurs de fond
+  --background-primary: #1a1a1a;
+  --background-secondary: #2c2c2c;
+  --background-tertiary: #3a3a3a;
+  
+  // Couleurs de texte
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --text-light: #888888;
+  --text-inverse: #1a1a1a;
+  
+  // Couleurs de surface
+  --surface-primary: #2c2c2c;
+  --surface-secondary: #3a3a3a;
+  --surface-elevated: #404040;
+  
+  // Couleurs de bordure
+  --border-primary: rgba(255, 255, 255, 0.1);
+  --border-secondary: rgba(255, 255, 255, 0.05);
+  
+  // Ombres (plus prononcées en mode sombre)
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  
+  // Gradients adaptés au mode sombre
+  --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, #e67e22 100%);
+  --gradient-hero: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+}
+
+// Transitions fluides pour le changement de thème
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+// Désactiver les transitions pour les utilisateurs préférant moins d'animations
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

@@ -2,15 +2,15 @@
   margin: 0.5rem;
 
   &.primary {
-    --card-color: var(--primary-color, #3f51b5);
+    --card-color: #0066cc;
   }
 
   &.accent {
-    --card-color: var(--accent-color, #ff4081);
+    --card-color: #f5a623;
   }
 
   &.warn {
-    --card-color: var(--warn-color, #f44336);
+    --card-color: #f44336;
   }
 }
 

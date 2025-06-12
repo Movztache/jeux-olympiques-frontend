@@ -32,6 +32,22 @@ export const routes: Routes = [
 
       { path: 'admin',loadChildren: () => import('./features/admin/admin.routing').then(m => m.ADMIN_ROUTES), canActivate: [authGuard, roleGuard(['Admin'])] },
 
+      {
+        path: 'actualites',
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./features/news/pages/news-list/news-list.component').then(m => m.NewsListComponent),
+            data: { title: 'Actualités - Vibe-ticket' }
+          },
+          {
+            path: ':id',
+            loadComponent: () => import('./features/news/pages/news-detail/news-detail.component').then(m => m.NewsDetailComponent),
+            data: { title: 'Article - Vibe-ticket' }
+          }
+        ]
+      },
+
       // Redirection de toute route inconnue vers home
       { path: '**', redirectTo: 'home' }
     ]

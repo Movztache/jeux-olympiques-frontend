@@ -1,0 +1,359 @@
+.news-detail-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  min-height: calc(100vh - 200px);
+}
+
+.loading-container,
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+    color: #bdc3c7;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+  }
+  
+  p {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin: 0 0 2rem 0;
+    max-width: 400px;
+    line-height: 1.6;
+  }
+}
+
+.error-container {
+  mat-icon {
+    color: #f44336;
+  }
+  
+  .error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+}
+
+.news-article {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.back-navigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    
+    a {
+      color: #0066cc;
+      text-decoration: none;
+      font-weight: 500;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      color: #bdc3c7;
+    }
+    
+    span:last-child {
+      color: #7f8c8d;
+      font-weight: 400;
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
+
+.article-header {
+  padding: 2rem 2rem 1rem;
+  
+  .article-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.3;
+    margin: 0 0 1.5rem 0;
+    color: #2c3e50;
+  }
+  
+  .article-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .author-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      
+      .author-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        mat-icon {
+          color: white;
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
+      }
+      
+      .author-details {
+        display: flex;
+        flex-direction: column;
+        
+        .author-name {
+          font-weight: 600;
+          color: #2c3e50;
+          font-size: 1rem;
+        }
+        
+        .publish-date {
+          font-size: 0.85rem;
+          color: #7f8c8d;
+        }
+      }
+    }
+    
+    .article-actions {
+      display: flex;
+      gap: 0.5rem;
+      
+      button {
+        width: 40px;
+        height: 40px;
+        
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}
+
+.article-image {
+  width: 100%;
+  max-height: 400px;
+  overflow: hidden;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.article-content {
+  padding: 2rem;
+  
+  .content-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #2c3e50;
+    
+    // Styles pour le contenu HTML
+    ::ng-deep {
+      p {
+        margin: 0 0 1.5rem 0;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      
+      h1, h2, h3, h4, h5, h6 {
+        margin: 2rem 0 1rem 0;
+        color: #2c3e50;
+        font-weight: 700;
+        
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+      
+      ul, ol {
+        margin: 1rem 0;
+        padding-left: 2rem;
+        
+        li {
+          margin: 0.5rem 0;
+        }
+      }
+      
+      blockquote {
+        margin: 2rem 0;
+        padding: 1rem 2rem;
+        background: #f8f9fa;
+        border-left: 4px solid #0066cc;
+        font-style: italic;
+        color: #7f8c8d;
+      }
+      
+      code {
+        background: #f8f9fa;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+      }
+      
+      pre {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        
+        code {
+          background: none;
+          padding: 0;
+        }
+      }
+    }
+  }
+}
+
+.article-footer {
+  padding: 1rem 2rem 2rem;
+  border-top: 1px solid #e9ecef;
+  
+  .article-tags {
+    margin-bottom: 1.5rem;
+    
+    mat-chip {
+      background: #f8f9fa;
+      color: #7f8c8d;
+      
+      mat-icon {
+        color: #bdc3c7;
+      }
+    }
+  }
+  
+  .footer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    
+    button {
+      border-radius: 24px;
+      font-weight: 600;
+      text-transform: none;
+      
+      mat-icon {
+        margin-right: 8px;
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .news-detail-container {
+    padding: 1rem 0.5rem;
+  }
+  
+  .back-navigation {
+    padding: 0.75rem 1rem;
+    
+    .breadcrumb span:last-child {
+      max-width: 200px;
+    }
+  }
+  
+  .article-header {
+    padding: 1.5rem 1rem 1rem;
+    
+    .article-title {
+      font-size: 1.75rem;
+    }
+    
+    .article-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      
+      .author-info {
+        .author-avatar {
+          width: 40px;
+          height: 40px;
+          
+          mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+    }
+  }
+  
+  .article-content {
+    padding: 1.5rem 1rem;
+    
+    .content-text {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+  }
+  
+  .article-footer {
+    padding: 1rem;
+    
+    .footer-actions {
+      flex-direction: column;
+      align-items: stretch;
+      
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+}

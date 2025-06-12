@@ -1,0 +1,764 @@
+// Variables améliorées
+$primary-color: #0066cc;
+$primary-light: #4d94ff;
+$primary-dark: #004499;
+$accent-color: #f5a623;
+$accent-light: #ffb84d;
+$success-color: #4caf50;
+$error-color: #f44336;
+$light-gray: #f8f9fa;
+$medium-gray: #e9ecef;
+$dark-gray: #343a40;
+$white: #ffffff;
+$card-radius: 16px;
+$shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 6px 20px rgba(0, 0, 0, 0.12);
+$shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.18);
+$transition-normal: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+$gradient-primary: linear-gradient(135deg, $primary-color 0%, $primary-light 100%);
+$gradient-accent: linear-gradient(135deg, $accent-color 0%, $accent-light 100%);
+
+.carousel-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #f1f3f4 100%);
+  border-radius: 24px;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+}
+
+
+
+// Loading State
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: #2c3e50;
+
+  p {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+// Error State
+.error-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: #ffebee;
+  border-radius: $card-radius;
+  color: $error-color;
+  border-left: 4px solid $error-color;
+
+  mat-icon {
+    margin-right: 1rem;
+    font-size: 24px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+}
+
+// OPTIMIZED: Carousel Content with balanced height
+.carousel-content {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: $card-radius;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  padding: 2rem 0;
+  min-height: 540px; // OPTIMIZED: Balanced height for 480px cards + padding
+  max-height: 540px; // OPTIMIZED: Enforce maximum height constraint
+  display: flex;
+  align-items: center;
+}
+
+// Container de défilement
+.tickets-scroll-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(90deg, $white 0%, transparent 100%);
+  }
+
+  &::after {
+    right: 0;
+    background: linear-gradient(270deg, $white 0%, transparent 100%);
+  }
+}
+
+// PERFORMANCE OPTIMIZED: Track with enhanced efficiency and reduced resource usage
+.tickets-scroll-track {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  animation: scroll-continuous 200s linear infinite; // Maintained contemplative speed
+  width: max-content;
+
+  // PERFORMANCE: Enhanced GPU acceleration with minimal resource usage
+  will-change: transform; // GPU acceleration hint
+  transform: translate3d(0, 0, 0); // More efficient than translateZ(0)
+  backface-visibility: hidden; // Prevent unnecessary repaints
+  contain: layout style paint; // CSS containment for performance isolation
+
+  // PERFORMANCE: Reduce event handling overhead during animation
+  pointer-events: none; // Prevent unnecessary event handling during animation
+
+  .ticket-card {
+    pointer-events: auto; // Re-enable events on cards
+  }
+
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+// Animation de défilement continu optimisée pour les performances
+@keyframes scroll-continuous {
+  0% {
+    transform: translate3d(0, 0, 0); // Optimisation : Utiliser translate3d pour l'accélération GPU
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0); // Optimisation : Utiliser translate3d pour l'accélération GPU
+  }
+}
+
+// OPTIMIZED: Ticket Cards with balanced size and optimal layout
+.ticket-card {
+  position: relative;
+  border-radius: $card-radius;
+  overflow: hidden; // Maintain card boundaries
+  transition: $transition-normal;
+  height: 480px; // OPTIMIZED: Balanced height - not too large, accommodates content
+  max-height: 480px; // OPTIMIZED: Enforce maximum height constraint
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  cursor: pointer;
+  width: 300px; // OPTIMIZED: Slightly reduced width for better visual balance
+  flex-shrink: 0;
+
+  // PERFORMANCE: Enhanced optimizations for reduced resource consumption
+  will-change: transform, box-shadow; // GPU acceleration hints
+  transform: translate3d(0, 0, 0); // More efficient hardware acceleration
+  backface-visibility: hidden; // Prevent unnecessary repaints
+  contain: layout style; // CSS containment for performance isolation
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: $gradient-primary;
+    opacity: 0;
+    transition: $transition-fast;
+  }
+
+  &:hover {
+    // PERFORMANCE: Optimized hover effects with reduced GPU load
+    transform: translate3d(0, -8px, 0) scale(1.015); // Reduced movement and scale for better performance
+    box-shadow: $shadow-lg;
+    border-color: rgba($primary-color, 0.2);
+
+    &::before {
+      opacity: 1;
+    }
+
+    mat-card-title {
+      color: $primary-color;
+    }
+
+    .view-button {
+      background: $gradient-accent;
+      // PERFORMANCE: Minimal transform for better performance
+      transform: translate3d(0, -1px, 0); // Reduced movement
+      box-shadow: 0 4px 16px rgba($accent-color, 0.3); // Reduced shadow complexity
+    }
+
+    .ticket-chips mat-chip {
+      // PERFORMANCE: Minimal chip movement for better performance
+      transform: translate3d(0, -0.5px, 0); // Reduced movement
+    }
+  }
+
+  mat-card-header {
+    padding: 1.5rem 1.5rem 1rem;
+    background: linear-gradient(135deg, $light-gray 0%, $medium-gray 50%, $white 100%);
+    position: relative;
+    flex-shrink: 0; // Optimisation : Empêcher la compression du header
+    min-height: 100px; // Optimisation : Hauteur minimale pour uniformité
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 1.5rem;
+      right: 1.5rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, $primary-color 50%, transparent 100%);
+      opacity: 0.3;
+    }
+
+    mat-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 0;
+      transition: $transition-fast;
+      line-height: 1.3;
+      letter-spacing: -0.3px;
+      // Optimisation : Limitation du texte pour uniformité
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-height: 3.25rem; // Exactement 2 lignes
+    }
+
+    .price-tag {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: $gradient-primary;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-top: 0.5rem;
+      display: inline-block;
+      flex-shrink: 0; // Optimisation : Empêcher la compression du prix
+    }
+  }
+
+  mat-card-content {
+    flex: 1;
+    padding: 1.5rem 1.5rem 1rem; // CRITICAL FIX: Reduced bottom padding to give more space for button
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; // Proper distribution of content
+    min-height: 400px; // CRITICAL FIX: Optimized content height
+    max-height: 400px; // CRITICAL FIX: Consistent max height
+    overflow: visible; // CRITICAL FIX: Allow button to be fully visible
+    position: relative;
+
+    .ticket-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      min-height: 40px; // CRITICAL FIX: Increased min height for chip visibility
+      max-height: 80px; // CRITICAL FIX: Increased max height to prevent truncation
+      align-items: flex-start;
+      overflow: visible; // CRITICAL FIX: Allow chips to be fully visible
+
+      mat-chip {
+        border-radius: 18px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        height: 36px;
+        padding: 0 14px;
+        transition: transform 0.2s ease-out; // PERFORMANCE: Optimized transition for specific property
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1;
+        white-space: nowrap;
+        min-width: fit-content;
+
+        // CRITICAL FIX: ULTIMATE border removal with maximum CSS specificity
+        border: 0 !important;
+        outline: 0 !important;
+        box-shadow: none !important;
+        border-width: 0 !important;
+        border-style: none !important;
+        border-color: transparent !important;
+
+        // Force override all Angular Material chip variants
+        &.mat-mdc-chip,
+        &.mat-chip,
+        &.mdc-chip,
+        &[class*="mat-chip"],
+        &[class*="mdc-chip"] {
+          border: 0 !important;
+          outline: 0 !important;
+          box-shadow: none !important;
+          border-width: 0 !important;
+          border-style: none !important;
+          border-color: transparent !important;
+
+          // Remove internal borders
+          &::before,
+          &::after {
+            border: 0 !important;
+            outline: 0 !important;
+          }
+        }
+
+        // Override ALL possible interaction states with maximum force
+        &:focus,
+        &:hover,
+        &:active,
+        &:focus-visible,
+        &:focus-within,
+        &.cdk-focused,
+        &.cdk-keyboard-focused,
+        &.mat-mdc-chip-selected,
+        &.mat-chip-selected,
+        &.mat-mdc-chip-highlighted,
+        &.mat-chip-highlighted,
+        &[aria-selected="true"],
+        &[data-selected="true"] {
+          border: 0 !important;
+          outline: 0 !important;
+          box-shadow: none !important;
+          border-width: 0 !important;
+          border-style: none !important;
+          border-color: transparent !important;
+        }
+
+        &.type-chip {
+          background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+          color: #0277bd;
+          // Bordure supprimée pour un rendu plus propre
+        }
+
+        &.persons-chip {
+          background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+          color: #2e7d32;
+          // Bordure supprimée pour un rendu plus propre
+        }
+
+        &.status-chip.available {
+          background: linear-gradient(135deg, $success-color 0%, #66bb6a 100%);
+          color: $white;
+          font-weight: 700;
+          // Bordure supprimée pour un rendu plus propre
+        }
+      }
+    }
+
+    .ticket-description {
+      flex: 1;
+      margin-bottom: 1.5rem;
+      min-height: 75px; // CRITICAL FIX: Optimized height for better space distribution
+      max-height: 75px; // CRITICAL FIX: Consistent height to prevent overflow
+      overflow: hidden; // Maintain text clipping for uniformity
+      display: flex;
+      align-items: flex-start;
+
+      p {
+        color: #7f8c8d;
+        line-height: 1.5; // CRITICAL FIX: Slightly reduced line height for better fit
+        margin: 0;
+        font-size: 0.9rem; // CRITICAL FIX: Slightly smaller font for better fit
+        font-weight: 400;
+        // CRITICAL FIX: Optimized text limitation for better space usage
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-height: 4.5rem; // CRITICAL FIX: Adjusted for better fit
+      }
+    }
+
+    .ticket-actions {
+      margin-top: auto; // Keep button at bottom
+      flex-shrink: 0; // Prevent compression
+      min-height: 70px; // CRITICAL FIX: Increased height for full button visibility
+      height: auto; // CRITICAL FIX: Allow natural height expansion
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 0; // CRITICAL FIX: Increased padding for breathing room
+      position: relative;
+      overflow: visible; // CRITICAL FIX: Allow button to be fully visible
+
+      .view-button {
+        width: 100%;
+        border-radius: 32px;
+        font-weight: 600;
+        font-size: 0.95rem; // CRITICAL FIX: Restored readable font size
+        padding: 12px 24px; // CRITICAL FIX: Proper padding for button content
+        transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; // PERFORMANCE: Specific property transitions
+        text-transform: none;
+        letter-spacing: 0.3px;
+        background: linear-gradient(135deg, #0066cc 0%, #4d94ff 100%);
+        border: none;
+        color: #ffffff;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        height: 48px; // CRITICAL FIX: Proper button height for full visibility
+        min-height: 48px; // CRITICAL FIX: Ensure minimum height
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: visible; // CRITICAL FIX: Allow button content to be fully visible
+
+        &:hover {
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        mat-icon {
+          margin-right: 8px;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}
+
+// Lien "Plus d'offres" pour mobile
+.more-offers-link {
+  display: none;
+  text-align: center;
+  margin-top: 2rem;
+
+  .more-offers-button {
+    background: linear-gradient(135deg, #0066cc 0%, #4d94ff 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 32px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: $transition-normal;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    mat-icon {
+      font-size: 20px;
+    }
+  }
+}
+
+// No Offers State
+.no-offers-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: #2c3e50;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+    color: #bdc3c7;
+  }
+
+  h3 {
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+    color: #7f8c8d;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #bdc3c7;
+  }
+}
+
+// Responsive Design amélioré
+@media (max-width: 1200px) {
+  .carousel-container {
+    padding: 2.5rem 0.75rem;
+  }
+
+  .ticket-card {
+    width: 270px; // OPTIMIZED: Balanced width for tablet
+    height: 460px; // OPTIMIZED: Proportional height for tablet
+    max-height: 460px; // OPTIMIZED: Enforce height constraint
+  }
+
+  .tickets-scroll-track {
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel-container {
+    padding: 2rem 0.5rem;
+    border-radius: 16px;
+  }
+
+
+
+  .ticket-card {
+    width: 250px; // OPTIMIZED: Balanced width for mobile
+    height: 440px; // OPTIMIZED: Proportional height for mobile
+    max-height: 440px; // OPTIMIZED: Enforce height constraint
+  }
+
+  .tickets-scroll-track {
+    gap: 1rem;
+    padding: 1rem;
+    animation-duration: 150s; // Optimisation : Ralenti proportionnellement sur tablette (200s * 0.75)
+  }
+
+  .tickets-scroll-container {
+    &::before,
+    &::after {
+      width: 40px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-container {
+    padding: 1.5rem 0.25rem;
+    margin: 0 0.5rem;
+  }
+
+
+
+  .carousel-content {
+    min-height: auto;
+    padding: 1rem 0;
+  }
+
+  .tickets-scroll-container {
+    overflow: visible;
+
+    &::before,
+    &::after {
+      display: none; // Supprimer les effets de fondu sur mobile
+    }
+  }
+
+  .tickets-scroll-track {
+    animation: none; // Désactiver l'animation sur mobile
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    width: 100%;
+  }
+
+  .ticket-card {
+    width: 100%;
+    height: 420px; // OPTIMIZED: Balanced height for very small screens
+    max-height: 420px; // OPTIMIZED: Enforce height constraint
+    max-width: 100%;
+  }
+
+  mat-card-header {
+    padding: 1.25rem 1.25rem 0.75rem;
+
+    mat-card-title {
+      font-size: 1.1rem;
+    }
+
+    .price-tag {
+      font-size: 1.2rem;
+    }
+  }
+
+  mat-card-content {
+    padding: 1.25rem;
+    min-height: 300px; // Correction : Hauteur de contenu augmentée pour mobile
+
+    .ticket-chips mat-chip {
+      font-size: 0.75rem;
+      height: 32px;
+      padding: 0 10px;
+      // CRITICAL FIX: ULTIMATE border removal on mobile with maximum force
+      border: 0 !important;
+      outline: 0 !important;
+      box-shadow: none !important;
+      border-width: 0 !important;
+      border-style: none !important;
+      border-color: transparent !important;
+
+      &.mat-mdc-chip,
+      &.mat-chip,
+      &.mdc-chip,
+      &[class*="mat-chip"],
+      &[class*="mdc-chip"] {
+        border: 0 !important;
+        outline: 0 !important;
+        box-shadow: none !important;
+        border-width: 0 !important;
+        border-style: none !important;
+        border-color: transparent !important;
+
+        &::before,
+        &::after {
+          border: 0 !important;
+          outline: 0 !important;
+          display: none !important;
+        }
+      }
+
+      &:focus,
+      &:hover,
+      &:active,
+      &:focus-visible,
+      &:focus-within,
+      &.cdk-focused,
+      &.cdk-keyboard-focused,
+      &[aria-selected="true"],
+      &[data-selected="true"] {
+        border: 0 !important;
+        outline: 0 !important;
+        box-shadow: none !important;
+        border-width: 0 !important;
+        border-style: none !important;
+        border-color: transparent !important;
+      }
+    }
+  }
+
+  .more-offers-link {
+    display: block; // Afficher le lien sur mobile
+  }
+}
+
+// CRITICAL FIX: ULTIMATE specificity rules to COMPLETELY eliminate chip borders
+:host ::ng-deep {
+  // Target ALL possible chip selectors with MAXIMUM specificity
+  .ticket-carousel-container .carousel-content .tickets-scroll-track .ticket-card mat-chip,
+  .ticket-carousel-container .carousel-content .tickets-scroll-track .ticket-card .mat-mdc-chip,
+  .ticket-carousel-container .carousel-content .tickets-scroll-track .ticket-card .mat-chip,
+  .ticket-card mat-chip,
+  .ticket-card .mat-mdc-chip,
+  .ticket-card .mat-chip,
+  .ticket-card .mat-mdc-chip-set .mat-mdc-chip,
+  .ticket-card .mat-chip-list .mat-chip,
+  .ticket-card .ticket-chips mat-chip,
+  .ticket-card .ticket-chips .mat-mdc-chip,
+  .ticket-card .ticket-chips .mat-chip,
+  mat-chip.type-chip,
+  mat-chip.persons-chip,
+  mat-chip.status-chip,
+  .mat-mdc-chip.type-chip,
+  .mat-mdc-chip.persons-chip,
+  .mat-mdc-chip.status-chip {
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+    border-width: 0 !important;
+    border-style: none !important;
+    border-color: transparent !important;
+
+    // FORCE override ALL possible states with MAXIMUM specificity
+    &:focus,
+    &:hover,
+    &:active,
+    &:focus-visible,
+    &:focus-within,
+    &.mat-mdc-chip-selected,
+    &.mat-chip-selected,
+    &.mat-mdc-chip-highlighted,
+    &.mat-chip-highlighted,
+    &.cdk-focused,
+    &.cdk-keyboard-focused,
+    &[aria-selected="true"],
+    &[data-selected="true"],
+    &.mat-mdc-chip-with-trailing-icon,
+    &.mat-chip-with-trailing-icon {
+      border: 0 !important;
+      outline: 0 !important;
+      box-shadow: none !important;
+      border-width: 0 !important;
+      border-style: none !important;
+      border-color: transparent !important;
+    }
+
+    // ELIMINATE all internal border elements
+    .mat-mdc-chip-focus-overlay,
+    .mat-chip-focus-overlay,
+    .mat-mdc-chip-ripple,
+    .mat-chip-ripple,
+    .mat-mdc-chip-graphic,
+    .mat-chip-graphic,
+    .mdc-chip__ripple,
+    .mdc-chip__checkmark,
+    .mdc-chip__leading-icon,
+    .mdc-chip__trailing-icon {
+      display: none !important;
+      border: 0 !important;
+      outline: 0 !important;
+    }
+
+    // FORCE override Material Design Component styles
+    &.mdc-chip,
+    &[class*="mdc-chip"] {
+      border: 0 !important;
+      outline: 0 !important;
+      box-shadow: none !important;
+
+      &::before,
+      &::after {
+        border: 0 !important;
+        outline: 0 !important;
+        display: none !important;
+      }
+    }
+  }
+
+  // ADDITIONAL nuclear option overrides
+  .ticket-card .ticket-chips {
+    mat-chip,
+    .mat-mdc-chip,
+    .mat-chip,
+    [class*="mat-chip"],
+    [class*="mdc-chip"] {
+      border: 0 !important;
+      outline: 0 !important;
+      box-shadow: none !important;
+
+      *,
+      *::before,
+      *::after {
+        border: 0 !important;
+        outline: 0 !important;
+      }
+    }
+  }
+}
