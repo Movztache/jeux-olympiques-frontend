@@ -164,7 +164,7 @@ $warning-color: #ff9800;
 .table-container {
   border-radius: 8px;
   overflow: hidden;
-  background-color: white;
+  background-color: var(--surface-primary);
 }
 
 .offers-table {

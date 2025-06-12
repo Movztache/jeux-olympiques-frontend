@@ -1,0 +1,85 @@
+<div class="carousel-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-progress-spinner diameter="50" mode="indeterminate"></mat-progress-spinner>
+    <p>Chargement des billets disponibles...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="error-container">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Carousel Content -->
+  <div *ngIf="!isLoading && !error && displayedOffers.length > 0" class="carousel-content">
+    <!-- Tickets Scrolling Container -->
+    <div class="tickets-scroll-container">
+      <div class="tickets-scroll-track">
+        <mat-card
+          *ngFor="let offer of displayedOffers; trackBy: trackByOfferId"
+          class="ticket-card"
+          (click)="onOfferClick(offer)">
+
+          <mat-card-header>
+            <mat-card-title>{{ offer.name || 'Billet Olympique' }}</mat-card-title>
+            <mat-card-subtitle class="price-tag">
+              {{ getDisplayPrice(offer) }}€
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="ticket-chips">
+              <mat-chip class="type-chip">
+                {{ getOfferTypeLabel(offer.offerType) }}
+              </mat-chip>
+              <mat-chip class="persons-chip">
+                {{ offer.personCount }} personne<span *ngIf="offer.personCount > 1">s</span>
+              </mat-chip>
+              <mat-chip class="status-chip available">
+                Disponible
+              </mat-chip>
+            </div>
+
+            <div class="ticket-description" *ngIf="hasValidDescription(offer)">
+              <p>{{ offer.description }}</p>
+            </div>
+
+            <div class="ticket-description" *ngIf="!hasValidDescription(offer)">
+              <p>Découvrez cette expérience unique aux Jeux Olympiques de France 2025 !</p>
+            </div>
+
+            <div class="ticket-actions">
+              <button
+                mat-raised-button
+                color="primary"
+                class="view-button"
+                (click)="onOfferClick(offer); $event.stopPropagation()">
+                <mat-icon>visibility</mat-icon>
+                Voir les détails
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lien "Plus d'offres" pour mobile -->
+  <div *ngIf="showMoreOffersLink" class="more-offers-link">
+    <button
+      mat-raised-button
+      class="more-offers-button"
+      (click)="onViewAllOffers()">
+      <mat-icon>arrow_forward</mat-icon>
+      Plus d'offres disponibles
+    </button>
+  </div>
+
+  <!-- No Offers State -->
+  <div *ngIf="!isLoading && !error && displayedOffers.length === 0" class="no-offers-container">
+    <mat-icon>event_busy</mat-icon>
+    <h3>Aucun billet disponible</h3>
+    <p>Il n'y a actuellement aucun billet disponible. Revenez plus tard !</p>
+  </div>
+</div>

@@ -1,0 +1,226 @@
+<div class="admin-news-container">
+  <!-- En-tête de la page -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <h1>Gestion des Actualités</h1>
+        <p class="subtitle">Gérez toutes les actualités de Vibe-ticket</p>
+      </div>
+      
+      <div class="header-actions">
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="createNews()"
+          class="create-btn">
+          <mat-icon>add</mat-icon>
+          Nouvelle actualité
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barre de recherche et filtres -->
+  <div class="filters-section">
+    <div class="search-filters">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Rechercher par titre...</mat-label>
+        <input matInput [formControl]="searchControl" placeholder="Titre de l'actualité">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="status-filter">
+        <mat-label>Statut</mat-label>
+        <mat-select [formControl]="statusFilter">
+          <mat-option *ngFor="let option of statusOptions" [value]="option.value">
+            {{ option.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    
+    <div class="filter-actions">
+      <button 
+        mat-icon-button 
+        (click)="clearFilters()" 
+        matTooltip="Effacer les filtres"
+        class="clear-btn">
+        <mat-icon>clear_all</mat-icon>
+      </button>
+      
+      <button 
+        mat-icon-button 
+        (click)="refresh()" 
+        matTooltip="Actualiser"
+        class="refresh-btn">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenu principal -->
+  <div class="main-content">
+    <!-- Indicateur de chargement -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Chargement des actualités...</p>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div *ngIf="error && !loading" class="error-container">
+      <mat-icon>error_outline</mat-icon>
+      <h3>Erreur de chargement</h3>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+        Réessayer
+      </button>
+    </div>
+
+    <!-- Tableau des actualités -->
+    <div *ngIf="!loading && !error" class="table-container">
+      <table mat-table [dataSource]="dataSource" class="news-table" matSort>
+        
+        <!-- Colonne Titre -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Titre</th>
+          <td mat-cell *matCellDef="let news" class="title-cell">
+            <div class="title-content">
+              <span class="title-text">{{ news.title }}</span>
+              <div class="title-meta">
+                <mat-chip *ngIf="news.imageUrl" class="image-chip">
+                  <mat-icon matChipAvatar>image</mat-icon>
+                  Image
+                </mat-chip>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Auteur -->
+        <ng-container matColumnDef="author">
+          <th mat-header-cell *matHeaderCellDef>Auteur</th>
+          <td mat-cell *matCellDef="let news">{{ getAuthorName(news) }}</td>
+        </ng-container>
+
+        <!-- Colonne Date de création -->
+        <ng-container matColumnDef="createdDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date de création</th>
+          <td mat-cell *matCellDef="let news">
+            <div class="date-content">
+              <span class="date-text">{{ formatDate(news.createdDate) }}</span>
+              <span *ngIf="news.updatedDate" class="updated-indicator">
+                <mat-icon>edit</mat-icon>
+                Modifié
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Statut -->
+        <ng-container matColumnDef="published">
+          <th mat-header-cell *matHeaderCellDef>Statut</th>
+          <td mat-cell *matCellDef="let news">
+            <mat-chip 
+              [class.published]="news.published"
+              [class.draft]="!news.published"
+              (click)="togglePublishStatus(news)"
+              class="status-chip">
+              <mat-icon matChipAvatar>
+                {{ news.published ? 'visibility' : 'visibility_off' }}
+              </mat-icon>
+              {{ news.published ? 'Publié' : 'Brouillon' }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let news">
+            <div class="actions-container">
+              <!-- Actions desktop -->
+              <div class="desktop-actions">
+                <button 
+                  mat-icon-button 
+                  (click)="viewNews(news)" 
+                  matTooltip="Voir l'actualité"
+                  class="view-btn">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                
+                <button 
+                  mat-icon-button 
+                  (click)="editNews(news)" 
+                  matTooltip="Modifier"
+                  class="edit-btn">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                
+                <button 
+                  mat-icon-button 
+                  (click)="deleteNews(news)" 
+                  matTooltip="Supprimer"
+                  class="delete-btn">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+
+              <!-- Actions mobile -->
+              <div class="mobile-actions">
+                <button mat-icon-button [matMenuTriggerFor]="actionsMenu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #actionsMenu="matMenu">
+                  <button mat-menu-item (click)="viewNews(news)">
+                    <mat-icon>visibility</mat-icon>
+                    <span>Voir</span>
+                  </button>
+                  <button mat-menu-item (click)="editNews(news)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Modifier</span>
+                  </button>
+                  <button mat-menu-item (click)="togglePublishStatus(news)">
+                    <mat-icon>{{ news.published ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    <span>{{ news.published ? 'Dépublier' : 'Publier' }}</span>
+                  </button>
+                  <button mat-menu-item (click)="deleteNews(news)" class="delete-action">
+                    <mat-icon>delete</mat-icon>
+                    <span>Supprimer</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="news-row"></tr>
+      </table>
+
+      <!-- Message si aucune actualité -->
+      <div *ngIf="dataSource.data.length === 0" class="no-data-container">
+        <mat-icon>article</mat-icon>
+        <h3>Aucune actualité trouvée</h3>
+        <p>Commencez par créer votre première actualité.</p>
+        <button mat-raised-button color="primary" (click)="createNews()">
+          <mat-icon>add</mat-icon>
+          Créer une actualité
+        </button>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="!loading && !error && dataSource.data.length > 0" class="pagination-container">
+      <mat-paginator
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageIndex]="currentPage"
+        [pageSizeOptions]="pageSizeOptions"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)"
+        aria-label="Sélectionner la page des actualités">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

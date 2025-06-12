@@ -6,18 +6,18 @@ $primary-color: #1a73e8;
 
 // Mixin pour les effets de carte communs
 @mixin card-base {
-  background-color: #fff;
+  background-color: #ffffff;
   border-radius: $border-radius;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all $transition-speed cubic-bezier(0.165, 0.84, 0.44, 1);
   position: relative;
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 
   &:hover {
     transform: translateY($hover-y-offset);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-    border-color: rgba(0, 0, 0, 0);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border-color: transparent;
 
     &::after {
       opacity: 1;
@@ -71,7 +71,7 @@ $primary-color: #1a73e8;
     padding: 1rem;
     font-weight: 500;
     margin: 0;
-    color: #333;
+    color: #2c3e50;
   }
 }
 
@@ -95,17 +95,17 @@ $primary-color: #1a73e8;
   h3 {
     font-size: 1.2rem;
     margin: 1.2rem 1.2rem 0.8rem;
-    color: #222;
+    color: #2c3e50;
     transition: color $transition-speed ease;
   }
 
   &:hover h3 {
-    color: $primary-color;
+    color: #0066cc;
   }
 
   p {
     margin: 0 1.2rem;
-    color: #666;
+    color: #7f8c8d;
     flex-grow: 1;
     line-height: 1.5;
   }
@@ -113,7 +113,7 @@ $primary-color: #1a73e8;
   a {
     display: inline-block;
     margin: 0.8rem 1.2rem 1.2rem;
-    color: $primary-color;
+    color: #0066cc;
     font-weight: 500;
     text-decoration: none;
     position: relative;
@@ -126,7 +126,7 @@ $primary-color: #1a73e8;
       height: 2px;
       bottom: 0;
       left: 0;
-      background-color: $primary-color;
+      background-color: #0066cc;
       transition: width $transition-speed ease;
     }
 

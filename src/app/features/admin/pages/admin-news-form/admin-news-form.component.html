@@ -1,0 +1,227 @@
+<div class="admin-news-form-container">
+  <!-- En-tête de la page -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <h1>{{ getPageTitle() }}</h1>
+        <p class="subtitle">{{ getPageSubtitle() }}</p>
+      </div>
+      
+      <div class="breadcrumb">
+        <a routerLink="/admin/news">Gestion des actualités</a>
+        <mat-icon>chevron_right</mat-icon>
+        <span>{{ isEditMode ? 'Modifier' : 'Créer' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenu principal -->
+  <div class="main-content">
+    <!-- Indicateur de chargement -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Chargement de l'actualité...</p>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div *ngIf="error && !loading" class="error-container">
+      <mat-icon>error_outline</mat-icon>
+      <h3>Erreur</h3>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="onCancel()">
+        <mat-icon>arrow_back</mat-icon>
+        Retour à la liste
+      </button>
+    </div>
+
+    <!-- Formulaire -->
+    <form *ngIf="!loading && !error" [formGroup]="newsForm" class="news-form">
+      <div class="form-container">
+        <div class="form-content">
+          <!-- Titre -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Titre de l'actualité</mat-label>
+            <input 
+              matInput 
+              formControlName="title" 
+              placeholder="Saisissez le titre de l'actualité"
+              maxlength="200">
+            <mat-hint align="end">{{ newsForm.get('title')?.value?.length || 0 }}/200</mat-hint>
+            <mat-error *ngIf="hasError('title', 'required')">
+              {{ getErrorMessage('title') }}
+            </mat-error>
+            <mat-error *ngIf="hasError('title', 'maxlength')">
+              {{ getErrorMessage('title') }}
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Description -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea 
+              matInput 
+              formControlName="description" 
+              placeholder="Rédigez le contenu de votre actualité..."
+              rows="8"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="8"
+              cdkAutosizeMaxRows="20">
+            </textarea>
+            <mat-hint align="start">Minimum 10 caractères</mat-hint>
+            <mat-hint align="end">{{ newsForm.get('description')?.value?.length || 0 }} caractères</mat-hint>
+            <mat-error *ngIf="hasError('description', 'required')">
+              {{ getErrorMessage('description') }}
+            </mat-error>
+            <mat-error *ngIf="hasError('description', 'minlength')">
+              {{ getErrorMessage('description') }}
+            </mat-error>
+          </mat-form-field>
+
+          <!-- URL de l'image -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>URL de l'image (optionnel)</mat-label>
+            <input 
+              matInput 
+              formControlName="imageUrl" 
+              placeholder="https://exemple.com/image.jpg"
+              type="url">
+            <mat-icon matSuffix>image</mat-icon>
+            <mat-hint>URL complète vers une image (HTTPS recommandé)</mat-hint>
+            <mat-error *ngIf="hasError('imageUrl', 'invalidUrl')">
+              {{ getErrorMessage('imageUrl') }}
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Aperçu de l'image -->
+          <div *ngIf="newsForm.get('imageUrl')?.value" class="image-preview">
+            <h4>Aperçu de l'image :</h4>
+            <img
+              [src]="newsForm.get('imageUrl')?.value"
+              alt="Aperçu"
+              (error)="onImageError($event)"
+              loading="lazy">
+          </div>
+
+          <!-- Statut de publication -->
+          <div class="publication-section">
+            <h4>Statut de publication</h4>
+            <mat-checkbox formControlName="published" class="publish-checkbox">
+              Publier immédiatement cette actualité
+            </mat-checkbox>
+            <p class="publish-hint">
+              <mat-icon>info</mat-icon>
+              {{ newsForm.get('published')?.value 
+                ? 'Cette actualité sera visible par tous les utilisateurs' 
+                : 'Cette actualité sera sauvegardée en brouillon' }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Sidebar avec actions -->
+        <div class="form-sidebar">
+          <div class="actions-card">
+            <h4>Actions</h4>
+            
+            <div class="action-buttons">
+              <!-- Bouton Prévisualiser -->
+              <button 
+                type="button"
+                mat-stroked-button 
+                color="primary"
+                (click)="onPreview()"
+                [disabled]="saving"
+                class="preview-btn">
+                <mat-icon>visibility</mat-icon>
+                Prévisualiser
+              </button>
+
+              <!-- Bouton Sauvegarder -->
+              <button 
+                type="button"
+                mat-raised-button 
+                color="primary"
+                (click)="onSave()"
+                [disabled]="saving || newsForm.invalid"
+                class="save-btn">
+                <mat-spinner *ngIf="saving" diameter="20"></mat-spinner>
+                <mat-icon *ngIf="!saving">save</mat-icon>
+                {{ saving ? 'Sauvegarde...' : 'Sauvegarder' }}
+              </button>
+
+              <!-- Bouton Sauvegarder et publier -->
+              <button 
+                type="button"
+                mat-raised-button 
+                color="accent"
+                (click)="onSaveAndPublish()"
+                [disabled]="saving || newsForm.invalid"
+                class="publish-btn">
+                <mat-spinner *ngIf="saving" diameter="20"></mat-spinner>
+                <mat-icon *ngIf="!saving">publish</mat-icon>
+                {{ saving ? 'Publication...' : 'Sauvegarder et publier' }}
+              </button>
+
+              <!-- Bouton Annuler -->
+              <button 
+                type="button"
+                mat-stroked-button 
+                (click)="onCancel()"
+                [disabled]="saving"
+                class="cancel-btn">
+                <mat-icon>cancel</mat-icon>
+                Annuler
+              </button>
+            </div>
+          </div>
+
+          <!-- Informations sur l'actualité (mode édition) -->
+          <div *ngIf="isEditMode && currentNews" class="info-card">
+            <h4>Informations</h4>
+            <div class="info-item">
+              <span class="label">Créée le :</span>
+              <span class="value">{{ formatDate(currentNews.createdDate) }}</span>
+            </div>
+            <div *ngIf="currentNews.updatedDate" class="info-item">
+              <span class="label">Modifiée le :</span>
+              <span class="value">{{ formatDate(currentNews.updatedDate) }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Auteur :</span>
+              <span class="value">{{ getAuthorName(currentNews) }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Statut :</span>
+              <span class="value status" [class.published]="currentNews.published">
+                <mat-icon>{{ currentNews.published ? 'visibility' : 'visibility_off' }}</mat-icon>
+                {{ currentNews.published ? 'Publié' : 'Brouillon' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Conseils -->
+          <div class="tips-card">
+            <h4>Conseils</h4>
+            <ul class="tips-list">
+              <li>
+                <mat-icon>lightbulb</mat-icon>
+                Utilisez un titre accrocheur et descriptif
+              </li>
+              <li>
+                <mat-icon>lightbulb</mat-icon>
+                Rédigez une description claire et engageante
+              </li>
+              <li>
+                <mat-icon>lightbulb</mat-icon>
+                Ajoutez une image pour plus d'impact visuel
+              </li>
+              <li>
+                <mat-icon>lightbulb</mat-icon>
+                Prévisualisez avant de publier
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

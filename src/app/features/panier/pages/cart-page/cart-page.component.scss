@@ -43,7 +43,7 @@ $transition-normal: all 0.3s ease;
   align-items: center;
   justify-content: center;
   min-height: 300px;
-  background-color: white;
+  background-color: #ffffff;
   border-radius: $border-radius;
   box-shadow: $shadow-sm;
   padding: 2rem;
@@ -63,7 +63,7 @@ $transition-normal: all 0.3s ease;
   justify-content: center;
   min-height: 400px;
   text-align: center;
-  background-color: white;
+  background-color: #ffffff;
   border-radius: $border-radius;
   box-shadow: $shadow-sm;
   padding: 3rem 2rem;
@@ -106,7 +106,7 @@ $transition-normal: all 0.3s ease;
 }
 
 .cart-content {
-  background-color: white;
+  background-color: var(--surface-primary);
   border-radius: $border-radius;
   box-shadow: $shadow-sm;
   overflow: hidden;
@@ -142,7 +142,7 @@ $transition-normal: all 0.3s ease;
   .summary-details {
     margin-bottom: 2rem;
     font-size: 1rem;
-    background-color: white;
+    background-color: #ffffff;
     padding: 1.5rem;
     border-radius: $border-radius;
     box-shadow: $shadow-sm;
